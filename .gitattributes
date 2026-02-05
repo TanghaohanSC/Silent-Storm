@@ -1,0 +1,9 @@
+Data/game.mdb filter=lfs diff=lfs merge=lfs -text
+Data/A5GAME_Data.MDF filter=lfs diff=lfs merge=lfs -text
+Data/h5_hourly filter=lfs diff=lfs merge=lfs -text
+Data/ibdata1 filter=lfs diff=lfs merge=lfs -text
+Data/mar2004 filter=lfs diff=lfs merge=lfs -text
+Data/masterserver/statistics.MYI filter=lfs diff=lfs merge=lfs -text
+Data/masterserver/statistics.MYD filter=lfs diff=lfs merge=lfs -text
+Data/ib_logfile0 filter=lfs diff=lfs merge=lfs -text
+Data/ib_logfile1 filter=lfs diff=lfs merge=lfs -text

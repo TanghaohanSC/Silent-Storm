@@ -1,0 +1,1684 @@
+InnoDB: The first specified data file .\ibdata1 did not exist:
+InnoDB: a new database to be created!
+030604 16:44:16  InnoDB: Setting file .\ibdata1 size to 10 MB
+InnoDB: Database physically writes the file full: wait...
+030604 16:44:17  InnoDB: Log file .\ib_logfile0 did not exist: new to be created
+InnoDB: Setting log file .\ib_logfile0 size to 5 MB
+InnoDB: Database physically writes the file full: wait...
+030604 16:44:17  InnoDB: Log file .\ib_logfile1 did not exist: new to be created
+InnoDB: Setting log file .\ib_logfile1 size to 5 MB
+InnoDB: Database physically writes the file full: wait...
+030604 16:44:18  C:\mysql\bin\mysqld-nt.exe: Got signal 2. Aborting!
+
+030604 16:44:18  Aborting
+
+030604 16:44:19  InnoDB: Warning: shutting down a not properly started
+                 InnoDB: or created database!
+030604 16:44:19  C:\mysql\bin\mysqld-nt.exe: Shutdown Complete
+
+030604 16:44:50  InnoDB: Database was not shut down normally.
+InnoDB: Starting recovery from log files...
+InnoDB: Starting log scan based on checkpoint at
+InnoDB: log sequence number 0 31244
+InnoDB: Doing recovery: scanned up to log sequence number 0 31244
+030604 16:44:50  InnoDB: Flushing modified pages from the buffer pool...
+InnoDB: Doublewrite buffer not found: creating new
+InnoDB: Doublewrite buffer created
+InnoDB: Creating foreign key constraint system tables
+InnoDB: Foreign key constraint system tables created
+030604 16:44:56  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030604 16:51:30  MySql: Normal shutdown
+
+030604 16:51:30  InnoDB: Starting shutdown...
+030604 16:51:31  InnoDB: Shutdown completed
+030604 16:51:31  MySql: Shutdown Complete
+
+030604 16:52:18  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030604 17:23:50  MySql: Normal shutdown
+
+030604 17:23:50  InnoDB: Starting shutdown...
+030604 17:23:51  InnoDB: Shutdown completed
+030604 17:23:51  MySql: Shutdown Complete
+
+030604 17:24:56  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030604 19:05:49  MySql: Normal shutdown
+
+030604 19:05:49  InnoDB: Starting shutdown...
+030604 19:05:51  InnoDB: Shutdown completed
+030604 19:05:51  MySql: Shutdown Complete
+
+030604 19:45:35  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030604 19:46:48  MySql: Normal shutdown
+
+030604 19:46:48  InnoDB: Starting shutdown...
+030604 19:46:49  InnoDB: Shutdown completed
+030604 19:46:49  MySql: Shutdown Complete
+
+030604 19:48:10  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030701 17:43:14  InnoDB: Database was not shut down normally.
+InnoDB: Starting recovery from log files...
+InnoDB: Starting log scan based on checkpoint at
+InnoDB: log sequence number 0 44414
+InnoDB: Doing recovery: scanned up to log sequence number 0 44414
+030701 17:43:16  InnoDB: Flushing modified pages from the buffer pool...
+030701 17:43:16  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030809 14:05:15  InnoDB: Database was not shut down normally.
+InnoDB: Starting recovery from log files...
+InnoDB: Starting log scan based on checkpoint at
+InnoDB: log sequence number 0 44414
+InnoDB: Doing recovery: scanned up to log sequence number 0 44414
+030809 14:05:16  InnoDB: Flushing modified pages from the buffer pool...
+030809 14:05:17  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030809 15:42:06  MySql: Normal shutdown
+
+030809 15:42:06  InnoDB: Starting shutdown...
+030809 15:42:07  InnoDB: Shutdown completed
+030809 15:42:07  MySql: Shutdown Complete
+
+030809 15:46:12  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030809 16:41:25  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030809 16:59:47  MySql: Normal shutdown
+
+030809 16:59:47  InnoDB: Starting shutdown...
+030809 16:59:49  InnoDB: Shutdown completed
+030809 16:59:49  MySql: Shutdown Complete
+
+030809 16:59:51  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030809 17:08:35  MySql: Normal shutdown
+
+030809 17:08:35  InnoDB: Starting shutdown...
+030809 17:08:36  InnoDB: Shutdown completed
+030809 17:08:36  MySql: Shutdown Complete
+
+030809 17:08:37  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030809 17:13:42  MySql: Normal shutdown
+
+030809 17:13:43  InnoDB: Starting shutdown...
+030809 17:13:44  InnoDB: Shutdown completed
+030809 17:13:44  MySql: Shutdown Complete
+
+030809 17:15:53  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030809 17:18:07  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030809 17:20:59  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030826 13:22:11  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030826 14:25:20  MySql: Normal shutdown
+
+030826 14:25:20  InnoDB: Starting shutdown...
+030826 14:25:21  InnoDB: Shutdown completed
+030826 14:25:21  MySql: Shutdown Complete
+
+030826 14:26:29  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030830 18:57:40  MySql: Normal shutdown
+
+030830 18:57:40  InnoDB: Starting shutdown...
+030830 18:57:41  InnoDB: Shutdown completed
+030830 18:57:41  MySql: Shutdown Complete
+
+030830 18:59:04  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030903 13:57:16  MySql: Normal shutdown
+
+030903 13:57:16  InnoDB: Starting shutdown...
+030903 13:57:17  InnoDB: Shutdown completed
+030903 13:57:17  MySql: Shutdown Complete
+
+030903 13:58:29  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+030915 11:01:27  MySql: Normal shutdown
+
+030915 11:01:28  InnoDB: Starting shutdown...
+030915 11:01:30  InnoDB: Shutdown completed
+030915 11:01:30  MySql: Shutdown Complete
+
+030915 11:02:58  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+031031 16:13:55  MySql: Normal shutdown
+
+031031 16:13:56  MySql: Forcing close of thread 40122  user: 'etherlord'
+
+031031 16:13:56  MySql: Forcing close of thread 40120  user: 'etherlord'
+
+031031 16:13:56  MySql: Forcing close of thread 40119  user: 'etherlord'
+
+031031 16:13:56  MySql: Forcing close of thread 40116  user: 'etherlord'
+
+031031 16:13:56  MySql: Forcing close of thread 40106  user: 'etherlord'
+
+031031 16:13:56  MySql: Forcing close of thread 40105  user: 'etherlord'
+
+031031 16:13:56  MySql: Forcing close of thread 40100  user: 'etherlord'
+
+031031 16:13:56  MySql: Forcing close of thread 40099  user: 'etherlord'
+
+031031 16:13:56  MySql: Forcing close of thread 40093  user: 'etherlord'
+
+031031 16:13:56  MySql: Forcing close of thread 40091  user: 'etherlord'
+
+031031 16:13:56  MySql: Forcing close of thread 40088  user: 'etherlord'
+
+031031 16:13:56  MySql: Forcing close of thread 40086  user: 'etherlord'
+
+031031 16:13:56  MySql: Forcing close of thread 40083  user: 'etherlord'
+
+031031 16:13:56  InnoDB: Starting shutdown...
+031031 16:13:58  InnoDB: Shutdown completed
+031031 16:13:58  MySql: Shutdown Complete
+
+031031 16:15:07  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+031103 12:36:10  MySql: Normal shutdown
+
+031103 12:36:11  MySql: Forcing close of thread 3236  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 3160  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 3151  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 3132  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 3126  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 3053  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 3050  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 3003  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 2991  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 2973  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 2964  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 2952  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 2949  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 2946  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 2942  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 2938  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 2937  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 2934  user: 'etherlord'
+
+031103 12:36:11  MySql: Forcing close of thread 2931  user: 'etherlord'
+
+031103 12:36:11  InnoDB: Starting shutdown...
+031103 12:36:12  InnoDB: Shutdown completed
+031103 12:36:12  MySql: Shutdown Complete
+
+031103 13:09:53  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+031115 18:56:32  MySql: Normal shutdown
+
+031115 18:56:33  MySql: Forcing close of thread 11056  user: 'etherlord'
+
+031115 18:56:33  MySql: Forcing close of thread 11055  user: 'etherlord'
+
+031115 18:56:33  MySql: Forcing close of thread 11054  user: 'etherlord'
+
+031115 18:56:33  MySql: Forcing close of thread 11049  user: 'etherlord'
+
+031115 18:56:33  MySql: Forcing close of thread 11035  user: 'etherlord'
+
+031115 18:56:33  MySql: Forcing close of thread 11034  user: 'etherlord'
+
+031115 18:56:33  MySql: Forcing close of thread 11028  user: 'etherlord'
+
+031115 18:56:33  InnoDB: Starting shutdown...
+031115 18:56:35  InnoDB: Shutdown completed
+031115 18:56:35  MySql: Shutdown Complete
+
+031115 19:06:28  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+031210 16:23:01  MySql: Normal shutdown
+
+031210 16:23:02  MySql: Forcing close of thread 14376  user: 'etherlord'
+
+031210 16:23:02  MySql: Forcing close of thread 14347  user: 'etherlord'
+
+031210 16:23:02  MySql: Forcing close of thread 14343  user: 'etherlord'
+
+031210 16:23:02  MySql: Forcing close of thread 14340  user: 'etherlord'
+
+031210 16:23:02  MySql: Forcing close of thread 14339  user: 'etherlord'
+
+031210 16:23:02  MySql: Forcing close of thread 14337  user: 'etherlord'
+
+031210 16:23:02  MySql: Forcing close of thread 14327  user: 'etherlord'
+
+031210 16:23:02  MySql: Forcing close of thread 14316  user: 'etherlord'
+
+031210 16:23:02  MySql: Forcing close of thread 14311  user: 'etherlord'
+
+031210 16:23:02  MySql: Forcing close of thread 14308  user: 'etherlord'
+
+031210 16:23:02  MySql: Forcing close of thread 14307  user: 'etherlord'
+
+031210 16:23:02  MySql: Forcing close of thread 14304  user: 'etherlord'
+
+031210 16:23:02  MySql: Forcing close of thread 14302  user: 'etherlord'
+
+031210 16:23:02  MySql: Forcing close of thread 14298  user: 'etherlord'
+
+031210 16:23:02  MySql: Forcing close of thread 14297  user: 'etherlord'
+
+031210 16:23:02  MySql: Forcing close of thread 14294  user: 'etherlord'
+
+031210 16:23:03  InnoDB: Starting shutdown...
+031210 16:23:05  InnoDB: Shutdown completed
+031210 16:23:05  MySql: Shutdown Complete
+
+031210 16:24:23  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+040110 11:45:25  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+040208 20:54:50  MySql: Normal shutdown
+
+040208 20:54:51  MySql: Forcing close of thread 17090  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17087  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17086  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17072  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17064  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17060  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17058  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17056  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17055  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17054  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17043  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17042  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17038  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17035  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17034  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17032  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17029  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17026  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17024  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17017  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17014  user: 'etherlord'
+
+040208 20:54:51  MySql: Forcing close of thread 17010  user: 'etherlord'
+
+040208 20:54:51  InnoDB: Starting shutdown...
+040208 20:54:52  InnoDB: Shutdown completed
+040208 20:54:52  MySql: Shutdown Complete
+
+040208 20:56:01  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+040208 21:52:46  MySql: Normal shutdown
+
+040208 21:52:47  MySql: Forcing close of thread 36  user: 'etherlord'
+
+040208 21:52:47  MySql: Forcing close of thread 7  user: 'etherlord'
+
+040208 21:52:47  MySql: Forcing close of thread 5  user: 'etherlord'
+
+040208 21:52:47  InnoDB: Starting shutdown...
+040208 21:52:48  InnoDB: Shutdown completed
+040208 21:52:48  MySql: Shutdown Complete
+
+040208 21:53:36  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+040229 12:59:13  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+040311 16:36:00  MySql: Normal shutdown
+
+040311 16:36:01  MySql: Forcing close of thread 7030  user: 'etherlord'
+
+040311 16:36:01  MySql: Forcing close of thread 6981  user: 'etherlord'
+
+040311 16:36:01  MySql: Forcing close of thread 6978  user: 'etherlord'
+
+040311 16:36:01  MySql: Forcing close of thread 6966  user: 'etherlord'
+
+040311 16:36:01  MySql: Forcing close of thread 6961  user: 'etherlord'
+
+040311 16:36:01  MySql: Forcing close of thread 6956  user: 'etherlord'
+
+040311 16:36:01  MySql: Forcing close of thread 6941  user: 'etherlord'
+
+040311 16:36:01  MySql: Forcing close of thread 6940  user: 'etherlord'
+
+040311 16:36:01  MySql: Forcing close of thread 6935  user: 'etherlord'
+
+040311 16:36:01  MySql: Forcing close of thread 6933  user: 'etherlord'
+
+040311 16:36:01  MySql: Forcing close of thread 6926  user: 'etherlord'
+
+040311 16:36:01  MySql: Forcing close of thread 6924  user: 'etherlord'
+
+040311 16:36:01  MySql: Forcing close of thread 6923  user: 'etherlord'
+
+040311 16:36:01  MySql: Forcing close of thread 6919  user: 'etherlord'
+
+040311 16:36:01  InnoDB: Starting shutdown...
+040311 16:36:02  InnoDB: Shutdown completed
+040311 16:36:02  MySql: Shutdown Complete
+
+040311 16:43:52  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+040311 17:15:23  MySql: Normal shutdown
+
+040311 17:15:24  MySql: Forcing close of thread 17  user: 'etherlord'
+
+040311 17:15:24  MySql: Forcing close of thread 12  user: 'etherlord'
+
+040311 17:15:24  MySql: Forcing close of thread 11  user: 'etherlord'
+
+040311 17:15:24  MySql: Forcing close of thread 10  user: 'etherlord'
+
+040311 17:15:24  MySql: Forcing close of thread 9  user: 'etherlord'
+
+040311 17:15:24  MySql: Forcing close of thread 4  user: 'etherlord'
+
+040311 17:15:24  InnoDB: Starting shutdown...
+040311 17:15:25  InnoDB: Shutdown completed
+040311 17:15:25  MySql: Shutdown Complete
+
+040311 17:16:19  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+041026 16:21:40  MySql: Normal shutdown
+
+041026 16:21:41  MySql: Forcing close of thread 142189  user: 'etherlord'
+
+041026 16:21:41  MySql: Forcing close of thread 142180  user: 'etherlord'
+
+041026 16:21:41  MySql: Forcing close of thread 142132  user: 'etherlord'
+
+041026 16:21:41  MySql: Forcing close of thread 142056  user: 'etherlord'
+
+041026 16:21:41  MySql: Forcing close of thread 142033  user: 'etherlord'
+
+041026 16:21:41  MySql: Forcing close of thread 142020  user: 'etherlord'
+
+041026 16:21:41  MySql: Forcing close of thread 142019  user: 'etherlord'
+
+041026 16:21:41  MySql: Forcing close of thread 142018  user: 'etherlord'
+
+041026 16:21:41  MySql: Forcing close of thread 142014  user: 'etherlord'
+
+041026 16:21:41  MySql: Forcing close of thread 141420  user: 'etherlord'
+
+041026 16:21:41  MySql: Forcing close of thread 141410  user: 'etherlord'
+
+041026 16:21:41  MySql: Forcing close of thread 141378  user: 'etherlord'
+
+041026 16:21:41  MySql: Forcing close of thread 141045  user: 'etherlord'
+
+041026 16:21:42  InnoDB: Starting shutdown...
+041026 16:21:43  InnoDB: Shutdown completed
+041026 16:21:43  MySql: Shutdown Complete
+
+041026 16:23:30  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+041102 11:41:04  MySql: Normal shutdown
+
+041102 11:41:05  MySql: Forcing close of thread 69  user: 'etherlord'
+
+041102 11:41:05  MySql: Forcing close of thread 68  user: 'etherlord'
+
+041102 11:41:05  MySql: Forcing close of thread 44  user: 'etherlord'
+
+041102 11:41:05  MySql: Forcing close of thread 42  user: 'etherlord'
+
+041102 11:41:05  MySql: Forcing close of thread 27  user: 'etherlord'
+
+041102 11:41:05  MySql: Forcing close of thread 22  user: 'etherlord'
+
+041102 11:41:05  MySql: Forcing close of thread 20  user: 'etherlord'
+
+041102 11:41:05  MySql: Forcing close of thread 14  user: 'etherlord'
+
+041102 11:41:05  MySql: Forcing close of thread 2  user: 'etherlord'
+
+041102 11:41:05  MySql: Forcing close of thread 1  user: 'etherlord'
+
+041102 11:41:05  InnoDB: Starting shutdown...
+041102 11:41:06  InnoDB: Shutdown completed
+041102 11:41:06  MySql: Shutdown Complete
+
+041102 11:41:56  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+041119 13:39:11  MySql: Normal shutdown
+
+041119 13:39:12  MySql: Forcing close of thread 4043  user: 'etherlord'
+
+041119 13:39:12  MySql: Forcing close of thread 4037  user: 'etherlord'
+
+041119 13:39:12  MySql: Forcing close of thread 4030  user: 'etherlord'
+
+041119 13:39:12  MySql: Forcing close of thread 4026  user: 'etherlord'
+
+041119 13:39:12  MySql: Forcing close of thread 4022  user: 'etherlord'
+
+041119 13:39:12  MySql: Forcing close of thread 4012  user: 'etherlord'
+
+041119 13:39:12  MySql: Forcing close of thread 4011  user: 'etherlord'
+
+041119 13:39:12  MySql: Forcing close of thread 4005  user: 'etherlord'
+
+041119 13:39:12  MySql: Forcing close of thread 4004  user: 'etherlord'
+
+041119 13:39:12  MySql: Forcing close of thread 4003  user: 'etherlord'
+
+041119 13:39:12  InnoDB: Starting shutdown...
+041119 13:39:14  InnoDB: Shutdown completed
+041119 13:39:14  MySql: Shutdown Complete
+
+041119 13:40:32  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+041125 12:53:08  MySql: Normal shutdown
+
+041125 12:53:09  MySql: Forcing close of thread 31  user: 'etherlord'
+
+041125 12:53:09  MySql: Forcing close of thread 30  user: 'etherlord'
+
+041125 12:53:09  MySql: Forcing close of thread 22  user: 'etherlord'
+
+041125 12:53:09  MySql: Forcing close of thread 19  user: 'etherlord'
+
+041125 12:53:09  MySql: Forcing close of thread 17  user: 'etherlord'
+
+041125 12:53:09  MySql: Forcing close of thread 16  user: 'etherlord'
+
+041125 12:53:09  MySql: Forcing close of thread 13  user: 'etherlord'
+
+041125 12:53:09  MySql: Forcing close of thread 9  user: 'etherlord'
+
+041125 12:53:09  MySql: Forcing close of thread 5  user: 'etherlord'
+
+041125 12:53:09  MySql: Forcing close of thread 4  user: 'etherlord'
+
+041125 12:53:09  InnoDB: Starting shutdown...
+041125 12:53:10  InnoDB: Shutdown completed
+041125 12:53:10  MySql: Shutdown Complete
+
+041125 12:54:39  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+041221 11:03:53  MySql: Normal shutdown
+
+041221 11:03:53  InnoDB: Starting shutdown...
+041221 11:03:55  InnoDB: Shutdown completed
+041221 11:03:55  MySql: Shutdown Complete
+
+041221 11:41:08  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050111 12:48:30  MySql: Normal shutdown
+
+050111 12:48:31  MySql: Forcing close of thread 6716  user: 'etherlord'
+
+050111 12:48:31  MySql: Forcing close of thread 6708  user: 'etherlord'
+
+050111 12:48:31  MySql: Forcing close of thread 6705  user: 'etherlord'
+
+050111 12:48:31  MySql: Forcing close of thread 6136  user: 'etherlord'
+
+050111 12:48:31  MySql: Forcing close of thread 232  user: 'etherlord'
+
+050111 12:48:31  MySql: Forcing close of thread 47  user: 'etherlord'
+
+050111 12:48:31  MySql: Forcing close of thread 42  user: 'etherlord'
+
+050111 12:48:31  MySql: Forcing close of thread 41  user: 'etherlord'
+
+050111 12:48:31  MySql: Forcing close of thread 21  user: 'etherlord'
+
+050111 12:48:31  MySql: Forcing close of thread 19  user: 'etherlord'
+
+050111 12:48:31  MySql: Forcing close of thread 12  user: 'etherlord'
+
+050111 12:48:31  MySql: Forcing close of thread 10  user: 'etherlord'
+
+050111 12:48:31  MySql: Forcing close of thread 8  user: 'etherlord'
+
+050111 12:48:31  MySql: Forcing close of thread 3  user: 'etherlord'
+
+050111 12:48:31  InnoDB: Starting shutdown...
+050111 12:48:33  InnoDB: Shutdown completed
+050111 12:48:33  MySql: Shutdown Complete
+
+050111 12:50:02  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050117 14:24:59  MySql: Normal shutdown
+
+050117 14:25:00  MySql: Forcing close of thread 4572  user: 'etherlord'
+
+050117 14:25:00  MySql: Forcing close of thread 4570  user: 'etherlord'
+
+050117 14:25:00  MySql: Forcing close of thread 4552  user: 'etherlord'
+
+050117 14:25:00  MySql: Forcing close of thread 4550  user: 'etherlord'
+
+050117 14:25:00  MySql: Forcing close of thread 4543  user: 'etherlord'
+
+050117 14:25:00  MySql: Forcing close of thread 4533  user: 'etherlord'
+
+050117 14:25:00  MySql: Forcing close of thread 4437  user: 'etherlord'
+
+050117 14:25:00  MySql: Forcing close of thread 4431  user: 'etherlord'
+
+050117 14:25:00  MySql: Forcing close of thread 1999  user: 'etherlord'
+
+050117 14:25:00  MySql: Forcing close of thread 1991  user: 'etherlord'
+
+050117 14:25:00  MySql: Forcing close of thread 1981  user: 'etherlord'
+
+050117 14:25:00  MySql: Forcing close of thread 1980  user: 'etherlord'
+
+050117 14:25:00  MySql: Forcing close of thread 1978  user: 'etherlord'
+
+050117 14:25:00  MySql: Forcing close of thread 1967  user: 'etherlord'
+
+050117 14:25:00  MySql: Forcing close of thread 1964  user: 'etherlord'
+
+050117 14:25:00  MySql: Forcing close of thread 1963  user: 'etherlord'
+
+050117 14:25:00  MySql: Forcing close of thread 1958  user: 'etherlord'
+
+050117 14:25:00  MySql: Forcing close of thread 1956  user: 'etherlord'
+
+050117 14:25:00  InnoDB: Starting shutdown...
+050117 14:25:02  InnoDB: Shutdown completed
+050117 14:25:02  MySql: Shutdown Complete
+
+050117 14:26:41  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050123 16:30:02  MySql: Normal shutdown
+
+050123 16:30:02  InnoDB: Starting shutdown...
+050123 16:30:04  InnoDB: Shutdown completed
+050123 16:30:04  MySql: Shutdown Complete
+
+050123 17:33:03  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050309 11:34:15  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050311 17:25:51  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050402 21:45:53  MySql: Normal shutdown
+
+050402 21:45:53  InnoDB: Starting shutdown...
+050402 21:45:55  InnoDB: Shutdown completed
+050402 21:45:55  MySql: Shutdown Complete
+
+050402 21:52:27  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050402 22:36:41  MySql: Normal shutdown
+
+050402 22:36:41  InnoDB: Starting shutdown...
+050402 22:36:43  InnoDB: Shutdown completed
+050402 22:36:43  MySql: Shutdown Complete
+
+050402 22:37:29  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050404  9:49:03  MySql: Normal shutdown
+
+050404  9:49:03  InnoDB: Starting shutdown...
+050404  9:49:03  InnoDB: Shutdown completed
+050404  9:49:03  MySql: Shutdown Complete
+
+050404  9:50:24  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050421 14:14:55  MySql: Normal shutdown
+
+050421 14:14:56  MySql: Forcing close of thread 10320  user: 'etherlord'
+
+050421 14:14:56  MySql: Forcing close of thread 10305  user: 'etherlord'
+
+050421 14:14:56  MySql: Forcing close of thread 10293  user: 'etherlord'
+
+050421 14:14:56  MySql: Forcing close of thread 10285  user: 'etherlord'
+
+050421 14:14:56  MySql: Forcing close of thread 10269  user: 'etherlord'
+
+050421 14:14:56  MySql: Forcing close of thread 10243  user: 'etherlord'
+
+050421 14:14:56  MySql: Forcing close of thread 5557  user: 'etherlord'
+
+050421 14:14:56  MySql: Forcing close of thread 5556  user: 'etherlord'
+
+050421 14:14:56  MySql: Forcing close of thread 5554  user: 'etherlord'
+
+050421 14:14:56  MySql: Forcing close of thread 5553  user: 'etherlord'
+
+050421 14:14:56  MySql: Forcing close of thread 5550  user: 'etherlord'
+
+050421 14:14:56  MySql: Forcing close of thread 5549  user: 'etherlord'
+
+050421 14:14:56  MySql: Forcing close of thread 5546  user: 'etherlord'
+
+050421 14:14:56  MySql: Forcing close of thread 5545  user: 'etherlord'
+
+050421 14:14:56  MySql: Forcing close of thread 5541  user: 'etherlord'
+
+050421 14:14:56  MySql: Forcing close of thread 5536  user: 'etherlord'
+
+050421 14:14:56  InnoDB: Starting shutdown...
+050421 14:14:57  InnoDB: Shutdown completed
+050421 14:14:57  MySql: Shutdown Complete
+
+050421 14:16:02  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050422 18:12:53  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050518 18:40:19  MySql: Normal shutdown
+
+050518 18:40:20  MySql: Forcing close of thread 11097  user: 'etherlord'
+
+050518 18:40:20  MySql: Forcing close of thread 11090  user: 'etherlord'
+
+050518 18:40:20  MySql: Forcing close of thread 11088  user: 'etherlord'
+
+050518 18:40:20  MySql: Forcing close of thread 11074  user: 'etherlord'
+
+050518 18:40:20  MySql: Forcing close of thread 11010  user: 'etherlord'
+
+050518 18:40:20  MySql: Forcing close of thread 10999  user: 'etherlord'
+
+050518 18:40:20  MySql: Forcing close of thread 10994  user: 'etherlord'
+
+050518 18:40:20  MySql: Forcing close of thread 10984  user: 'etherlord'
+
+050518 18:40:20  MySql: Forcing close of thread 10973  user: 'etherlord'
+
+050518 18:40:20  MySql: Forcing close of thread 10957  user: 'etherlord'
+
+050518 18:40:20  MySql: Forcing close of thread 10956  user: 'etherlord'
+
+050518 18:40:20  MySql: Forcing close of thread 10951  user: 'etherlord'
+
+050518 18:40:20  MySql: Forcing close of thread 10948  user: 'etherlord'
+
+050518 18:40:20  MySql: Forcing close of thread 10947  user: 'etherlord'
+
+050518 18:40:20  MySql: Forcing close of thread 10943  user: 'etherlord'
+
+050518 18:40:20  MySql: Forcing close of thread 10942  user: 'etherlord'
+
+050518 18:40:20  InnoDB: Starting shutdown...
+050518 18:40:21  InnoDB: Shutdown completed
+050518 18:40:21  MySql: Shutdown Complete
+
+050518 18:42:18  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050527 16:12:53  MySql: Normal shutdown
+
+050527 16:12:54  MySql: Forcing close of thread 4207  user: 'etherlord'
+
+050527 16:12:54  MySql: Forcing close of thread 4202  user: 'etherlord'
+
+050527 16:12:54  MySql: Forcing close of thread 4201  user: 'etherlord'
+
+050527 16:12:54  MySql: Forcing close of thread 4198  user: 'etherlord'
+
+050527 16:12:54  MySql: Forcing close of thread 4110  user: 'etherlord'
+
+050527 16:12:54  MySql: Forcing close of thread 2530  user: 'etherlord'
+
+050527 16:12:54  MySql: Forcing close of thread 1115  user: 'etherlord'
+
+050527 16:12:54  MySql: Forcing close of thread 1086  user: 'etherlord'
+
+050527 16:12:54  MySql: Forcing close of thread 1073  user: 'etherlord'
+
+050527 16:12:54  MySql: Forcing close of thread 1070  user: 'etherlord'
+
+050527 16:12:54  MySql: Forcing close of thread 1064  user: 'etherlord'
+
+050527 16:12:54  MySql: Forcing close of thread 1061  user: 'etherlord'
+
+050527 16:12:54  MySql: Forcing close of thread 1056  user: 'etherlord'
+
+050527 16:12:54  MySql: Forcing close of thread 1054  user: 'etherlord'
+
+050527 16:12:54  MySql: Forcing close of thread 1053  user: 'etherlord'
+
+050527 16:12:54  InnoDB: Starting shutdown...
+050527 16:12:55  InnoDB: Shutdown completed
+050527 16:12:55  MySql: Shutdown Complete
+
+050527 16:15:08  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050606 12:04:11  MySql: Normal shutdown
+
+050606 12:04:12  MySql: Forcing close of thread 3497  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 3496  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 3494  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 3493  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 3491  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 3490  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 3488  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 3482  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 3474  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 3469  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 3459  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 3458  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 3451  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 3450  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 3445  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 3443  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 3433  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 3426  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 89  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 47  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 23  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 16  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 14  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 13  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 12  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 9  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 8  user: 'etherlord'
+
+050606 12:04:12  MySql: Forcing close of thread 4  user: 'etherlord'
+
+050606 12:04:12  InnoDB: Starting shutdown...
+050606 12:04:13  InnoDB: Shutdown completed
+050606 12:04:13  MySql: Shutdown Complete
+
+050606 12:06:45  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050708 10:33:09  MySql: Normal shutdown
+
+050708 10:33:10  MySql: Forcing close of thread 18385  user: 'etherlord'
+
+050708 10:33:10  MySql: Forcing close of thread 16714  user: 'etherlord'
+
+050708 10:33:10  MySql: Forcing close of thread 16693  user: 'etherlord'
+
+050708 10:33:10  MySql: Forcing close of thread 16669  user: 'etherlord'
+
+050708 10:33:10  MySql: Forcing close of thread 16644  user: 'etherlord'
+
+050708 10:33:10  MySql: Forcing close of thread 16643  user: 'etherlord'
+
+050708 10:33:10  MySql: Forcing close of thread 16629  user: 'etherlord'
+
+050708 10:33:10  MySql: Forcing close of thread 16626  user: 'etherlord'
+
+050708 10:33:10  MySql: Forcing close of thread 16621  user: 'etherlord'
+
+050708 10:33:10  MySql: Forcing close of thread 16612  user: 'etherlord'
+
+050708 10:33:10  MySql: Forcing close of thread 16610  user: 'etherlord'
+
+050708 10:33:10  InnoDB: Starting shutdown...
+050708 10:33:11  InnoDB: Shutdown completed
+050708 10:33:11  MySql: Shutdown Complete
+
+050708 10:41:34  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050714 11:49:38  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050715 12:57:28  MySql: Normal shutdown
+
+050715 12:57:29  MySql: Forcing close of thread 700  user: 'etherlord'
+
+050715 12:57:29  MySql: Forcing close of thread 698  user: 'etherlord'
+
+050715 12:57:29  MySql: Forcing close of thread 653  user: 'etherlord'
+
+050715 12:57:29  MySql: Forcing close of thread 643  user: 'etherlord'
+
+050715 12:57:29  MySql: Forcing close of thread 449  user: 'etherlord'
+
+050715 12:57:29  MySql: Forcing close of thread 441  user: 'etherlord'
+
+050715 12:57:29  MySql: Forcing close of thread 437  user: 'etherlord'
+
+050715 12:57:29  MySql: Forcing close of thread 436  user: 'etherlord'
+
+050715 12:57:29  MySql: Forcing close of thread 418  user: 'etherlord'
+
+050715 12:57:29  MySql: Forcing close of thread 417  user: 'etherlord'
+
+050715 12:57:29  MySql: Forcing close of thread 416  user: 'etherlord'
+
+050715 12:57:29  MySql: Forcing close of thread 56  user: 'etherlord'
+
+050715 12:57:29  MySql: Forcing close of thread 40  user: 'etherlord'
+
+050715 12:57:29  MySql: Forcing close of thread 5  user: 'etherlord'
+
+050715 12:57:29  InnoDB: Starting shutdown...
+050715 12:57:31  InnoDB: Shutdown completed
+050715 12:57:31  MySql: Shutdown Complete
+
+050715 13:01:10  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050715 13:36:39  MySql: Normal shutdown
+
+050715 13:36:40  MySql: Forcing close of thread 46  user: 'root'
+
+050715 13:36:40  MySql: Forcing close of thread 39  user: 'etherlord'
+
+050715 13:36:40  MySql: Forcing close of thread 35  user: 'etherlord'
+
+050715 13:36:40  MySql: Forcing close of thread 17  user: 'etherlord'
+
+050715 13:36:40  MySql: Forcing close of thread 16  user: 'etherlord'
+
+050715 13:36:40  MySql: Forcing close of thread 6  user: 'etherlord'
+
+050715 13:36:40  MySql: Forcing close of thread 4  user: 'etherlord'
+
+050715 13:36:40  MySql: Forcing close of thread 3  user: 'root'
+
+050715 13:36:40  MySql: Forcing close of thread 1  user: 'etherlord'
+
+050715 13:36:40  InnoDB: Starting shutdown...
+050715 13:36:41  InnoDB: Shutdown completed
+050715 13:36:41  MySql: Shutdown Complete
+
+050715 13:36:46  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050825 16:20:36  MySql: Normal shutdown
+
+050825 16:20:37  MySql: Forcing close of thread 30529  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 30528  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 30467  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 30382  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 30169  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 30112  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 29896  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 29498  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 29234  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 29197  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 29193  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 29190  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 29184  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 29176  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 29172  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 29155  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 29151  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 29115  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 29081  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 29075  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 29058  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 24951  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 24946  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 24937  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 24918  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 24908  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 24899  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 24896  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 24893  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 24892  user: 'etherlord'
+
+050825 16:20:37  MySql: Forcing close of thread 24886  user: 'etherlord'
+
+050825 16:20:38  InnoDB: Starting shutdown...
+050825 16:20:40  InnoDB: Shutdown completed
+050825 16:20:40  MySql: Shutdown Complete
+
+050825 18:29:04  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050825 18:30:57  MySql: Normal shutdown
+
+050825 18:30:58  MySql: Forcing close of thread 3  user: 'etherlord'
+
+050825 18:30:58  MySql: Forcing close of thread 2  user: 'etherlord'
+
+050825 18:30:58  InnoDB: Starting shutdown...
+050825 18:31:00  InnoDB: Shutdown completed
+050825 18:31:00  MySql: Shutdown Complete
+
+050825 18:31:46  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050825 18:37:32  MySql: Normal shutdown
+
+050825 18:37:33  MySql: Forcing close of thread 12  user: 'etherlord'
+
+050825 18:37:33  MySql: Forcing close of thread 9  user: 'etherlord'
+
+050825 18:37:33  MySql: Forcing close of thread 7  user: 'etherlord'
+
+050825 18:37:33  MySql: Forcing close of thread 6  user: 'etherlord'
+
+050825 18:37:33  MySql: Forcing close of thread 5  user: 'etherlord'
+
+050825 18:37:33  MySql: Forcing close of thread 3  user: 'etherlord'
+
+050825 18:37:33  MySql: Forcing close of thread 2  user: 'etherlord'
+
+050825 18:37:33  InnoDB: Starting shutdown...
+050825 18:37:35  InnoDB: Shutdown completed
+050825 18:37:35  MySql: Shutdown Complete
+
+050825 18:38:22  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050825 18:40:11  MySql: Normal shutdown
+
+050825 18:40:12  MySql: Forcing close of thread 4  user: 'etherlord'
+
+050825 18:40:12  MySql: Forcing close of thread 2  user: 'etherlord'
+
+050825 18:40:12  MySql: Forcing close of thread 1  user: 'etherlord'
+
+050825 18:40:12  InnoDB: Starting shutdown...
+050825 18:40:12  InnoDB: Shutdown completed
+050825 18:40:12  MySql: Shutdown Complete
+
+050825 18:40:57  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050906 20:31:41  MySql: Normal shutdown
+
+050906 20:31:42  MySql: Forcing close of thread 9591  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 9574  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 9567  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 9563  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 9524  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 9430  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 9407  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 9371  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 9370  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 9359  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 9339  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 9336  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 9323  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 9311  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 9302  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 9298  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 6546  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 6482  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 6465  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 6421  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 6411  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 6391  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 6388  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 6387  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 6385  user: 'etherlord'
+
+050906 20:31:42  MySql: Forcing close of thread 6383  user: 'etherlord'
+
+050906 20:31:43  InnoDB: Starting shutdown...
+050906 20:31:43  InnoDB: Shutdown completed
+050906 20:31:43  MySql: Shutdown Complete
+
+050906 20:57:22  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050926 15:59:29  MySql: Normal shutdown
+
+050926 15:59:30  MySql: Forcing close of thread 14635  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14629  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14627  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14624  user: 'root'
+
+050926 15:59:30  MySql: Forcing close of thread 14623  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14622  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14621  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14620  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14609  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14595  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14573  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14535  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14462  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14440  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14418  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14406  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14397  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14360  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14349  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14342  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14340  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14339  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14336  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14333  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14325  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14322  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14314  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14313  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14311  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14306  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14300  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 14279  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 11103  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 3195  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 3182  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 3169  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 35  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 21  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 18  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 15  user: 'root'
+
+050926 15:59:30  MySql: Forcing close of thread 11  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 5  user: 'etherlord'
+
+050926 15:59:30  MySql: Forcing close of thread 2  user: 'etherlord'
+
+050926 15:59:30  InnoDB: Starting shutdown...
+050926 15:59:31  InnoDB: Shutdown completed
+050926 15:59:31  MySql: Shutdown Complete
+
+050926 15:59:32  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+050926 16:06:10  MySql: Normal shutdown
+
+050926 16:06:10  InnoDB: Starting shutdown...
+050926 16:06:11  InnoDB: Shutdown completed
+050926 16:06:11  MySql: Shutdown Complete
+
+050926 16:08:09  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+051031 11:50:04  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+051118 10:00:18  MySql: Normal shutdown
+
+051118 10:00:19  MySql: Forcing close of thread 11454  user: 'etherlord'
+
+051118 10:00:19  MySql: Forcing close of thread 11451  user: 'etherlord'
+
+051118 10:00:19  MySql: Forcing close of thread 11449  user: 'etherlord'
+
+051118 10:00:19  MySql: Forcing close of thread 11422  user: 'etherlord'
+
+051118 10:00:19  MySql: Forcing close of thread 11415  user: 'etherlord'
+
+051118 10:00:19  MySql: Forcing close of thread 11413  user: 'etherlord'
+
+051118 10:00:19  MySql: Forcing close of thread 11412  user: 'etherlord'
+
+051118 10:00:19  MySql: Forcing close of thread 7612  user: 'etherlord'
+
+051118 10:00:19  MySql: Forcing close of thread 7115  user: 'etherlord'
+
+051118 10:00:19  MySql: Forcing close of thread 7111  user: 'etherlord'
+
+051118 10:00:19  MySql: Forcing close of thread 6536  user: 'etherlord'
+
+051118 10:00:19  MySql: Forcing close of thread 6025  user: 'etherlord'
+
+051118 10:00:19  MySql: Forcing close of thread 4485  user: 'etherlord'
+
+051118 10:00:19  MySql: Forcing close of thread 52  user: 'etherlord'
+
+051118 10:00:19  MySql: Forcing close of thread 38  user: 'etherlord'
+
+051118 10:00:19  MySql: Forcing close of thread 29  user: 'etherlord'
+
+051118 10:00:19  MySql: Forcing close of thread 24  user: 'etherlord'
+
+051118 10:00:19  MySql: Forcing close of thread 5  user: 'etherlord'
+
+051118 10:00:20  InnoDB: Starting shutdown...
+051118 10:00:21  InnoDB: Shutdown completed
+051118 10:00:21  MySql: Shutdown Complete
+
+051118 10:01:52  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+051121 10:38:25  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+060109 13:26:59  MySql: Normal shutdown
+
+060109 13:27:00  MySql: Forcing close of thread 39523  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 39517  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 39516  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 39513  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 39504  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 39495  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 39490  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 39486  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 39482  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 39480  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 39477  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 39449  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 39446  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 36513  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 34866  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 29186  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 24362  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 24287  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 24266  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 24258  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 24221  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 24219  user: 'etherlord'
+
+060109 13:27:00  MySql: Forcing close of thread 24218  user: 'etherlord'
+
+060109 13:27:05  InnoDB: Starting shutdown...
+060109 13:27:12  InnoDB: Shutdown completed
+060109 13:27:12  MySql: Shutdown Complete
+
+060109 13:30:53  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+060110 10:39:00  MySql: Normal shutdown
+
+060110 10:39:02  MySql: Forcing close of thread 599  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 597  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 595  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 593  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 592  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 590  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 589  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 581  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 576  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 574  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 572  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 569  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 564  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 558  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 557  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 547  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 527  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 509  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 185  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 105  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 84  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 63  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 57  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 46  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 38  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 25  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 3  user: 'etherlord'
+
+060110 10:39:02  MySql: Forcing close of thread 1  user: 'etherlord'
+
+060110 10:39:08  InnoDB: Starting shutdown...
+060110 10:39:13  InnoDB: Shutdown completed
+060110 10:39:13  MySql: Shutdown Complete
+
+060110 10:42:27  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+060111 13:27:47  MySql: Normal shutdown
+
+060111 13:27:48  MySql: Forcing close of thread 1212  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1210  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1200  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1188  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1168  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1141  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1133  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1132  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1119  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1114  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1112  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1110  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1095  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1079  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1073  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1068  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1052  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1044  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1042  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1032  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 1030  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 118  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 109  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 78  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 75  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 71  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 61  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 57  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 44  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 20  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 16  user: 'etherlord'
+
+060111 13:27:48  MySql: Forcing close of thread 8  user: 'etherlord'
+
+060111 13:27:52  InnoDB: Starting shutdown...
+060111 13:27:58  InnoDB: Shutdown completed
+060111 13:27:58  MySql: Shutdown Complete
+
+060111 13:29:17  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+060111 18:08:15  MySql: Normal shutdown
+
+060111 18:08:16  MySql: Forcing close of thread 156  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 146  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 129  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 124  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 118  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 117  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 108  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 106  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 101  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 98  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 90  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 87  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 86  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 77  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 64  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 61  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 60  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 55  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 54  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 51  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 49  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 48  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 46  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 45  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 43  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 39  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 38  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 33  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 32  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 29  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 26  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 25  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 12  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 7  user: 'etherlord'
+
+060111 18:08:16  MySql: Forcing close of thread 6  user: 'root'
+
+060111 18:08:16  MySql: Forcing close of thread 5  user: 'root'
+
+060111 18:08:16  MySql: Forcing close of thread 3  user: 'etherlord'
+
+060111 18:08:16  InnoDB: Starting shutdown...
+060111 18:08:17  InnoDB: Shutdown completed
+060111 18:08:17  MySql: Shutdown Complete
+
+060111 18:08:19  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+060117 15:10:00  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+060215 11:07:38  MySql: Normal shutdown
+
+060215 11:07:39  MySql: Forcing close of thread 26824  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 26714  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 26712  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 26697  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 26683  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 26659  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 26658  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 26656  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 26630  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 26624  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 26623  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 25057  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 25039  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 25024  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 25021  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 25008  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 24969  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 24950  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 24922  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 24921  user: 'etherlord'
+
+060215 11:07:39  MySql: Forcing close of thread 24913  user: 'etherlord'
+
+060215 11:07:44  InnoDB: Starting shutdown...
+060215 11:07:50  InnoDB: Shutdown completed
+060215 11:07:51  MySql: Shutdown Complete
+
+060215 11:11:40  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+060309  9:06:09  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+060309 10:35:43  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+060320  9:22:03  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+060619 17:42:09  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+060727 11:55:57  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+060916 16:46:42  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+061209 14:38:59  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+061215 10:52:10  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
+070221  6:48:40  InnoDB: Started
+MySql: ready for connections.
+Version: '4.0.13-max-nt'  socket: ''  port: 3306
