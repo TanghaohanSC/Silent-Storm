@@ -1,0 +1,238 @@
+-- MySQL dump 9.07
+--
+-- Host: 195.128.95.41    Database: Master4102
+---------------------------------------------------------
+-- Server version       4.0.13-max-nt
+
+CREATE DATABASE Master4102;
+USE Master4102;
+
+--
+-- Table structure for table 'allowedips'
+--
+
+CREATE TABLE allowedips (
+  ID int(4) NOT NULL auto_increment,
+  IP varchar(20) default NULL,
+  PRIMARY KEY  (ID)
+) TYPE=MyISAM;
+
+--
+-- Table structure for table 'bannedips'
+--
+
+CREATE TABLE bannedips (
+  ID int(4) NOT NULL auto_increment,
+  IP varchar(20) default NULL,
+  Mask varchar(20) default NULL,
+  PRIMARY KEY  (ID)
+) TYPE=MyISAM;
+
+--
+-- Table structure for table 'bannednames'
+--
+
+CREATE TABLE bannednames (
+  ID int(4) NOT NULL auto_increment,
+  Name varchar(40) default NULL,
+  PRIMARY KEY  (ID)
+) TYPE=MyISAM;
+
+--
+-- Table structure for table 'commonstats'
+--
+
+CREATE TABLE commonstats (
+  UsersNow int(4) default NULL,
+  Registered int(4) default NULL,
+  GamesNow int(4) default NULL
+) TYPE=MyISAM;
+
+--
+-- Table structure for table 'statistics'
+--
+
+CREATE TABLE statistics (
+  ID int(11) NOT NULL default '0',
+  Total_Minutes_Played int(11) NOT NULL default '0',
+  Cheats int(11) NOT NULL default '0',
+  Duel_Wins int(11) NOT NULL default '0',
+  Duel_Losses int(11) NOT NULL default '0',
+  Duel_Draws int(11) NOT NULL default '0',
+  Draft_Wins int(11) NOT NULL default '0',
+  Draft_Losses int(11) NOT NULL default '0',
+  Draft_Draws int(11) NOT NULL default '0',
+  Sealed_Wins int(11) NOT NULL default '0',
+  Sealed_Losses int(11) NOT NULL default '0',
+  Sealed_Draws int(11) NOT NULL default '0',
+  total_wins int(11) NOT NULL default '0',
+  total_losses int(11) NOT NULL default '0',
+  total_draws int(11) NOT NULL default '0',
+  Duel_Rating int(11) NOT NULL default '100',
+  Draft_Rating int(11) NOT NULL default '100',
+  Sealed_Rating int(11) NOT NULL default '100',
+  Duel_Chaot_Rating int(11) NOT NULL default '100',
+  Duel_Kinet_Rating int(11) NOT NULL default '100',
+  Duel_Pale_Rating int(11) NOT NULL default '100',
+  Duel_Synthet_Rating int(11) NOT NULL default '100',
+  Duel_Vital_Rating int(11) NOT NULL default '100',
+  Sealed_Chaot_Rating int(11) NOT NULL default '100',
+  Sealed_Kinet_Rating int(11) NOT NULL default '100',
+  Sealed_Pale_Rating int(11) NOT NULL default '100',
+  Sealed_Synthet_Rating int(11) NOT NULL default '100',
+  Sealed_Vital_Rating int(11) NOT NULL default '100',
+  Draft_Chaot_Rating int(11) NOT NULL default '100',
+  Draft_Kinet_Rating int(11) NOT NULL default '100',
+  Draft_Pale_Rating int(11) NOT NULL default '100',
+  Draft_Synthet_Rating int(11) NOT NULL default '100',
+  Draft_Vital_Rating int(11) NOT NULL default '100',
+  total_rating int(11) NOT NULL default '0',
+  Total_Chaot_Rating int(11) NOT NULL default '0',
+  Total_Kinet_Rating int(11) NOT NULL default '0',
+  Total_Pale_Rating int(11) NOT NULL default '0',
+  Total_Synthet_Rating int(11) NOT NULL default '0',
+  Total_Vital_Rating int(11) NOT NULL default '0',
+  Duel_place int(11) NOT NULL default '1',
+  Draft_place int(11) NOT NULL default '1',
+  Sealed_place int(11) NOT NULL default '1',
+  Duel_Chaot_place int(11) NOT NULL default '1',
+  Duel_Kinet_place int(11) NOT NULL default '1',
+  Duel_Synthet_place int(11) NOT NULL default '1',
+  Duel_Pale_place int(11) NOT NULL default '1',
+  Duel_Vital_place int(11) NOT NULL default '1',
+  Sealed_Chaot_place int(11) NOT NULL default '1',
+  Sealed_Kinet_place int(11) NOT NULL default '1',
+  Sealed_Synthet_place int(11) NOT NULL default '1',
+  Sealed_Pale_place int(11) NOT NULL default '1',
+  Sealed_Vital_place int(11) NOT NULL default '1',
+  Draft_Chaot_place int(11) NOT NULL default '1',
+  Draft_Kinet_place int(11) NOT NULL default '1',
+  Draft_Synthet_place int(11) NOT NULL default '1',
+  Draft_Pale_place int(11) NOT NULL default '1',
+  Draft_Vital_place int(11) NOT NULL default '1',
+  Total_Chaot_place int(11) NOT NULL default '1',
+  Total_Kinet_place int(11) NOT NULL default '1',
+  Total_Synthet_place int(11) NOT NULL default '1',
+  Total_Pale_place int(11) NOT NULL default '1',
+  Total_Vital_place int(11) NOT NULL default '1',
+  Total_place int(11) NOT NULL default '1',
+  LastMatchGUID int(11) NOT NULL default '0',
+  Duel_Chaot_Wins int(11) NOT NULL default '0',
+  Duel_Chaot_Losses int(11) NOT NULL default '0',
+  Duel_Chaot_Draws int(11) NOT NULL default '0',
+  Duel_Kinet_Wins int(11) NOT NULL default '0',
+  Duel_Kinet_Losses int(11) NOT NULL default '0',
+  Duel_Kinet_Draws int(11) NOT NULL default '0',
+  Duel_Synthet_Wins int(11) NOT NULL default '0',
+  Duel_Synthet_Losses int(11) NOT NULL default '0',
+  Duel_Synthet_Draws int(11) NOT NULL default '0',
+  Duel_Vital_Wins int(11) NOT NULL default '0',
+  Duel_Vital_Losses int(11) NOT NULL default '0',
+  Duel_Vital_Draws int(11) NOT NULL default '0',
+  Duel_Pale_Wins int(11) NOT NULL default '0',
+  Duel_Pale_Losses int(11) NOT NULL default '0',
+  Duel_Pale_Draws int(11) NOT NULL default '0',
+  Draft_Chaot_Wins int(11) NOT NULL default '0',
+  Draft_Chaot_Losses int(11) NOT NULL default '0',
+  Draft_Chaot_Draws int(11) NOT NULL default '0',
+  Draft_Kinet_Wins int(11) NOT NULL default '0',
+  Draft_Kinet_Losses int(11) NOT NULL default '0',
+  Draft_Kinet_Draws int(11) NOT NULL default '0',
+  Draft_Synthet_Wins int(11) NOT NULL default '0',
+  Draft_Synthet_Losses int(11) NOT NULL default '0',
+  Draft_Synthet_Draws int(11) NOT NULL default '0',
+  Draft_Vital_Wins int(11) NOT NULL default '0',
+  Draft_Vital_Losses int(11) NOT NULL default '0',
+  Draft_Vital_Draws int(11) NOT NULL default '0',
+  Draft_Pale_Wins int(11) NOT NULL default '0',
+  Draft_Pale_Losses int(11) NOT NULL default '0',
+  Draft_Pale_Draws int(11) NOT NULL default '0',
+  Sealed_Chaot_Wins int(11) NOT NULL default '0',
+  Sealed_Chaot_Losses int(11) NOT NULL default '0',
+  Sealed_Chaot_Draws int(11) NOT NULL default '0',
+  Sealed_Kinet_Wins int(11) NOT NULL default '0',
+  Sealed_Kinet_Losses int(11) NOT NULL default '0',
+  Sealed_Kinet_Draws int(11) NOT NULL default '0',
+  Sealed_Synthet_Wins int(11) NOT NULL default '0',
+  Sealed_Synthet_Losses int(11) NOT NULL default '0',
+  Sealed_Synthet_Draws int(11) NOT NULL default '0',
+  Sealed_Vital_Wins int(11) NOT NULL default '0',
+  Sealed_Vital_Losses int(11) NOT NULL default '0',
+  Sealed_Vital_Draws int(11) NOT NULL default '0',
+  Sealed_Pale_Wins int(11) NOT NULL default '0',
+  Sealed_Pale_Losses int(11) NOT NULL default '0',
+  Sealed_Pale_Draws int(11) NOT NULL default '0',
+  Name varchar(30) NOT NULL default '',
+  Total_Chaot_Wins int(11) NOT NULL default '0',
+  Total_Chaot_Losses int(11) NOT NULL default '0',
+  Total_Chaot_Draws int(11) NOT NULL default '0',
+  Total_Kinet_Wins int(11) NOT NULL default '0',
+  Total_Kinet_Losses int(11) NOT NULL default '0',
+  Total_Kinet_Draws int(11) NOT NULL default '0',
+  Total_Synthet_Wins int(11) NOT NULL default '0',
+  Total_Synthet_Losses int(11) NOT NULL default '0',
+  Total_Synthet_Draws int(11) NOT NULL default '0',
+  Total_Vital_Wins int(11) NOT NULL default '0',
+  Total_Vital_Losses int(11) NOT NULL default '0',
+  Total_Vital_Draws int(11) NOT NULL default '0',
+  Total_Pale_Wins int(11) NOT NULL default '0',
+  Total_Pale_Losses int(11) NOT NULL default '0',
+  Total_Pale_Draws int(11) NOT NULL default '0',
+  Duel_Total_Wins int(11) NOT NULL default '0',
+  Duel_Total_Losses int(11) NOT NULL default '0',
+  Duel_Total_Draws int(11) NOT NULL default '0',
+  Draft_Total_Wins int(11) NOT NULL default '0',
+  Draft_Total_Losses int(11) NOT NULL default '0',
+  Draft_Total_Draws int(11) NOT NULL default '0',
+  Sealed_Total_Wins int(11) NOT NULL default '0',
+  Sealed_Total_Losses int(11) NOT NULL default '0',
+  Sealed_Total_Draws int(11) NOT NULL default '0',
+  Total_Total_Wins int(11) NOT NULL default '0',
+  Total_Total_Losses int(11) NOT NULL default '0',
+  Total_Total_Draws int(11) NOT NULL default '0',
+  PRIMARY KEY  (ID),
+  KEY idx_name (Name),
+  KEY idx_sealed_wins (Sealed_Wins),
+  KEY idx_draft_wins (Draft_Wins),
+  KEY idx_duel_wins (Duel_Wins),
+  KEY idx_total_wins (total_wins),
+  KEY idx_sealed_losses (Sealed_Losses),
+  KEY idx_draft_losses (Draft_Losses),
+  KEY idx_duel_losses (Duel_Losses),
+  KEY idx_total_losses (total_losses),
+  KEY idx_sealed_draws (Sealed_Draws),
+  KEY idx_draft_draws (Draft_Draws),
+  KEY idx_duel_draws (Duel_Draws),
+  KEY idx_total_draws (total_draws),
+  KEY idx_sealed_rating (Sealed_Rating),
+  KEY idx_draft_rating (Draft_Rating),
+  KEY idx_duel_rating (Duel_Rating),
+  KEY idx_total_rating (total_rating),
+  KEY idx_duel_total_wins (Duel_Total_Wins),
+  KEY idx_duel_total_losses (Duel_Total_Losses),
+  KEY idx_duel_total_draws (Duel_Total_Draws),
+  KEY idx_sealed_total_wins (Sealed_Total_Wins),
+  KEY idx_sealed_total_losses (Sealed_Total_Losses),
+  KEY idx_sealed_total_draws (Sealed_Total_Draws),
+  KEY idx_draft_total_wins (Draft_Total_Wins),
+  KEY idx_draft_total_losses (Draft_Total_Losses),
+  KEY idx_draft_total_draws (Draft_Total_Draws),
+  KEY idx_total_total_wins (Total_Total_Wins),
+  KEY idx_total_total_losses (Total_Total_Losses),
+  KEY idx_total_total_draws (Total_Total_Draws)
+) TYPE=MyISAM;
+
+--
+-- Table structure for table 'users'
+--
+
+CREATE TABLE users (
+  ID int(4) NOT NULL auto_increment,
+  Name varchar(40) default NULL,
+  Password varchar(40) default NULL,
+  IsBanned int(1) default NULL,
+  CDKey varchar(20) NOT NULL default '',
+  lastlogin varchar(60) NOT NULL default '',
+  PRIMARY KEY  (ID)
+) TYPE=MyISAM;
+
