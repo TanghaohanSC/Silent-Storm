@@ -1,0 +1,94 @@
+;----------------------------------------------------
+;          Life Studio:Head
+;         Phonemes & Visemes
+;      (c) 2001...2002, LifeMode Interactive, Inc.
+;----------------------------------------------------
+
+; spline form:   FD      - dipthong
+;                FM      - monothong
+;                FC      - consonant
+; (used default form if not specified)
+
+;-command-type-phomene-viseme:  normal accent-spline form ---------
+
+PHON   VOWELD     AY           AY_5  AY_9     ; dipthongs (normal+accent visemes)
+PHON   VOWELD     AW           AW_5  AW_9
+PHON   VOWELD     EY           EY_5  EY_9
+PHON   VOWELD     OW           OW_5  OW_9
+PHON   VOWELD     OY           OY_5  OY_9
+
+PHON   VOWELM     AR           AR             ; monothongs (only normal visemes)
+PHON   VOWELM     AA           AA
+PHON   VOWELM     AE           AE
+PHON   VOWELM     AH           AH
+PHON   VOWELM     AO           AO
+PHON   VOWELM     AX           AX
+PHON   VOWELM     EH           EH
+PHON   VOWELM     ER           ER
+PHON   VOWELM     IH           IH
+PHON   VOWELM     IX           IH
+PHON   VOWELM     IY           IY
+PHON   VOWELM     OH           OH
+PHON   VOWELM     UH           UH
+PHON   VOWELM     UW           UW
+PHON   VOWELM     IN           IH
+PHON   VOWELM     UN           AX
+
+
+PHON   CONSONANT  h#           PAUSE PAUSE
+PHON   CONSONANT  CH           CH             ; consonant (only normal visemes)
+PHON   CONSONANT  SH           CH
+PHON   CONSONANT  ZH           CH
+PHON   CONSONANT  DH           DH
+PHON   CONSONANT  TH           DH
+PHON   CONSONANT  F            FV
+PHON   CONSONANT  V            FV
+PHON   CONSONANT  L            L      FM
+PHON   CONSONANT  M            MBP
+PHON   CONSONANT  B            MBP
+PHON   CONSONANT  P            MBP
+PHON   CONSONANT  W            W      FM      ; consonant, but monothong spline form
+PHON   CONSONANT  WH           W      FM
+PHON   CONSONANT  Z            Z
+PHON   CONSONANT  S            Z
+
+
+PHON   COMPLEX   IL            IH    L
+PHON   COMPLEX   IM            IH    M
+PHON   COMPLEX   UL            AX    L
+PHON   COMPLEX   UM            AX    M
+
+
+
+;-----timing-----------------------------------------
+;               delta_t       time
+DTIME  VOWELD     0            60            ; delta_t0: 60 msec
+DTIME  VOWELD     1           -1             ; delta_t1: to next phoneme start, if negative
+DTIME  VOWELM     0            60            ; delta_t0: 60 msec
+DTIME  VOWELM     1           -1             ; delta_t1: to next phoneme start, if negative
+
+DTIME  CONSONANT  0            20            ; delta_t0: 0 msec
+DTIME  CONSONANT  1            0             ; delta_t1: 0 msec
+
+;-----amplitudes-------------------------------------
+                                             ; points 0..3, ampl range: -100..+100
+AMPL   VOWELD     0           -100           ; point 0, ampl -100
+AMPL   VOWELD     2            0             ; point 2, ampl   0
+AMPL   VOWELD     3            100           ; point 3, ampl  100
+
+AMPL   VOWELM     0           -100           ; point 0, ampl  -100
+AMPL   VOWELM     1            0             ; point 1, ampl   0
+AMPL   VOWELM     2            0             ; point 2, ampl   0
+AMPL   VOWELM     3           -100           ; point 3, ampl  -100
+
+AMPL   CONSONANT 0            -100           ; point 0, ampl  -100
+AMPL   CONSONANT 1             100           ; point 1, ampl   100
+AMPL   CONSONANT 2             100           ; point 2, ampl   100
+AMPL   CONSONANT 3            -100           ; point 3, ampl  -100
+
+PERCENT COMPLEX                75            ; duration of first complex phoneme:
+                                             ;        % of total duration
+
+
+;----------------------------------------------------
+
