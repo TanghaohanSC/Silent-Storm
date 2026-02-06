@@ -1,0 +1,220 @@
+digraph g
+{
+  concentrate=true;
+  nodesep=.3;
+  ranksep=.3;
+  Base[shape = box, fontcolor=darkgreen, style=filled, label = "Base\n1"];
+  RFCom[shape = box, style=dotted, label = "RFCom\n9"];
+  ECct[shape = box, style=dotted, label = "ECct\n4"];
+  RFFact[shape = box, style=dotted, label = "RFFact\n10"];
+  EFCom[shape = box, style=dotted, label = "EFCom\n3"];
+  RTLab[shape = box, style=filled, label = "5\nRTLab\n12"];
+  EFLab[shape = box, style=dotted, label = "EFLab\n5"];
+  EFStore[shape = box, style=dotted, label = "EFStore\n5"];
+  EFVip[shape = box, style=filled, label = "2\nEFVip\n5"];
+  EHid[shape = box, style=dotted, label = "EHid\n4"];
+  EMis[shape = box, fontcolor=darkgreen, style=filled, label = "1\nEMis\n2"];
+  ETStore[shape = box, label = "ETStore\n11"];
+  ETwn[shape = box, style=dotted, label = "ETwn\n8"];
+  EVlg[shape = box, style=dotted, label = "EVlg\n7"];
+  FFight[shape = box, style=filled, label = "6\nFFight\n15"];
+  GCct[shape = box, label = "GCct\n6"];
+  [shape = box, style=dotted, label = "\n0"];
+  GECom[shape = box, style=filled, label = "3\nGECom\n7"];
+  EFirst[shape = box, style=dotted, label = "EFirst\n0"];
+  GEFact[shape = box, label = "GEFact\n11"];
+  GELab[shape = box, label = "GELab\n8"];
+  GEStore[shape = box, label = "GEStore\n9"];
+  GEVip[shape = box, style=dotted, label = "GEVip\n8"];
+  GTFact[shape = box, label = "GTFact\n13"];
+  GTVip[shape = box, style=filled, label = "4\nGTVip\n10"];
+  GTwn[shape = box, style=dotted, label = "GTwn\n7"];
+  Find_Coded_Message[shape = ellipse, style=filled, label = "Find_Coded_Message"];
+  Rocket_Eng_Info[shape = ellipse, style=filled, label = "Rocket_Eng_Info"];
+  Lab_Note[shape = ellipse, style=filled, label = "Lab_Note"];
+  Find_address[shape = ellipse, style=dotted, label = "Find_address"];
+  TerrorPlan[shape = ellipse, style=dotted, label = "TerrorPlan"];
+  Find_note[shape = ellipse, style=dotted, label = "Find_note"];
+  DiscoverRadioEquipment[shape = ellipse, style=dotted, label = "DiscoverRadioEquipment"];
+  CapturedBritScientist[shape = ellipse, style=filled, label = "CapturedBritScientist"];
+  Shipment_Docs[shape = ellipse, label = "Shipment_Docs"];
+  Find_German_Intel_Officer[shape = ellipse, style=dotted, label = "Find_German_Intel_Officer"];
+  Russian_TB_Activity[shape = ellipse, style=filled, label = "Russian_TB_Activity"];
+  Find_note_about_TerrAttack[shape = ellipse, style=dotted, label = "Find_note_about_TerrAttack"];
+  RussianActivity[shape = ellipse, style=filled, label = "RussianActivity"];
+  LebedevRocket[shape = ellipse, style=filled, label = "LebedevRocket"];
+  Hanke_KidnappedScientist[shape = ellipse, style=dotted, label = "Hanke_KidnappedScientist"];
+  Find_Helenas_Letter[shape = ellipse, style=filled, label = "Find_Helenas_Letter"];
+  Hanke_TerrPlan[shape = ellipse, style=filled, label = "Hanke_TerrPlan"];
+  Space_Rocket_N_Sea[shape = ellipse, style=filled, label = "Space_Rocket_N_Sea"];
+  Recapture_Scientist[shape = ellipse, label = "Recapture_Scientist"];
+  StrangeActivity[shape = ellipse, style=filled, label = "StrangeActivity"];
+  Defend_Russian_Engineer[shape = ellipse, style=dotted, label = "Defend_Russian_Engineer"];
+  Delivery_Request[shape = ellipse, style=filled, label = "Delivery_Request"];
+  INFO_Coded_Message_assasination[shape = ellipse, style=dotted, label = "INFO_Coded_Message_assasination"];
+  Find_TheftPlans[shape = ellipse, style=dotted, label = "Find_TheftPlans"];
+  StrangeActivity_Germany[shape = ellipse, style=filled, label = "StrangeActivity_Germany"];
+  Obtain_German_Pk[shape = ellipse, label = "Obtain_German_Pk"];
+  Defend_Informer[shape = ellipse, style=dotted, label = "Defend_Informer"];
+  Hanke_Construction[shape = ellipse, style=filled, label = "Hanke_Construction"];
+  INFO_Stolen_TopSecretDocs[shape = ellipse, fontcolor=darkgreen, style=filled, label = "INFO_Stolen_TopSecretDocs"];
+  Find_G_Technician[shape = ellipse, label = "Find_G_Technician"];
+  FIN_DESCRIPTION[shape = ellipse, style=filled, label = "FIN_DESCRIPTION"];
+  Find_german_experimental_equipment[shape = ellipse, style=dotted, label = "Find_german_experimental_equipment"];
+  Find_StolenDocs_Note[shape = ellipse, style=filled, label = "Find_StolenDocs_Note"];
+  Helena_Exchange_Letter[shape = ellipse, style=filled, label = "Helena_Exchange_Letter"];
+  Find_Stolen_Docs[shape = ellipse, style=filled, label = "Find_Stolen_Docs"];
+  Capture_General[shape = ellipse, label = "Capture_General"];
+  Find_BritLetter[shape = ellipse, style=filled, label = "Find_BritLetter"];
+  Hanke_Terror[shape = ellipse, style=filled, label = "Hanke_Terror"];
+  Free_our_agent[shape = ellipse, style=dotted, label = "Free_our_agent"];
+  Letter_from_H[shape = ellipse, style=filled, label = "Letter_from_H"];
+  Draft_Letter_to_Andersen[shape = ellipse, label = "Draft_Letter_to_Andersen"];
+  Capture_Officer_traitor[shape = ellipse, style=filled, label = "Capture_Officer_traitor"];
+  Obtain_Pk_prototype[shape = ellipse, label = "Obtain_Pk_prototype"];
+  Colonel_Escaped[shape = ellipse, label = "Colonel_Escaped"];
+  Capture_Stielmann[shape = ellipse, label = "Capture_Stielmann"];
+  Capture_G_ThftLeader[shape = ellipse, style=dotted, label = "Capture_G_ThftLeader"];
+  PK_R_D_Docs[shape = ellipse, label = "PK_R_D_Docs"];
+  Capture_Hanke[shape = ellipse, style=filled, label = "Capture_Hanke"];
+  Capture_G_Diversant[shape = ellipse, style=dotted, label = "Capture_G_Diversant"];
+  Find_Empty_Containers[shape = ellipse, label = "Find_Empty_Containers"];
+  TerrorPlanB[shape = ellipse, style=filled, label = "TerrorPlanB"];
+  Capture_G_Agent2[shape = ellipse, style=filled, label = "Capture_G_Agent2"];
+  Obtain_Terror_Pk[shape = ellipse, label = "Obtain_Terror_Pk"];
+  Capture_G_Agent3[shape = ellipse, style=dotted, label = "Capture_G_Agent3"];
+  StrangeActivity_NSea[shape = ellipse, style=filled, label = "StrangeActivity_NSea"];
+  Find_Microfilm[shape = ellipse, style=filled, label = "Find_Microfilm"];
+  Find_Steinberg_LogBook[shape = ellipse, label = "Find_Steinberg_LogBook"];
+  Hanke_StolenDocs[shape = ellipse, style=filled, label = "Hanke_StolenDocs"];
+  British_PK_Transfer[shape = ellipse, label = "British_PK_Transfer"];
+  Find_Lebedev_ReserchDocs[shape = ellipse, style=filled, label = "Find_Lebedev_ReserchDocs"];
+  Find_Pass[shape = ellipse, label = "Find_Pass"];
+  LostShipNote[shape = ellipse, style=filled, label = "LostShipNote"];
+  Defend_russian_docs[shape = ellipse, style=dotted, label = "Defend_russian_docs"];
+  Find_Cipher_key[shape = ellipse, style=dotted, label = "Find_Cipher_key"];
+  Capture_T_Boss[shape = ellipse, style=filled, label = "Capture_T_Boss"];
+  Base -> INFO_Stolen_TopSecretDocs;
+  RFCom -> Find_note_about_TerrAttack;
+  ECct -> Find_TheftPlans;
+  ECct -> Free_our_agent;
+  RFFact -> Defend_Russian_Engineer;
+  EFCom -> Capture_G_Agent3;
+  RTLab -> Find_Lebedev_ReserchDocs;
+  RTLab -> Helena_Exchange_Letter;
+  RTLab -> Delivery_Request;
+  RTLab -> Capture_T_Boss;
+  EFLab -> Defend_Informer;
+  EFStore -> Capture_G_Diversant;
+  EFVip -> Find_BritLetter;
+  EFVip -> Find_Microfilm;
+  EFVip -> LostShipNote;
+  EFVip -> Capture_Officer_traitor;
+  EHid -> DiscoverRadioEquipment;
+  EMis -> Capture_G_Agent2;
+  ETStore -> British_PK_Transfer;
+  ETStore -> Find_Steinberg_LogBook;
+  ETStore -> Obtain_Pk_prototype;
+  ETStore -> Draft_Letter_to_Andersen;
+  ETwn -> Capture_G_ThftLeader;
+  ETwn -> Find_Cipher_key;
+  EVlg -> Find_address;
+  FFight -> CapturedBritScientist;
+  FFight -> FIN_DESCRIPTION;
+  FFight -> Find_Stolen_Docs;
+  GCct -> Find_Empty_Containers;
+  GCct -> Find_G_Technician;
+  GECom -> Find_Coded_Message;
+  GECom -> Find_StolenDocs_Note;
+  GEFact -> Capture_General;
+  GEFact -> Obtain_German_Pk;
+  GEFact -> PK_R_D_Docs;
+  GELab -> Recapture_Scientist;
+  GEStore -> Find_german_experimental_equipment;
+  GEVip -> Defend_russian_docs;
+  GTFact -> Shipment_Docs;
+  GTFact -> Obtain_Terror_Pk;
+  GTFact -> Capture_Stielmann;
+  GTVip -> Lab_Note;
+  GTVip -> Find_Helenas_Letter;
+  GTVip -> Capture_Hanke;
+  GTVip -> Letter_from_H;
+  GTwn -> Find_note;
+  GTwn -> Find_German_Intel_Officer;
+  Find_Coded_Message -> INFO_Coded_Message_assasination
+  Rocket_Eng_Info -> LebedevRocket
+  Lab_Note -> GELab
+  Find_address -> ETwn
+  TerrorPlan -> FFight
+  Find_note -> GEVip
+  DiscoverRadioEquipment -> EFVip
+  DiscoverRadioEquipment -> GTwn
+  CapturedBritScientist -> FFight
+  Shipment_Docs -> FFight
+  Find_German_Intel_Officer -> Hanke_KidnappedScientist
+  Find_German_Intel_Officer -> GTVip
+  Find_German_Intel_Officer -> GEVip
+  Find_German_Intel_Officer -> GTVip
+  Russian_TB_Activity -> TerrorPlanB
+  Find_note_about_TerrAttack -> RFFact
+  RussianActivity -> Space_Rocket_N_Sea
+  LebedevRocket -> TerrorPlanB
+  LebedevRocket -> Space_Rocket_N_Sea
+  Hanke_KidnappedScientist -> RTLab
+  Find_Helenas_Letter -> Hanke_Terror
+  Hanke_TerrPlan -> FFight
+  Space_Rocket_N_Sea -> TerrorPlan
+  Recapture_Scientist -> GEStore
+  StrangeActivity -> Colonel_Escaped
+  StrangeActivity -> StrangeActivity_NSea
+  Defend_Russian_Engineer -> RTLab
+  Delivery_Request -> Russian_TB_Activity
+  Delivery_Request -> RussianActivity
+  INFO_Coded_Message_assasination -> RFFact
+  Find_TheftPlans -> EFStore
+  StrangeActivity_Germany -> RussianActivity
+  Defend_Informer -> GECom
+  Hanke_Construction -> StrangeActivity_Germany
+  INFO_Stolen_TopSecretDocs -> EMis
+  Find_G_Technician -> GELab
+  FIN_DESCRIPTION -> FFight
+  Find_StolenDocs_Note -> Hanke_StolenDocs
+  Find_StolenDocs_Note -> GTVip
+  Helena_Exchange_Letter -> Rocket_Eng_Info
+  Capture_General -> GTFact
+  Find_BritLetter -> StrangeActivity
+  Hanke_Terror -> Hanke_TerrPlan
+  Hanke_Terror -> Rocket_Eng_Info
+  Hanke_Terror -> Hanke_Construction
+  Hanke_Terror -> Hanke_StolenDocs
+  Hanke_Terror -> Hanke_KidnappedScientist
+  Hanke_Terror -> ETStore
+  Free_our_agent -> EFLab
+  Letter_from_H -> StrangeActivity_Germany
+  Letter_from_H -> Hanke_Construction
+  Draft_Letter_to_Andersen -> Colonel_Escaped
+  Capture_Officer_traitor -> StrangeActivity
+  Capture_Officer_traitor -> GECom
+  Capture_Stielmann -> FFight
+  Capture_G_ThftLeader -> GEVip
+  PK_R_D_Docs -> GTFact
+  Capture_Hanke -> Hanke_Terror
+  Capture_G_Diversant -> EVlg
+  Find_Empty_Containers -> GELab
+  TerrorPlanB -> Hanke_TerrPlan
+  Capture_G_Agent2 -> EFVip
+  Capture_G_Agent3 -> ECct
+  Capture_G_Agent3 -> EHid
+  StrangeActivity_NSea -> StrangeActivity_Germany
+  Find_Microfilm -> GCct
+  Find_Steinberg_LogBook -> TerrorPlan
+  Hanke_StolenDocs -> RTLab
+  British_PK_Transfer -> GTFact
+  Find_Lebedev_ReserchDocs -> LebedevRocket
+  Find_Pass -> GEFact
+  LostShipNote -> StrangeActivity_NSea
+  Defend_russian_docs -> RFCom
+  Find_Cipher_key -> INFO_Coded_Message_assasination
+  Capture_T_Boss -> Russian_TB_Activity
+  Capture_T_Boss -> GTFact
+}

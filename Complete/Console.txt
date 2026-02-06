@@ -1,0 +1,727 @@
+Noticed trap Fritz gained 0.000 medal points.
+Noticed trap Rocco gained 0.000 medal points.
+Noticed trap Klaus gained 0.000 medal points.
+[Script warning!] Value was NIL when getting global with name OnEnterZone
+All passcalcer jobs were done
+	HL=Body 	DmgModifier=1.000 	Rocco damaged on 0hp 	PiercingAbility = 1000000 HP:147
+ 	Rocco made unconscious
+Starting physics case WeaponFallFromBody
+	HL=LLeg 	DmgModifier=0.850 	Rocco damaged on 85000hp 	PiercingAbility = 1000000 HP:-84853
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+	HL=Body 	DmgModifier=1.000 	Klaus damaged on 0hp 	PiercingAbility = 1000000 HP:104
+ 	Klaus made unconscious
+Starting physics case ItemFallFromBody
+Starting physics case WeaponFallFromBody
+	HL=Body 	DmgModifier=1.000 	Klaus damaged on 100000hp 	PiercingAbility = 1000000 HP:-99896
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Building stability update: Schema: 0.003
+Building stability update: 1iterations; Time: 0.001
+	HL=RLeg 	DmgModifier=0.850 	Shatelro damaged on 0hp 	PiercingAbility = 1000000 HP:80
+ 	Shatelro made unconscious
+All passcalcer jobs were done
+zone difficulty = 0
+World is loading template 810
+MapBuild: 0 ladders created
+Building stability update: Schema: 0.003
+Building stability update: 2iterations; Time: 0.004
+scenario tracker: Clues to distribute:
+scenario tracker: 0 person slots found on the map
+scenario tracker: 0 item slots found on the map
+AI Player number 1 was created
+Unit [ [UNKNOWN] ] level changed: 0-th level
+Unit [ Shatelro ] level changed: 0-th level
+Start game
+User player was created
+waypoint "UnitHero" not found 
+Shatelro interrupt Fritz probability 45% Check:96
+Shatelro interrupt Rocco probability 47% Check:92
+Shatelro interrupt Klaus probability 45% Check:9
+Fritz interrupt Shatelro probability 55% Check:41
+Rocco interrupt Shatelro probability 53% Check:90
+Klaus interrupt Shatelro probability 55% Check:0
+Real time is impossible, unit OFFICER03S of player 1 sees not ally unit FRITZ of player 0
+Real time is impossible, unit OFFICER03S of player 1 sees not ally unit FRITZ of player 0
+Start game
+UI-ERROR: UI Container not complete, control name in container inventorypanel not found
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Constants were loaded
+Triggers manager was started
+[Script warning!] Value was NIL when getting global with name false
+Common functions were loaded
+Hints were loaded
+Noticed trap Fritz gained 0.000 medal points.
+Noticed trap Rocco gained 0.000 medal points.
+Noticed trap Klaus gained 0.000 medal points.
+[Script warning!] Value was NIL when getting global with name OnEnterZone
+All passcalcer jobs were done
+Building stability update: Schema: 0.003
+Building stability update: 1iterations; Time: 0.001
+Building stability update: Schema: 0.003
+Building stability update: 1iterations; Time: 0.001
+All passcalcer jobs were done
+	HL=LLeg 	DmgModifier=0.850 	Shatelro damaged on 0hp 	PiercingAbility = 1000000 HP:80
+ 	Shatelro made unconscious
+zone difficulty = 0
+World is loading template 810
+MapBuild: 0 ladders created
+Building stability update: Schema: 0.002
+Building stability update: 2iterations; Time: 0.004
+scenario tracker: Clues to distribute:
+scenario tracker: 0 person slots found on the map
+scenario tracker: 0 item slots found on the map
+AI Player number 1 was created
+Unit [ [UNKNOWN] ] level changed: 0-th level
+Unit [ Shatelro ] level changed: 0-th level
+Start game
+User player was created
+waypoint "UnitHero" not found 
+Shatelro interrupt Fritz probability 45% Check:24
+Shatelro interrupt Rocco probability 47% Check:96
+Shatelro interrupt Klaus probability 45% Check:74
+Fritz interrupt Shatelro probability 55% Check:1
+Rocco interrupt Shatelro probability 53% Check:71
+Klaus interrupt Shatelro probability 55% Check:23
+Real time is impossible, unit OFFICER03S of player 1 sees not ally unit FRITZ of player 0
+Real time is impossible, unit OFFICER03S of player 1 sees not ally unit FRITZ of player 0
+Start game
+UI-ERROR: UI Container not complete, control name in container inventorypanel not found
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Constants were loaded
+Triggers manager was started
+[Script warning!] Value was NIL when getting global with name false
+Common functions were loaded
+Hints were loaded
+Noticed trap Fritz gained 0.000 medal points.
+Noticed trap Rocco gained 0.000 medal points.
+Noticed trap Klaus gained 0.000 medal points.
+[Script warning!] Value was NIL when getting global with name OnEnterZone
+All passcalcer jobs were done
+	HL=Body 	DmgModifier=1.000 	Shatelro damaged on 0hp 	PiercingAbility = 1000000 HP:80
+ 	Shatelro made unconscious
+zone difficulty = 0
+World is loading template 810
+MapBuild: 0 ladders created
+Building stability update: Schema: 0.002
+Building stability update: 2iterations; Time: 0.004
+scenario tracker: Clues to distribute:
+scenario tracker: 0 person slots found on the map
+scenario tracker: 0 item slots found on the map
+AI Player number 1 was created
+Unit [ [UNKNOWN] ] level changed: 0-th level
+Unit [ Shatelro ] level changed: 0-th level
+Start game
+User player was created
+waypoint "UnitHero" not found 
+Shatelro interrupt Fritz probability 45% Check:72
+Shatelro interrupt Rocco probability 47% Check:7
+Shatelro interrupt Klaus probability 45% Check:80
+Fritz interrupt Shatelro probability 55% Check:15
+Rocco interrupt Shatelro probability 53% Check:25
+Klaus interrupt Shatelro probability 55% Check:59
+Real time is impossible, unit OFFICER03S of player 1 sees not ally unit FRITZ of player 0
+Real time is impossible, unit OFFICER03S of player 1 sees not ally unit FRITZ of player 0
+Start game
+UI-ERROR: UI Container not complete, control name in container inventorypanel not found
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Constants were loaded
+Triggers manager was started
+[Script warning!] Value was NIL when getting global with name false
+Common functions were loaded
+Hints were loaded
+Noticed trap Fritz gained 0.000 medal points.
+Noticed trap Rocco gained 0.000 medal points.
+Noticed trap Klaus gained 0.000 medal points.
+[Script warning!] Value was NIL when getting global with name OnEnterZone
+All passcalcer jobs were done
+	HL=LHand 	DmgModifier=0.700 	Shatelro damaged on 0hp 	PiercingAbility = 1000000 HP:80
+ 	Shatelro made unconscious
+	HL=Body 	DmgModifier=1.000 	Shatelro damaged on 100000hp 	PiercingAbility = 1000000 HP:-99920
+Starting physics case WeaponFallFromBody
+Starting physics case WeaponFallFromBody
+Starting physics case WeaponFallFromBody
+	HL=Body 	DmgModifier=1.000 	Shatelro damaged on 100000hp 	PiercingAbility = 1000000 HP:-199920
+	HL=Body 	DmgModifier=1.000 	Shatelro damaged on 100000hp 	PiercingAbility = 1000000 HP:-299920
+	HL=Body 	DmgModifier=1.000 	Shatelro damaged on 100000hp 	PiercingAbility = 1000000 HP:-399920
+zone difficulty = 0
+World is loading template 810
+MapBuild: 0 ladders created
+Building stability update: Schema: 0.002
+Building stability update: 2iterations; Time: 0.004
+scenario tracker: Clues to distribute:
+scenario tracker: 0 person slots found on the map
+scenario tracker: 0 item slots found on the map
+AI Player number 1 was created
+Unit [ [UNKNOWN] ] level changed: 0-th level
+Unit [ Shatelro ] level changed: 0-th level
+Start game
+User player was created
+waypoint "UnitHero" not found 
+Shatelro interrupt Fritz probability 45% Check:68
+Shatelro interrupt Rocco probability 47% Check:45
+Shatelro interrupt Klaus probability 45% Check:82
+Fritz interrupt Shatelro probability 55% Check:31
+Rocco interrupt Shatelro probability 53% Check:65
+Klaus interrupt Shatelro probability 55% Check:14
+Real time is impossible, unit OFFICER03S of player 1 sees not ally unit FRITZ of player 0
+Real time is impossible, unit OFFICER03S of player 1 sees not ally unit FRITZ of player 0
+Start game
+UI-ERROR: UI Container not complete, control name in container inventorypanel not found
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Constants were loaded
+Triggers manager was started
+[Script warning!] Value was NIL when getting global with name false
+Common functions were loaded
+Hints were loaded
+Noticed trap Fritz gained 0.000 medal points.
+Noticed trap Rocco gained 0.000 medal points.
+Noticed trap Klaus gained 0.000 medal points.
+[Script warning!] Value was NIL when getting global with name OnEnterZone
+All passcalcer jobs were done
+	HL=LHand 	DmgModifier=0.700 	Shatelro damaged on 0hp 	PiercingAbility = 1000000 HP:80
+ 	Shatelro made unconscious
+zone difficulty = 0
+World is loading template 810
+MapBuild: 0 ladders created
+Building stability update: Schema: 0.002
+Building stability update: 2iterations; Time: 0.004
+scenario tracker: Clues to distribute:
+scenario tracker: 0 person slots found on the map
+scenario tracker: 0 item slots found on the map
+AI Player number 1 was created
+Unit [ [UNKNOWN] ] level changed: 0-th level
+Unit [ Shatelro ] level changed: 0-th level
+Start game
+User player was created
+waypoint "UnitHero" not found 
+Shatelro interrupt Fritz probability 45% Check:31
+Shatelro interrupt Rocco probability 47% Check:92
+Shatelro interrupt Klaus probability 45% Check:32
+Fritz interrupt Shatelro probability 55% Check:75
+Rocco interrupt Shatelro probability 53% Check:90
+Klaus interrupt Shatelro probability 55% Check:11
+Real time is impossible, unit OFFICER03S of player 1 sees not ally unit FRITZ of player 0
+Real time is impossible, unit OFFICER03S of player 1 sees not ally unit FRITZ of player 0
+Start game
+UI-ERROR: UI Container not complete, control name in container inventorypanel not found
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Constants were loaded
+Triggers manager was started
+[Script warning!] Value was NIL when getting global with name false
+Common functions were loaded
+Hints were loaded
+Noticed trap Fritz gained 0.000 medal points.
+Noticed trap Rocco gained 0.000 medal points.
+Noticed trap Klaus gained 0.000 medal points.
+[Script warning!] Value was NIL when getting global with name OnEnterZone
+All passcalcer jobs were done
+	HL=LHand 	DmgModifier=0.700 	Shatelro damaged on 0hp 	PiercingAbility = 1000000 HP:80
+ 	Shatelro made unconscious
+zone difficulty = 0
+World is loading template 810
+MapBuild: 0 ladders created
+Building stability update: Schema: 0.003
+Building stability update: 2iterations; Time: 0.004
+scenario tracker: Clues to distribute:
+scenario tracker: 0 person slots found on the map
+scenario tracker: 0 item slots found on the map
+AI Player number 1 was created
+Unit [ [UNKNOWN] ] level changed: 0-th level
+Unit [ Shatelro ] level changed: 0-th level
+Start game
+User player was created
+waypoint "UnitHero" not found 
+Shatelro interrupt Fritz probability 45% Check:83
+Shatelro interrupt Rocco probability 47% Check:41
+Shatelro interrupt Klaus probability 45% Check:38
+Fritz interrupt Shatelro probability 55% Check:21
+Rocco interrupt Shatelro probability 53% Check:47
+Klaus interrupt Shatelro probability 55% Check:27
+Real time is impossible, unit OFFICER03S of player 1 sees not ally unit FRITZ of player 0
+Real time is impossible, unit OFFICER03S of player 1 sees not ally unit FRITZ of player 0
+Start game
+UI-ERROR: UI Container not complete, control name in container inventorypanel not found
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Constants were loaded
+Triggers manager was started
+[Script warning!] Value was NIL when getting global with name false
+Common functions were loaded
+Hints were loaded
+Noticed trap Fritz gained 0.000 medal points.
+Noticed trap Rocco gained 0.000 medal points.
+Noticed trap Klaus gained 0.000 medal points.
+[Script warning!] Value was NIL when getting global with name OnEnterZone
+All passcalcer jobs were done
+	HL=Body 	DmgModifier=1.000 	Shatelro damaged on 0hp 	PiercingAbility = 1000000 HP:80
+ 	Shatelro made unconscious
+	HL=Body 	DmgModifier=1.000 	Klaus damaged on 0hp 	PiercingAbility = 1000000 HP:104
+ 	Klaus made unconscious
+Starting physics case ItemFallFromBody
+Starting physics case WeaponFallFromBody
+	HL=Body 	DmgModifier=1.000 	Klaus damaged on 100000hp 	PiercingAbility = 1000000 HP:-99896
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+	HL=Body 	DmgModifier=1.000 	Rocco damaged on 0hp 	PiercingAbility = 1000000 HP:147
+ 	Rocco made unconscious
+Starting physics case WeaponFallFromBody
+	HL=RHand 	DmgModifier=0.700 	Rocco damaged on 70000hp 	PiercingAbility = 1000000 HP:-69853
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+	HL=Head 	DmgModifier=1.500 	[UNKNOWN] damaged on 0hp 	PiercingAbility = 1000000 HP:80
+ 	[UNKNOWN] made unconscious
+	HL=Body 	DmgModifier=1.000 	[UNKNOWN] damaged on 100000hp 	PiercingAbility = 1000000 HP:-99920
+Starting physics case WeaponFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+	HL=Body 	DmgModifier=1.000 	[UNKNOWN] damaged on 100000hp 	PiercingAbility = 1000000 HP:-199920
+	HL=Body 	DmgModifier=1.000 	[UNKNOWN] damaged on 100000hp 	PiercingAbility = 1000000 HP:-299920
+	HL=Body 	DmgModifier=1.000 	[UNKNOWN] damaged on 100000hp 	PiercingAbility = 1000000 HP:-399920
+	HL=Body 	DmgModifier=1.000 	[UNKNOWN] damaged on 100000hp 	PiercingAbility = 1000000 HP:-499920
+zone difficulty = 0
+World is loading template 810
+MapBuild: 0 ladders created
+Building stability update: Schema: 0.002
+Building stability update: 2iterations; Time: 0.004
+scenario tracker: Clues to distribute:
+scenario tracker: 0 person slots found on the map
+scenario tracker: 0 item slots found on the map
+AI Player number 1 was created
+Unit [ [UNKNOWN] ] level changed: 0-th level
+Unit [ Shatelro ] level changed: 0-th level
+Start game
+User player was created
+waypoint "UnitHero" not found 
+Shatelro interrupt Fritz probability 45% Check:56
+Shatelro interrupt Rocco probability 47% Check:94
+Shatelro interrupt Klaus probability 45% Check:90
+Fritz interrupt Shatelro probability 55% Check:61
+Rocco interrupt Shatelro probability 53% Check:94
+Klaus interrupt Shatelro probability 55% Check:98
+Real time is impossible, unit OFFICER03S of player 1 sees not ally unit FRITZ of player 0
+Real time is impossible, unit OFFICER03S of player 1 sees not ally unit FRITZ of player 0
+Start game
+UI-ERROR: UI Container not complete, control name in container inventorypanel not found
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Constants were loaded
+Triggers manager was started
+[Script warning!] Value was NIL when getting global with name false
+Common functions were loaded
+Hints were loaded
+Noticed trap Fritz gained 0.000 medal points.
+Noticed trap Rocco gained 0.000 medal points.
+Noticed trap Klaus gained 0.000 medal points.
+[Script warning!] Value was NIL when getting global with name OnEnterZone
+All passcalcer jobs were done
+	HL=LHand 	DmgModifier=0.700 	Shatelro damaged on 0hp 	PiercingAbility = 1000000 HP:80
+ 	Shatelro made unconscious
+	HL=RLeg 	DmgModifier=0.850 	Shatelro damaged on 85000hp 	PiercingAbility = 1000000 HP:-84920
+Starting physics case WeaponFallFromBody
+Starting physics case WeaponFallFromBody
+Starting physics case WeaponFallFromBody
+Starting physics case WeaponFallFromBody
+Starting physics case WeaponFallFromBody
+Starting physics case WeaponFallFromBody
+Building stability update: Schema: 0.010
+Building stability update: 1iterations; Time: 0.001
+Building stability update: Schema: 0.010
+Building stability update: 1iterations; Time: 0.001
+Building stability update: Schema: 0.010
+Building stability update: 1iterations; Time: 0.001
+Building stability update: Schema: 0.003
+Building stability update: 1iterations; Time: 0.001
+Building stability update: Schema: 0.003
+Building stability update: 1iterations; Time: 0.001
+Building stability update: Schema: 0.002
+Building stability update: 1iterations; Time: 0.001
+Building stability update: Schema: 0.003
+Building stability update: 1iterations; Time: 0.001
+Building stability update: 1iterations; Time: 0.001
+Building stability update: 1iterations; Time: 0.002
+Building stability update: 1iterations; Time: 0.001
+Building stability update: 1iterations; Time: 0.001
+Starting physics case WeaponThrowOut
+Starting physics case WeaponThrowOut
+Starting physics case WeaponThrowOut
+Starting physics case WeaponThrowOut
+Starting physics case WeaponThrowOut
+No interrupt, all commands were canceled
+All passcalcer jobs were done
+All passcalcer jobs were done
+	HL=Head 	DmgModifier=1.500 	Shatelro damaged on 150000hp 	PiercingAbility = 1000000 HP:-234920
+	HL=Head 	DmgModifier=1.500 	Shatelro damaged on 150000hp 	PiercingAbility = 1000000 HP:-384920
+	HL=Head 	DmgModifier=1.500 	Shatelro damaged on 150000hp 	PiercingAbility = 1000000 HP:-534920
+	HL=Head 	DmgModifier=1.500 	Shatelro damaged on 150000hp 	PiercingAbility = 1000000 HP:-684920
+	HL=Head 	DmgModifier=1.500 	Shatelro damaged on 150000hp 	PiercingAbility = 1000000 HP:-834920
+	HL=Head 	DmgModifier=1.500 	Shatelro damaged on 150000hp 	PiercingAbility = 1000000 HP:-984920
+Real time is impossible, unit FRITZ of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit FRITZ of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Shoot begin :
+General ToHit:	Dist=4	W+=2	MinRange=10	MaxRange=25	BulletNumber=0
+	Stance=0.000	DerSkill=35	D1=13.750	D2=89.917	ZeroingIn(RS)=0.000	AddAP=0	TCover=93.750	TArea=0.330	CA=0.914	SMove=0.000
+	Adaptation=0.000	Light=1.000	FRmult=1.000	AllAdd=91.917	AllAddMult=91.917	ToHit = 86
+	TileToHit = 86	Check = 91 Hit: false
+General ToHit:	Dist=4	W+=2	MinRange=10	MaxRange=25	BulletNumber=1
+	Stance=0.000	DerSkill=4	D1=10.429	D2=81.747	ZeroingIn(RS)=0.000	AddAP=0	TCover=93.750	TArea=0.330	CA=0.914	SMove=0.000
+	Adaptation=0.000	Light=1.000	FRmult=1.000	AllAdd=83.747	AllAddMult=83.747	ToHit = 78
+	TileToHit = 78	Check = 66 Hit: true
+General ToHit:	Dist=4	W+=2	MinRange=10	MaxRange=25	BulletNumber=2
+	Stance=0.000	DerSkill=2	D1=10.214	D2=80.965	ZeroingIn(RS)=0.000	AddAP=0	TCover=93.750	TArea=0.330	CA=0.914	SMove=0.000
+	Adaptation=0.000	Light=1.000	FRmult=1.000	AllAdd=82.965	AllAddMult=82.965	ToHit = 77
+	TileToHit = 77	Check = 82 Hit: false
+Real time is impossible, unit FRITZ of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit FRITZ of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit FRITZ of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit FRITZ of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit FRITZ of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit FRITZ of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit FRITZ of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit FRITZ of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit FRITZ of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit FRITZ of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit FRITZ of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit FRITZ of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit FRITZ of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit FRITZ of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Shoot begin :
+Backstab attack
+General ToHit:	Dist=14	W+=2	MinRange=10	MaxRange=25	BulletNumber=0
+	Stance=0.000	DerSkill=35	D1=13.750	D2=16.463	ZeroingIn(RS)=2.000	AddAP=0	TCover=85.862	TArea=0.667	CA=0.836	SMove=0.000
+	Adaptation=0.010	Light=1.000	FRmult=1.000	AllAdd=20.473	AllAddMult=20.473	ToHit = 16
+Unit ToHit:	TMove=0.000	HL=Any	BaseIC=5
+	ToHit = 16	Check = 26 Hit: false
+Backstab attack
+General ToHit:	Dist=14	W+=2	MinRange=10	MaxRange=25	BulletNumber=1
+	Stance=0.000	DerSkill=4	D1=10.429	D2=3.160	ZeroingIn(RS)=2.000	AddAP=0	TCover=85.862	TArea=0.667	CA=0.836	SMove=0.000
+	Adaptation=0.010	Light=1.000	FRmult=1.000	AllAdd=7.170	AllAddMult=7.170	ToHit = 5
+Unit ToHit:	TMove=0.000	HL=Any	BaseIC=5
+	ToHit = 5	Check = 3 Hit: true
+Backstab attack
+General ToHit:	Dist=14	W+=2	MinRange=10	MaxRange=25	BulletNumber=2
+	Stance=0.000	DerSkill=2	D1=10.214	D2=2.786	ZeroingIn(RS)=2.000	AddAP=0	TCover=85.862	TArea=0.667	CA=0.836	SMove=0.000
+	Adaptation=0.010	Light=1.000	FRmult=1.000	AllAdd=6.796	AllAddMult=6.796	ToHit = 5
+Unit ToHit:	TMove=0.000	HL=Any	BaseIC=5
+	ToHit = 5	Check = 82 Hit: false
+}
+[Script warning!] Value was NIL when getting global with name OnShotAtUnit
+Shoot hit object, result damage = 0, remain 187500 of 187500
+	crit prob=14 resist=1.000 (check=83) 	severity=15	HL=Head 	DmgModifier=1.500 	[UNKNOWN] damaged on 37hp 	PiercingAbility = 304 HP:43
+Shoot hit object, result damage = 0, remain 187500 of 187500
+Shoot begin :
+Backstab attack
+General ToHit:	Dist=14	W+=2	MinRange=10	MaxRange=25	BulletNumber=0
+	Stance=0.000	DerSkill=35	D1=13.750	D2=16.463	ZeroingIn(RS)=4.000	AddAP=0	TCover=85.862	TArea=0.667	CA=0.836	SMove=0.000
+	Adaptation=0.020	Light=1.000	FRmult=1.000	AllAdd=22.483	AllAddMult=22.483	ToHit = 18
+Unit ToHit:	TMove=0.000	HL=Any	BaseIC=5
+	ToHit = 18	Check = 8 Hit: true
+Backstab attack
+General ToHit:	Dist=14	W+=2	MinRange=10	MaxRange=25	BulletNumber=1
+	Stance=0.000	DerSkill=4	D1=10.429	D2=3.160	ZeroingIn(RS)=4.000	AddAP=0	TCover=85.862	TArea=0.667	CA=0.836	SMove=0.000
+	Adaptation=0.020	Light=1.000	FRmult=1.000	AllAdd=9.180	AllAddMult=9.180	ToHit = 7
+Unit ToHit:	TMove=0.000	HL=Any	BaseIC=5
+	ToHit = 7	Check = 81 Hit: false
+Backstab attack
+General ToHit:	Dist=14	W+=2	MinRange=10	MaxRange=25	BulletNumber=2
+	Stance=0.000	DerSkill=2	D1=10.214	D2=2.786	ZeroingIn(RS)=4.000	AddAP=0	TCover=85.862	TArea=0.667	CA=0.836	SMove=0.000
+	Adaptation=0.020	Light=1.000	FRmult=1.000	AllAdd=8.806	AllAddMult=8.806	ToHit = 6
+Unit ToHit:	TMove=0.000	HL=Any	BaseIC=5
+	ToHit = 6	Check = 10 Hit: false
+}
+[Script warning!] Value was NIL when getting global with name OnShotAtUnit
+	crit prob=24 resist=1.000 (check=5) 	severity=12	Critical: "3) Temporarily ToHit reduction(1.25)", difficulty=205  Duration=2(2 : 4)  HL=Torso
+	HL=Body 	DmgModifier=3.057 	[UNKNOWN] damaged on 76hp 	PiercingAbility = 304 HP:-33
+Starting physics case WeaponFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Killed enemy Fritz gained 15.000 medal points.
+Fritz gained 2.202 EXP
+Rocco gained 2.386 EXP
+Klaus gained 2.386 EXP
+	HL=Body 	DmgModifier=1.000 	[UNKNOWN] damaged on 100000hp 	PiercingAbility = 1000000 HP:-100033
+	HL=Body 	DmgModifier=1.000 	[UNKNOWN] damaged on 100000hp 	PiercingAbility = 1000000 HP:-200033
+	HL=Body 	DmgModifier=1.000 	[UNKNOWN] damaged on 100000hp 	PiercingAbility = 1000000 HP:-300033
+	HL=Body 	DmgModifier=1.000 	[UNKNOWN] damaged on 100000hp 	PiercingAbility = 1000000 HP:-400033
+	HL=Body 	DmgModifier=1.000 	[UNKNOWN] damaged on 100000hp 	PiercingAbility = 1000000 HP:-500033
+	HL=Body 	DmgModifier=1.000 	[UNKNOWN] damaged on 100000hp 	PiercingAbility = 1000000 HP:-600033
+	HL=Body 	DmgModifier=1.000 	[UNKNOWN] damaged on 100000hp 	PiercingAbility = 1000000 HP:-700033
+	HL=Body 	DmgModifier=1.000 	[UNKNOWN] damaged on 100000hp 	PiercingAbility = 1000000 HP:-800033
+[Script warning!] Value was NIL when getting global with name OnMineTriggered
+Shoot hit object, result damage = 0, remain 187500 of 187500
+	crit prob=29 resist=1.000 (check=23) 	severity=29	Critical: "2) Temporarily AP reduction(2.0)", difficulty=171  Duration=5(3 : 6)  HL=Legs
+	HL=RLeg 	DmgModifier=2.221	Fritz Dodge:false
+ 	Fritz damaged on 157hp 	PiercingAbility = 2500 HP:-20
+ 	Fritz made unconscious
+Starting physics case WeaponFallFromBody
+Building stability update: Schema: 0.002
+Building stability update: 1iterations; Time: 0.000
+Shoot hit object, result damage = 78, remain 0 of 47
+Building stability update: Schema: 0.002
+Building stability update: 1iterations; Time: 0.000
+Starting physics case WeaponThrowOut
+Starting physics case WeaponThrowOut
+Starting physics case WeaponThrowOut
+Starting physics case WeaponThrowOut
+Starting physics case WeaponThrowOut
+Starting physics case WeaponThrowOut
+All passcalcer jobs were done
+zone difficulty = 0
+World is loading template 810
+MapBuild: 0 ladders created
+Building stability update: Schema: 0.002
+Building stability update: 2iterations; Time: 0.004
+scenario tracker: Clues to distribute:
+scenario tracker: 0 person slots found on the map
+scenario tracker: 0 item slots found on the map
+AI Player number 1 was created
+Unit [ [UNKNOWN] ] level changed: 0-th level
+Unit [ Shatelro ] level changed: 0-th level
+Start game
+User player was created
+waypoint "UnitHero" not found 
+Shatelro interrupt Fritz probability 45% Check:88
+Shatelro interrupt Rocco probability 47% Check:52
+Shatelro interrupt Klaus probability 45% Check:82
+Fritz interrupt Shatelro probability 55% Check:19
+Rocco interrupt Shatelro probability 53% Check:53
+Klaus interrupt Shatelro probability 55% Check:83
+Real time is impossible, unit OFFICER03S of player 1 sees not ally unit FRITZ of player 0
+Real time is impossible, unit OFFICER03S of player 1 sees not ally unit FRITZ of player 0
+Start game
+UI-ERROR: UI Container not complete, control name in container inventorypanel not found
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Constants were loaded
+Triggers manager was started
+[Script warning!] Value was NIL when getting global with name false
+Common functions were loaded
+Hints were loaded
+Noticed trap Fritz gained 0.000 medal points.
+Noticed trap Rocco gained 0.000 medal points.
+Noticed trap Klaus gained 0.000 medal points.
+[Script warning!] Value was NIL when getting global with name OnEnterZone
+All passcalcer jobs were done
+[Script warning!] Value was NIL when getting global with name OnMineTriggered
+	crit prob=30 resist=1.000 (check=47) 	severity=30	HL=RLeg 	DmgModifier=0.850	Fritz Dodge:false
+ 	Fritz damaged on 33hp 	PiercingAbility = 2500 HP:104
+	crit prob=30 resist=1.000 (check=5) 	severity=30	Critical: "4) AP reduction(2.0)", difficulty=223  Duration=-1(-1 : -1)  HL=Legs
+	HL=RLeg 	DmgModifier=2.636	Fritz Dodge:false
+ 	Fritz damaged on 65hp 	PiercingAbility = 2500 HP:39
+	crit prob=30 resist=1.000 (check=9) 	severity=30	Critical: "0) Bleeding", difficulty=53  Duration=-1(-1 : -1)  HL=Legs
+	HL=RLeg 	DmgModifier=1.279	Fritz Dodge:false
+ 	Fritz damaged on 30hp 	PiercingAbility = 2500 HP:9
+	crit prob=30 resist=1.000 (check=16) 	severity=30	Critical: "0) Bleeding", difficulty=73  Duration=-1(-1 : -1)  HL=Legs
+	HL=RLeg 	DmgModifier=1.436	Fritz Dodge:true
+ 	Fritz damaged on 62hp 	PiercingAbility = 2500 HP:-53
+ 	Fritz made unconscious
+Starting physics case WeaponFallFromBody
+	crit prob=29 resist=1.000 (check=24) 	severity=29	Critical: "2) Temporarily AP reduction(2.0)", difficulty=201  Duration=5(3 : 6)  HL=Legs
+	HL=RLeg 	DmgModifier=2.464	Fritz Dodge:false
+ 	Fritz damaged on 162hp 	PiercingAbility = 2500 HP:-215
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case GrenadeFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Shoot hit object, result damage = 201, remain 0 of 1
+Shoot hit object, result damage = 99, remain 0 of 47
+	crit prob=21 resist=1.000 (check=6) 	severity=21	Critical: "2) Temporarily AP reduction(2.0)", difficulty=205  Duration=4(3 : 6)  HL=Legs
+	HL=RLeg 	DmgModifier=2.493	Shatelro Dodge:true
+ 	Shatelro damaged on 147hp 	PiercingAbility = 2500 HP:-67
+Starting physics case WeaponFallFromBody
+Starting physics case WeaponFallFromBody
+Starting physics case WeaponFallFromBody
+Starting physics case WeaponFallFromBody
+Starting physics case WeaponFallFromBody
+Starting physics case WeaponFallFromBody
+Building stability update: Schema: 0.002
+Building stability update: 1iterations; Time: 0.001
+Building stability update: 1iterations; Time: 0.001
+Building stability update: 1iterations; Time: 0.001
+Building stability update: 1iterations; Time: 0.001
+Building stability update: 1iterations; Time: 0.001
+No interrupt, all commands were canceled
+All passcalcer jobs were done
+	HL=LLeg 	DmgModifier=0.850 	Shatelro damaged on 85000hp 	PiercingAbility = 1000000 HP:-85067
+Building stability update: Schema: 0.002
+Building stability update: 1iterations; Time: 0.000
+	HL=LLeg 	DmgModifier=0.850 	Shatelro damaged on 85000hp 	PiercingAbility = 1000000 HP:-170067
+Starting physics case WeaponThrowOut
+Starting physics case WeaponThrowOut
+Starting physics case WeaponThrowOut
+Starting physics case WeaponThrowOut
+Starting physics case WeaponThrowOut
+Starting physics case WeaponThrowOut
+All passcalcer jobs were done
+Shoot begin :
+Backstab attack
+General ToHit:	Dist=15	W+=5	MinRange=24	MaxRange=50	BulletNumber=0
+	Stance=0.000	DerSkill=36	D1=30.686	D2=70.819	ZeroingIn(RS)=0.000	AddAP=0	TCover=100.000	TArea=1.000	CA=1.000	SMove=0.000
+	Adaptation=0.000	Light=1.000	FRmult=1.000	AllAdd=73.459	AllAddMult=73.459	ToHit = 73
+Unit ToHit:	TMove=2.360	HL=Any	BaseIC=5
+	ToHit = 73	Check = 29 Hit: true
+}
+[Script warning!] Value was NIL when getting global with name OnShotAtUnit
+	crit prob=16 resist=1.000 (check=9) 	severity=7	Critical: "1) Temporarily AP reduction(1.25)", difficulty=128  Duration=3(1 : 4)  HL=Legs
+	HL=RLeg 	DmgModifier=1.879 	[UNKNOWN] damaged on 56hp 	PiercingAbility = 1381 HP:24
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+	HL=Body 	DmgModifier=1.000	[UNKNOWN] Dodge:false
+ 	[UNKNOWN] damaged on 1hp 	PiercingAbility = 1 HP:23
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+	HL=Body 	DmgModifier=1.000	[UNKNOWN] Dodge:false
+ 	[UNKNOWN] damaged on 1hp 	PiercingAbility = 1 HP:22
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+	HL=Body 	DmgModifier=1.000	[UNKNOWN] Dodge:true
+ 	[UNKNOWN] damaged on 1hp 	PiercingAbility = 1 HP:21
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+	HL=Body 	DmgModifier=1.000	[UNKNOWN] Dodge:false
+ 	[UNKNOWN] damaged on 1hp 	PiercingAbility = 1 HP:20
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+	HL=Body 	DmgModifier=1.000	[UNKNOWN] Dodge:false
+ 	[UNKNOWN] damaged on 2hp 	PiercingAbility = 1 HP:18
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+	HL=Body 	DmgModifier=1.000	[UNKNOWN] Dodge:false
+ 	[UNKNOWN] damaged on 2hp 	PiercingAbility = 1 HP:16
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+	HL=Body 	DmgModifier=1.000	[UNKNOWN] Dodge:false
+ 	[UNKNOWN] damaged on 2hp 	PiercingAbility = 1 HP:14
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+	HL=Body 	DmgModifier=1.000	[UNKNOWN] Dodge:false
+ 	[UNKNOWN] damaged on 2hp 	PiercingAbility = 1 HP:12
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+	HL=Body 	DmgModifier=1.000	[UNKNOWN] Dodge:false
+ 	[UNKNOWN] damaged on 2hp 	PiercingAbility = 1 HP:10
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Real time is impossible, unit ROCCO of player 0 sees not ally unit PERS1 of player 1
+	HL=Body 	DmgModifier=1.000	[UNKNOWN] Dodge:false
+ 	[UNKNOWN] damaged on 3hp 	PiercingAbility = 1 HP:7
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Shoot begin :
+General ToHit:	Dist=13	W+=5	MinRange=24	MaxRange=50	BulletNumber=0
+	Stance=0.000	DerSkill=36	D1=30.686	D2=77.754	ZeroingIn(RS)=0.000	AddAP=0	TCover=75.000	TArea=0.330	CA=0.920	SMove=0.000
+	Adaptation=0.010	Light=1.000	FRmult=1.000	AllAdd=82.764	AllAddMult=82.764	ToHit = 77
+	TileToHit = 77	Check = 94 Hit: false
+non primary target toHit = 69 check = 18
+	crit prob=16 resist=1.000 (check=11) 	severity=13	Critical: "0) Bleeding", difficulty=39  Duration=-1(-1 : -1)  HL=Legs
+	HL=LLeg 	DmgModifier=1.164	[UNKNOWN] Dodge:false
+ 	[UNKNOWN] damaged on 34hp 	PiercingAbility = 1381 HP:-27
+Starting physics case WeaponFallFromBody
+Starting physics case ItemFallFromBody
+Starting physics case ItemFallFromBody
+Killed enemy Klaus gained 15.000 medal points.
+Rocco gained 3.579 EXP
+Klaus gained 3.579 EXP
+Shoot hit object, result damage = 0, remain 187500 of 187500
+(debug)General failure!
+Not enough APs!
+(debug)General failure!
+Not enough APs!
+(debug)General failure!
+[Script warning!] Value was NIL when getting global with name OnStartTurn
+Shoot begin :
+Shoot hit object, result damage = 21, remain 28 of 49
+[Script warning!] Value was NIL when getting global with name OnMineTriggered
+}
+Shoot hit object, result damage = 0, remain 187500 of 187500
+Shoot hit object, result damage = 27, remain 1 of 49
+Shoot hit object, result damage = 0, remain 187500 of 187500
+Shoot hit object, result damage = 22, remain 0 of 49
+Shoot hit object, result damage = 18, remain 0 of 49
+Shoot hit object, result damage = 29, remain 0 of 49
+[Script warning!] Value was NIL when getting global with name OnOpenObject
+Shoot hit object, result damage = 23, remain 0 of 49
+	crit prob=14 resist=1.000 (check=43) 	severity=14	HL=Body 	DmgModifier=1.000	Rocco Dodge:false
+ 	Rocco damaged on 30hp 	PiercingAbility = 1900 HP:117
+Shoot hit object, result damage = 0, remain 187500 of 187500
+Shoot hit object, result damage = 152, remain 0 of 1
+Shoot hit object, result damage = 0, remain 187500 of 187500
+Building stability update: Schema: 0.001
+Building stability update: 1iterations; Time: 0.001
+Building stability update: 1iterations; Time: 0.000
+All passcalcer jobs were done
