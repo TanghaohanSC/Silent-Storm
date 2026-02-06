@@ -1,0 +1,286 @@
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Nasdaq Boom (World of Cracking) -->
+<Zones>
+	<Zone Description="Пересеченная местность в Англии" Code="ECct" ItemSlots="1" PersonSlots="1" Location="Cross-country" Country="England"/>
+	<Zone Description="Деревня  в Англии" Code="EVlg_Not4Use" ItemSlots="1" PersonSlots="1" Location="Cross-country" Country="England"/>
+	<Zone Description="Город  в Англии" Code="ETwn " ItemSlots="1" PersonSlots="1" Location="Cross-country" Country="England"/>
+	<Zone Description="Английский склад" Code="EEStore" ItemSlots="1" PersonSlots="1" Location="EnemyСomplex" Country="England"/>
+	<Zone Description="Английская лаборатория" Code="EELab" ItemSlots="2" PersonSlots="1" Location="EnemyСomplex" Country="England"/>
+	<Zone Description="Английская комендатура" Code="EECom" ItemSlots="1" PersonSlots="1" Location="EnemyСomplex" Country="England"/>
+	<Zone Description="Усадьба английской шишки" Code="EEVip" ItemSlots="1" PersonSlots="1" Location="EnemyСomplex" Country="England"/>
+	<Zone Description="Склад террористов в Англии" Code="ETStore" ItemSlots="2" PersonSlots="1" Location="TerrorsComplex" Country="England"/>
+	<Zone Description="Пересеченная местонсть в Германии" Code="GCct" ItemSlots="1" PersonSlots="1" Location="Cross-country" Country="Germany"/>
+	<Zone Description="Город  в Швейцарии" Code="GTwn " ItemSlots="1" PersonSlots="1" Location="FriendlyСomplex" Country="Germany"/>
+	<Zone Description="Деревня   в Германии" Code="GVlg_Not4Use  " ItemSlots="1" PersonSlots="1" Location="FriendlyСomplex" Country="Germany"/>
+	<Zone Description="Склад в Германии" Code="GFStore" ItemSlots="1" PersonSlots="1" Location="FriendlyСomplex" Country="Germany"/>
+	<Zone Description="Завод в Германии" Code="GFFact" ItemSlots="1" PersonSlots="1" Location="FriendlyСomplex" Country="Germany"/>
+	<Zone Description="Лаборатория в Германии" Code="GFLab" ItemSlots="1" PersonSlots="1" Location="FriendlyСomplex" Country="Germany"/>
+	<Zone Description="Немецкая комендатура" Code="GFCom" ItemSlots="2" PersonSlots="1" Location="FriendlyСomplex" Country="Germany"/>
+	<Zone Description="Усадьба немецкой шишки " Code="GFVip" ItemSlots="1" PersonSlots="1" Location="FriendlyСomplex" Country="Germany"/>
+	<Zone Description="Усадьба шишки террористов в Германии" Code="GTVip" ItemSlots="2" PersonSlots="1" Location="TerrorsComplex" Country="Germany"/>
+	<Zone Description="Русская коммендатура" Code="RECom" ItemSlots="1" PersonSlots="1" Location="EnemyСomplex" Country="Russia"/>
+	<Zone Description="Завод в России" Code="REFact" ItemSlots="1" PersonSlots="1" Location="EnemyСomplex" Country="Russia"/>
+	<Zone Description="Швейцарский завод террористов " Code="RTFact" ItemSlots="2" PersonSlots="1" Location="TerrorsComplex" Country="Germany"/>
+	<Zone Description="Террористический комплекс в России" Code="RTLab" ItemSlots="2" PersonSlots="1" Location="TerrorsComplex" Country="Russia"/>
+	<Zone Description="Первая миссия" Code="ETutor" ItemSlots="1" PersonSlots="1" Location="Tutorial" Country="England"/>
+	<Zone Description="Последняя миссия" Code="FFight" ItemSlots="1" PersonSlots="1" Location="FinalFight" Country="Island"/>
+	<Zone Description="Наша база" Code="Base" ItemSlots="1" PersonSlots="1" Location="Base" Country="Germany"/>
+	<Clues Description="Info about Lieutenant W kidnapping" Type="Item" State="AlliesEnemy" Code="INFO_W_Kidnapping">
+		<ZoneToPlace>Base</ZoneToPlace>
+		<Obj Action="Capture" Description="Англичане похитили человека, который имел доступ к необычайно важной информации. В кратчайшие сроки необходимо либо вызволить его из плена, либо уничтожить.">
+			<ZoneToOpen>EECom</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Captive German Agent" Type="Person" State="AlliesEnemy" Code="Captive_G_Agent">
+		<ZoneToPlace>EEVip</ZoneToPlace>
+		<Obj Action="Capture" Description="Cообщает о фирме, которая осуществляет поставки странного оборудования в местную лабораторию">
+			<ZoneToOpen>ETwn</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Captive German Agent2" Type="Person" State="AlliesEnemy" Code="Captive_G_Agent2">
+		<ZoneToPlace>EECom</ZoneToPlace>
+		<Obj Action="Capture" Description="Сообщает об активной базе нем. диверсантов">
+			<ZoneToOpen>ECct</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Documents about secret military  laboratory" Type="Item" State="AlliesEnemy" Code="Doc_About_Secret_Lab">
+		<ZoneToPlace>ECct</ZoneToPlace>
+		<Obj Action="Capture" Description="Сведения, собраные немецким агентом о секретной лаборатории англичан">
+			<ZoneToOpen>EELab</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="German Officer Relocation Order" Type="Item" State="AlliesEnemy" Code="G_Officer_Relocation_Order">
+		<ZoneToPlace>EECom</ZoneToPlace>
+		<Obj Action="Capture" Description="Распоряжение о перемещении пленного немца в штаб разведки">
+			<ZoneToOpen>EEVip</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Captive German Officer" Type="Person" State="AlliesEnemy" Code="Captive_G_Officer">
+		<ZoneToPlace>EEVip</ZoneToPlace>
+		<Obj Action="Capture" Description="Пленный немецкий офицер.Сообщает, что никакого лейтенанта W  англичане не похищали. Так же сообщает, что в отделе Ханке творится что-то подозрительное.">
+			<ClueToOpen>Hanke_Traitor</ClueToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Documents about experimental weapons transfered to local military depot " Type="Item" State="AlliesEnemy" Code="Transfered_Weapons">
+		<ZoneToPlace>EELab</ZoneToPlace>
+		<ZoneToPlace>EEVip</ZoneToPlace>
+		<Obj Action="Capture" Description="Документы о перемещении партии экмпериментального оружия на местный склад">
+			<ZoneToOpen>EEStore</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Strange device" Type="Item" State="AlliesEnemy" Code="Strange_device">
+		<ZoneToPlace>EEStore</ZoneToPlace>
+		<Obj Action="Capture" Description="Странный механизм, полученный из местной коммендатуры">
+			<ZoneToOpen>EECom</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Dummy PK in sealed container" Type="Item" State="AlliesEnemy" Code="PK_container">
+		<ZoneToPlace>EELab</ZoneToPlace>
+		<ZoneToPlace>EEStore</ZoneToPlace>
+		<Obj Action="Capture" Description="Запечатанный контейнер c нерабочим прототипом ПК. На контейнере белой краской нанесен адрес фирмы изготовителя. ">
+			<ZoneToOpen>ETwn</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="PanzerKleinInternalMechanicsPart" Type="Item" State="UnknowEnemy" Code="PK_Int_Part">
+		<ZoneToPlace>ETwn</ZoneToPlace>
+		<Obj Action="Capture" Description="Части непонятного оборудования, упакованные в ящики c маркировкой отправителя и предназначенные для отправки в военную лабораторию. ">
+			<ZoneToOpen>GFStore</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="BritishMajor" Type="Person" State="UnknowEnemy" Code="British_Major">
+		<ZoneToPlace>ETwn</ZoneToPlace>
+		<ZoneToPlace>EEStore</ZoneToPlace>
+		<Obj Action="Capture" Description="Командир антидиверсионной группы. После пленения некоторое время отказывается отвечать на вопросы. Однако случайно услышав имя Ханке майор презрительно заявляет, что Ханке продаст родную мать, не то что уж Родину, и что весь отряд Героя одной ногой уже ступил в могилу.">
+			<ClueToOpen>Hanke_Traitor</ClueToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="PK invoice" Type="Item" State="UnknowEnemy" Code="PK_invoice">
+		<ZoneToPlace>ETwn</ZoneToPlace>
+		<Obj Action="Capture" Description="Накладная на прилагающаяся к  партии оборудования, полученном  из Германии транзитом через Швейцарию">
+			<ZoneToOpen>GFStore</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Letter from Swiss based firm " Type="Item" State="AlliesEnemy" Code="Swiss_Letter">
+		<ZoneToPlace>ETwn</ZoneToPlace>
+		<Obj Action="Capture" Description='Запрос от представителя некой швейцарской фирмы, на поставку новой партии "специального оборудования".'>
+			<ZoneToOpen>GTwn</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Suspicous Facts about Hanke " Type="Item" State="UnknowEnemy" Code="Hanke_Traitor">
+		<Obj Action="Capture" Description="Подозрительные факты связанные с деятельностью полковника Ханке">
+			<ZoneToOpen>GTVip</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Representative of a Swiss Firm" Type="Person" State="UnknowEnemy" Code="Swiss_Representative">
+		<ZoneToPlace>GTwn</ZoneToPlace>
+		<Obj Action="Capture" Description='Представитель швейцарской фирмы, хорошо охраняемый неизвестными вооруженными людьми. На допросе сообщает, что не ничего не знает о "специальном оборудовании", однако раскрывает месторасположение склада откуда идут поставки.'>
+			<ZoneToOpen>GFStore</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="PanzerKleinExternalPart" Type="Item" State="UnknowEnemy" Code="PK_Part">
+		<ZoneToPlace>GFStore</ZoneToPlace>
+		<Obj Action="Capture" Description="Части непонятного оборудования, упакованные в ящики и предназначенные для отправки в военную лабораторию. ">
+			<ZoneToOpen>GFLab</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="AlliesInfiltrationTeamLeader" Type="Person" State="UnknowEnemy" Code="Infiltrator_Leader">
+		<ZoneToPlace>GFCom</ZoneToPlace>
+		<ZoneToPlace>GFLab</ZoneToPlace>
+		<Obj Action="Destroy" Description="Несколько страниц из личного блокнота лидера диверсионной группы. После внимательного ознакомления становится ясно, что в блокноте перечисленны задачи группы. Большинство из них помечены как завершенные. Единственная запись, оставшаяся без отметки, указывает на некое поместье.">
+			<ZoneToOpen>GTVip</ZoneToOpen>
+		</Obj>
+		<Obj Action="Capture" Description="На допросе рассказывает, что его группа занималась расследованием деятельности некой неизвестной организации, занимающейся международной торговлей оружием. Следы привели его группу в Англию. Так же диверсант сообщает о предполагаемом месторасположении Германского  центра организации. Кроме этого диверсант рассказывает о продаже информации имевшей место быть на  немецком заводе.">
+			<ZoneToOpen>GFFact</ZoneToOpen>
+			<ZoneToOpen>GTVip</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Strange Alloy Analysis" Type="Item" State="UnknowEnemy" Code="Strange_Alloy">
+		<ZoneToPlace>GFLab</ZoneToPlace>
+		<Obj Action="Capture" Description="Некий минерал с прилагающимся описанием. Предполагается, что минерал был добыт на территории России">
+			<ZoneToOpen>REFact</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Factory security officer" Type="Person" State="UnknowEnemy" Code="Factory_security_officer">
+		<ZoneToPlace>GFVip</ZoneToPlace>
+		<Obj Action="Destroy" Description="Устранив начальника охраны завода вы сможете подставить на его место двойника, подготовленного специально для этой цели и беспрепятственно проникнуть на территорию завода.">
+			<ZoneToOpen>RTFact</ZoneToOpen>
+		</Obj>
+		<Obj Action="Capture" Description="Начальник охраны рассказал о системе безопасности завода. ">
+			<ZoneToOpen>RTFact</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Microfilm" Type="Item" State="UnknowEnemy" Code="Microfilm">
+		<ZoneToPlace>GFStore</ZoneToPlace>
+		<Obj Action="Capture" Description="Микрофильм, запечатлевший ПК в действии">
+			<ZoneToOpen>GCct</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Henrih Stielmann" Type="Person" State="UnknowEnemy" Code="Henrih_Stielmann">
+		<ZoneToPlace>GFFact</ZoneToPlace>
+		<Obj Action="Capture" Description="Сообщает о месторасположении склада фирмы">
+			<ZoneToOpen>GFStore</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="General G" Type="Person" State="UnknowEnemy" Code="General_G">
+		<ZoneToPlace>GFFact</ZoneToPlace>
+		<Obj Action="Destroy" Description="Устранив генерала  вы восстановили справедливость. Предатель получил по заслугам."/>
+		<Obj Action="Capture" Description="Генерал рассказал, что был подкуплен полколвником Ханке и за вознаграждение передавал тому секретную информацию. ">
+			<ZoneToOpen>GTVip</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Rocket Testsite" Type="Item" State="UnknowEnemy" Code="Rocket_Test_Info">
+		<ZoneToPlace>GTVip</ZoneToPlace>
+		<Obj Action="Capture" Description="Информация о проведении испытаний ракетного двигателя.">
+			<ZoneToOpen>GCct</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Полковник Ханке" Type="Person" State="TerrorEnemy" Code="Hauptmann_Hanke">
+		<ZoneToPlace>GTVip</ZoneToPlace>
+		<Obj Action="Capture" Description="Ханке после нескольких дней пыток рассказывает про Организацию. ">
+			<ZoneToOpen>RTLab</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Russion Factory Info" Type="Item" State="TerrorEnemy" Code="Russion_Factory_Info">
+		<ZoneToPlace>GTVip</ZoneToPlace>
+		<Obj Action="Capture" Description="Информация о русском заводе, где работает некий ученый, которого террористы хотят похитить">
+			<ZoneToOpen>REFact</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Lebedev assistant" Type="Person" State="TerrorEnemy" Code="Lebedev_assistant">
+		<ZoneToPlace>GCct</ZoneToPlace>
+		<Obj Action="Capture" Description="Помошник Лебедева, работавший вместе с ним над прототипом ракеты. Рассказывает о комплексе в России">
+			<ZoneToOpen>RTLab</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Security officer Dossier " Type="Item" State="TerrorEnemy" Code="Dossier_Sec_Officer">
+		<ZoneToPlace>RTLab</ZoneToPlace>
+		<ZoneToPlace>GTVip</ZoneToPlace>
+		<Obj Action="Capture" Description="Досье на начальника безопасности швейцарского завода террористов">
+			<ZoneToOpen>GFVip</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="RAygun docs" Type="Item" State="TerrorEnemy" Code="RayGun_Info">
+		<ZoneToPlace>ETStore</ZoneToPlace>
+		<Obj Action="Capture" Description="Папка с материалы описывающими необычное оружие.  Среди прочих бумаг в папке находится копия древнего тибетского манускрипта. В документах часто встречается фамилия Лебедев.">
+			<ZoneToOpen>RTFact</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Panzerklein Programm Description" Type="Item" State="TerrorEnemy" Code="PK_Programm_Description">
+		<ZoneToPlace>RTLab</ZoneToPlace>
+		<Obj Action="Capture" Description="Данные чертежи механизма предназначены для получателя. В качестве места доставки указан секретный склад в Англии. ">
+			<ZoneToOpen>ETStore</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Russian Engineer" Type="Person" State="TerrorEnemy" Code="Russian_Engineer">
+		<ZoneToPlace>REFact</ZoneToPlace>
+		<Obj Action="Capture" Description="После пленения Инженер сообщает о партии загадочного минерала полученной из местной комендатуры.">
+			<ZoneToOpen>RECom</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Documents about strange activity" Type="Item" State="TerrorEnemy" Code="Document_about_terror_activity">
+		<ZoneToPlace>RECom</ZoneToPlace>
+		<Obj Action="Capture" Description="Документы о странной активности в определенном районе">
+			<ZoneToOpen>RTLab</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="RussianTerrorEngineer" Type="Person" State="TerrorEnemy" Code="R_Terror_Engineer">
+		<ZoneToPlace>REFact</ZoneToPlace>
+		<Obj Action="Capture" Description="Агент террористов, выдающий себя за русского инженера. После поимки выдает местонахождение комплекса террористов">
+			<ZoneToOpen>RTLab</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="RussianBaseCommander" Type="Person" State="TerrorEnemy" Code="R_Base_Commander">
+		<ZoneToPlace>RTLab</ZoneToPlace>
+		<Obj Action="Capture" Description="Рассказывает об организации террориство">
+			<ZoneToOpen>RTFact</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Lebedev's Personal Logbook" Type="Item" State="TerrorEnemy" Code="LebedevDiary">
+		<ZoneToPlace>RTFact</ZoneToPlace>
+		<Obj Action="Capture" Description="Дневник Лебедева">
+			<ZoneToOpen>FFight</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="British Scientist Abduction" Type="Item" State="AlliesEnemy" Code="INFO_Br_Scientist_Abduction">
+		<ZoneToPlace>Base</ZoneToPlace>
+		<Obj Action="Capture" Description="Английские ученые ведут секретные разработки. Необходимо выяснить их природу, и по возможности похитить участников проекта. ">
+			<ZoneToOpen>EELab</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Plan of a german military lab" Type="Item" State="AlliesEnemy" Code="GermanLabPlan">
+		<ZoneToPlace>EEVip</ZoneToPlace>
+		<Obj Action="Capture" Description="Планы нападения на немецкую лабораторию">
+			<ZoneToOpen>GFLab</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Plans concerning assault on german objects " Type="Item" State="AlliesEnemy" Code="British_Assault_Plans">
+		<ZoneToPlace>EEVip</ZoneToPlace>
+		<Obj Action="Capture" Description="Планы действий английских диверсантов на территории Германии">
+			<ZoneToOpen>GFCom</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Working materials of the scientist" Type="Item" State="AlliesEnemy" Code="Scientific_Documents">
+		<ZoneToPlace>EELab</ZoneToPlace>
+		<Obj Action="Capture" Description="Рабочие документы некоего ученого. Описывают принципы совершенно нового типа вооружения. (принципы действия актуаторов ПК)">
+			<ZoneToOpen>EEStore</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="British Scientist" Type="Person" State="AlliesEnemy" Code="British_Scientist">
+		<ZoneToPlace>EEVip</ZoneToPlace>
+		<ZoneToPlace>EELab</ZoneToPlace>
+		<Obj Action="Capture" Description="Ученый сообщает об анонимной посылке полученной из Швейцарии несколько месяцев назад. В посылке находилось странное устройство.">
+			<ZoneToOpen>GTwn</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Missed Friendly Agent " Type="Item" State="AlliesEnemy" Code="INFO_Missed_Agent">
+		<ZoneToPlace>Base</ZoneToPlace>
+		<Obj Action="Capture" Description="Выяснить судьбу ценного немецкого разведчика пропавшего несколько недель назад. Поиск предполагается начать с получения информации от агента, работающего на территории Англии">
+			<ZoneToOpen>EECom</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues Description="Steal British Plans" Type="item" State="AlliesEnemy" Code="INFO_Steal_Plans">
+		<ZoneToPlace>Base</ZoneToPlace>
+		<Obj Action="Capture" Description="Проникнуть в штаб английской контрразведки и выкрасть собранную англичанами информацию по нашим агентам. ">
+			<ZoneToOpen>EEVip</ZoneToOpen>
+		</Obj>
+	</Clues>
+</Zones>

@@ -1,0 +1,5 @@
+play .\res\video\nVidia.bik
+play .\res\video\JoWooD.bik
+play .\res\video\Nival.bik
+play .\res\video\Intro.bik
+exec mainmenu

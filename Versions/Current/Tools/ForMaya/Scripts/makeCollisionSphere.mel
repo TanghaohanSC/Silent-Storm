@@ -1,0 +1,25 @@
+{
+     string $name[] = `sphere -n "Sphere1" -p 0 0 0 -ax 0 0 1 -ssw 0 -esw 360 -r 1 -d 3 -ut 0 -tol 0.01 -s 8 -nsp 4 -ch 0`;
+     displaySmoothness -divisionsU 3 -divisionsV 3 -pointsWire 16 -pointsShaded 4;
+     subdivDisplaySmoothness -smoothness 3;
+
+     addAttr -ln radius -at double  $name[0];
+     eval("setAttr -e -keyable true "+$name[0]+".radius");
+     eval("setAttr "+$name[0]+".radius 1");
+
+     eval("connectAttr -f "+$name[0]+".radius "+$name[0]+".scaleX");
+     eval("connectAttr -f "+$name[0]+".radius "+$name[0]+".scaleY");
+     eval("connectAttr -f "+$name[0]+".radius "+$name[0]+".scaleZ");
+
+     eval("setAttr -e -keyable false "+$name[0]+".rx");
+     eval("setAttr -e -keyable false "+$name[0]+".ry");
+     eval("setAttr -e -keyable false "+$name[0]+".rz");
+     eval("setAttr -e -keyable false "+$name[0]+".sx");
+     eval("setAttr -e -keyable false "+$name[0]+".sy");
+     eval("setAttr -e -keyable false "+$name[0]+".sz");
+     eval("setAttr -e -keyable false "+$name[0]+".v");
+
+     eval("addAttr -ln mass -at double  "+$name[0]);
+     eval("setAttr -e -keyable true "+$name[0]+".mass");
+     eval("setAttr "+$name[0]+".mass 1");
+}

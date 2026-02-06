@@ -1,0 +1,1 @@
+scengraph.exe -f -i zones_allies

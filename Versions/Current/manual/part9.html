@@ -1,0 +1,699 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<LINK REL="stylesheet" HREF="styles.css">
+	<script language="javascript1.2" src="menu.js"></script>
+
+</head>
+
+<body background="img/fon1.gif" leftmargin=0 topmargin=0 onload="newTitle('8')">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td><div align="justify">
+		<a name="level1"></a>
+		<h2>About RPG system</h2>
+						<p>RPG system in<i> Silent Storm </i>is based on characters' 
+				    attributes, including basic attributes (Strength, Dexterity and Intelligence) 
+				    and secondary attributes — derivatives of the basic ones. Initial values of 
+				    basic attributes depend on the selected character's individual features and 
+				    his military profession; when you create a custom character, these values 
+				    can be set manually. Accomplishing mission objectives (destroying enemies 
+				    and finding clues), characters gain experience; 
+				    accumulated experience slightly increases their attributes. Each acquired 
+				    hint will also give characters some experience. When accumulated experience 
+				    exceeds certain limits, the character moves up to the next level.</p>
+				  <p>In addition to attributes, characters have skills and abilities. 
+				    Skills determine how good characters are at certain things, e.g. using firearms, 
+				    engineering, medicine etc. Skill values depend both on the basic attributes 
+				    and practical experience in appropriate activities. More experience gives 
+				    more scope to develop skills, and skills develop when characters use them.</p>
+				  <p>Characters' abilities are not graded and not acquired automatically. 
+				    Abilities depend on the selected profession and ultimately allow characters 
+				    to become experts in relevant areas, e.g. master sniper or master medic. When 
+				    the character moves on to the next level, he can get a new ability (the player 
+				    chooses one of the currently available). All possible abilities connected 
+				    with the character's profession form the &laquo;Abilities Tree&raquo; showing 
+				    abilities' relations with each other and the sequence they can be acquired 
+				    in.</p>
+				  <p>At the beginning of the game you can choose a character 
+				    with preset attributes as your main hero, or create a custom character selecting 
+				    his profession and distributing his basic attributes. During the game you 
+				    will be able to hire a group of characters with preset parameters; they will 
+				    develop together with the main hero. When characters act as a squad, the acquired 
+				    experience is divided between them evenly.</p>
+				  <p>Enemies encountered by your characters in missions also 
+				    have parameters including level, profession and skills; however, these parameters 
+				    are preset and not known to the player. Enemies' parameters can also depend on the selected difficulty level 
+				    of the game.</p>
+					<a name="level2"></a>
+				  <h2>Character's parameters</h2>
+				  <h3>Basic and secondary attributes</h3>
+				  <p>Each character has three basic parameters defining his physical 
+				    and intellectual properties:</p>
+				  <table border=1 cellspacing=0 cellpadding=3 width=570 bordercolor="#595F60">
+				    <tr> 
+				      <td width=134 valign=top> <p>Strength</p></td>
+				      <td width=436 valign=top> <p>Defines the 
+				          character's physical strength; primarily affects his health — Vitality 
+				          points (VP), but also how far the character can throw grenades or melee 
+				          weapons.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Dexterity</p></td>
+				      <td width=436 valign=top> <p>Defines coordination, 
+				          dexterity and speed of the character's actions; primarily affects the 
+				          number of actions the character can take during one turn – Action Points 
+				          (AP), but also the initial value of Shooting skill.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Intelligence</p></td>
+				      <td width=436 valign=top> <p>Defines the 
+				          character's intelligence, education and observation; primarily affects 
+				          the speed of gaining experience.</p></td>
+				    </tr>
+				  </table>
+				  <p>Characters' attributes values depend on their profession. 
+				    There are two leading parameters for each profession; these have higher values. 
+				    Initial values used in the game are given in the table below:</p>
+				  <table border=1 cellspacing=0 cellpadding=3 width=570 bordercolor="#595F60">
+				    <tr> 
+				      <td width=134 valign=top> <p><i>Profession</i></p></td>
+				      <td width=154 valign=top> <p align=center style='text-align:center'><em>Strength</em></p></td>
+				      <td width=144 valign=top> <p align=center style='text-align:center'><i>Dexterity</i></p></td>
+				      <td width=130 valign=top> <p align=center style='text-align:center'><i>Intelligence</i></p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Scout</p></td>
+				      <td width=154 valign=top> <p align=center style='text-align:center'>6</p></td>
+				      <td width=144 valign=top> <p align=center style='text-align:center'>10</p></td>
+				      <td width=130 valign=top> <p align=center style='text-align:center'>4</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Sniper</p></td>
+				      <td width=154 valign=top> <p align=center style='text-align:center'>5</p></td>
+				      <td width=144 valign=top> <p align=center style='text-align:center'>9</p></td>
+				      <td width=130 valign=top> <p align=center style='text-align:center'>6</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Grenadier</p></td>
+				      <td width=154 valign=top> <p align=center style='text-align:center'>9</p></td>
+				      <td width=144 valign=top> <p align=center style='text-align:center'>4</p></td>
+				      <td width=130 valign=top> <p align=center style='text-align:center'>7</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Soldier</p></td>
+				      <td width=154 valign=top> <p align=center style='text-align:center'>8</p></td>
+				      <td width=144 valign=top> <p align=center style='text-align:center'>8</p></td>
+				      <td width=130 valign=top> <p align=center style='text-align:center'>4</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Medic</p></td>
+				      <td width=154 valign=top> <p align=center style='text-align:center'>4</p></td>
+				      <td width=144 valign=top> <p align=center style='text-align:center'>7</p></td>
+				      <td width=130 valign=top> <p align=center style='text-align:center'>9</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Engineer</p></td>
+				      <td width=154 valign=top> <p align=center style='text-align:center'>5</p></td>
+				      <td width=144 valign=top> <p align=center style='text-align:center'>5</p></td>
+				      <td width=130 valign=top> <p align=center style='text-align:center'>10</p></td>
+				    </tr>
+				  </table>
+				  <p>Secondary attributes are no less important than the basic 
+				    ones, since they affect characters' abilities to act in combat:</p>
+				  <table border=1 cellspacing=0 cellpadding=3 width=570 bordercolor="#595F60">
+				    <tr> 
+				      <td width=134 valign=top> <p>Action Points 
+				          — AP</p></td>
+				      <td width=436 valign=top> <p>Defines the 
+				          number of actions the character can take, or the distance he can cover 
+				          during one turn; mostly depends on Dexterity.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Vitality Points 
+				          — VP</p></td>
+				      <td width=436 valign=top> <p>Defines the 
+				          character's ability to sustain damage; mostly depends on Strength.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Evasion</p></td>
+				      <td width=436 valign=top> <p>Defines the 
+				          character's potential for passive defence (e.g. avoiding a thrown grenade 
+				          or suffering less damage from a blast).</p></td>
+				    </tr>
+				  </table>
+				  <h3>Skills</h3>
+				  <p>Skills describe various aptitudes characters have from the 
+				    start and can develop during the game. Each character has a full set of skills, 
+				    but they have different values. Initial skill values depend on the character's 
+				    attributes, and develop when the character uses them.</p>
+				  <table border=1 cellspacing=0 cellpadding=3 width=570 bordercolor="#595F60">
+				    <tr> 
+				      <td width=134 valign=top> <p>Melee</p></td>
+				      <td width=436 valign=top> <p>Depends on 
+				          Dexterity and Strength attributes. <br>Affects efficiency of unarmed or melee attack, determines 
+				          the number of possible attacks and damage the characters can inflict.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Shooting</p></td>
+				      <td width=436 valign=top> <p>Depends on 
+				          Dexterity attribute.<br>Affects accuracy with all kinds of firearms.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Throwing</p></td>
+				      <td width=436 valign=top> <p>Depends on 
+				          Strength and Dexterity attributes.<br>Affects accuracy with throwing weapons (knives) and 
+				          grenades (ability to hit the specified target).</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Burst</p></td>
+				      <td width=436 valign=top> <p>Depends on 
+				          Strength and Dexterity attributes.<br>Increases accuracy when firing in bursts; affects 
+				          the number of rounds shot in a &laquo;long burst&raquo;.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Snipe</p></td>
+				      <td width=436 valign=top> <p>Depends on 
+				          Dexterity and Intelligence attributes.<br>Enables to fire Sniper shots.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Stealth</p></td>
+				      <td width=436 valign=top> <p>Depends on 
+				          Dexterity attribute.<br>Decreases the radius within which the character's 
+				          steps can be heard; makes the character less visible to enemies in hide 
+				          mode.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Spot</p></td>
+				      <td width=436 valign=top> <p>Depends on 
+				          Intelligence attribute.<br>Increases ability to detect stealthily moving characters, 
+				          spot mines and booby-traps without mine-detector.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Medicine</p></td>
+				      <td width=436 valign=top> <p>Depends on 
+				          Intelligence and Dexterity attributes.<br>Increases efficiency of dressing wounds and healing 
+				          critical damage; needed to use certain medical tools and medicines.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=134 valign=top> <p>Engineering</p></td>
+				      <td width=436 valign=top> <p>Depends on 
+				          Intelligence and Dexterity attributes.<br>Needed to open locks using lock-picks; enables to 
+				          set mines and booby-traps which are harder to spot, and detect and disarm 
+				          more ingenious traps and mines set by the enemy, with great effect use 
+				          special explosives (see. Weapon classes for details)</p></td>
+				    </tr>
+				  </table>
+				  <h3>Abilities</h3>
+				  <p>Abilities can give characters various advantages; some abilities 
+				    are necessary to take certain action or use certain equipment. Moving up to 
+				    the next level allows the character to acquire a new ability. The list of 
+				    abilities and the order in which they can be acquired (Ability Tree) depend 
+				    on the character's military profession. All abilities in the game (there are 
+				    dozens of them) can be divided into the following classes:</p>
+				  <p><i>AP Abilities</i> allow to reduce 
+				    AP costs of actions important to the character's profession (firing, close 
+				    combat, grenade throwing, moving etc.); some actions can even be taken without 
+				    spending any APs at all.</p>
+				  <p><i>Critical Abilities</i> increase characters' chances to inflict critical damage during various 
+				    attacks or made it more heavier.</p>
+				  <p><i>Damage Abilities</i> allow to inflict heavier damage during various attacks.</p>
+				  <p><i>Defence Abilities</i> help characters to take cover, avoid enemy attacks and reduce the 
+				    damage suffered when they are hit;</p>
+				  <p><i>Engineering Abilities</i> allow to increase damage caused by explosions, make the booby-traps 
+				    set by the character harder to detect while increasing efficiency of detecting 
+				    enemy traps, use lock-picks more efficiently;</p>
+				  <p><i>Experience Abilities</i> allow to gain experience and develop all skills quicker;</p>
+				  <p><i>Marksmanship Abilities</i> allow to develop characters' skills with certain weapons, increase 
+				    firearms' ranges, throw grenades farther, master new weapons quicker, decrease 
+				    or eliminate penalties for inefficient positions, increase efficiency of zeroing 
+				    in, reduce adverse effects of the time of day etc.</p>
+				  <p><i>Medicine Abilities</i> increase the character's medical skill, allow him to treat the wounded 
+				    more quickly and efficiently and use more advanced tools and medicines.</p>
+				  <p><i>Panzerklein Abilities</i>reduce limitations on using armoured suits (sensor range, noise level); 
+				    also allow the character to fix armoured suits.</p>
+				  <p><i>Sense Abilities</i> improve eye-sight and hearing, extend field of vision and ability 
+				    to detect enemies; also allow to determine enemies' VP values.</p>
+					<a name="level3"></a>
+				  <h2>Combat system</h2>
+				  <h3>Game mechanics</h3>
+				  <p>The<i> Silent Storm</i> world is based on physical models 
+				    of objects present in the game. All characters have skeleton models which 
+				    use special kinematics, making movements of various body parts, positions 
+				    characters take (including holding weapons), moving around the terrain in 
+				    various ways, carrying bodies etc. look very realistic. Another key feature 
+				    of the game is physical calculation of objects' interaction and destruction. 
+				    For example, a building's model is made of a number of blocks linked to each 
+				    other. After an explosion on one of the floors, a detailed calculation of 
+				    the shock wave is made to determine which sections of walls, floor and ceiling 
+				    will be smashed or damaged; the stability of the whole construction is also 
+				    checked — destruction of the supporting frame can lead to partial or total 
+				    collapse of the building. When a bullet or shell hit an obstacle, the probability 
+				    of piercing it or ricocheting from it is also calculated according to a physical 
+				    model. Wounds caused by bullets or fragments, or blasts' effects on characters 
+				    are calculated individually for each damaged body part.</p>
+				  <p>Calculations of hits or simple destructions (e.g. bullet 
+				    hitting wall and piercing it) are done quite quickly, so the player never 
+				    notices them. For more complex calculations, especially those concerning collapse 
+				    of buildings, the game may pause before you actually see the appropriate effect 
+				    on the screen. Any destructive impact (a shot, a thrown grenade etc.) automatically 
+				    switches the game to turn-based mode. Actions not connected with destroying 
+				    objects (moving around, picking up and swapping things, setting up mines and 
+				    booby-traps etc.) can be taken both in real-time and turn-based modes.</p>
+				  <p>During one turn in turn-based mode, a character can take 
+				    actions which in real time would last from 6 to 30 seconds (e.g. firing a 
+				    long burst takes much less time than dressing a wound, with identical AP costs). 
+				    Waiting for the opposition to complete their turn might take tens of seconds 
+				    or more — because all allied and enemy characters act taking turns, one after 
+				    another.</p>
+				  <h3>Weapon classes</h3>
+				  <p><i>Pistols and revolvers</i> are 
+				    the lightest weapons. They have close range, low density of fire and cause 
+				    low damage. On the plus side, using them involves low AP costs (both firing 
+				    and reloading). You'll need many different kinds of ammunition, depending 
+				    on the gun type. Usually these guns are used for self-defence in close combat 
+				    or for surprise attack at close range; using pistols at long range will not 
+				    be efficient. You might be able to get hold of silent pistols. Firing modes 
+				    include Snap Shot and Aimed Shot.</p>
+				  <p><i>Rifles </i>have been the most commonly used weapons during the WW2. They have 
+				    long range often exceeding characters' range of vision, high density of fire 
+				    and cause heavy damage. Given a large variety of rifles, you won't need too 
+				    many different kinds of ammunition which makes finding appropriate ammunition 
+				    easier. Using rifles involves high AP costs, both for firing and reloading. 
+				    The sniper modification — rifle with optical sights — offers increased precision 
+				    of fire and longer range. Rifles are quite efficient for medium-range and 
+				    long range combat. Available firing modes include Snap Shot, Aimed Shot, Careful 
+				    Shot and Snipe mode (for sniper rifles). Some rifles can fire in bursts.</p>
+				  <p><i>Submachine-guns </i>use pistol 
+				    ammunition to fire in bursts; some models allow to fire single shots. In addition 
+				    to medium range they have rather low fire precision, so the probability of 
+				    each round hitting the target is not high. However, that's compensated by 
+				    heavy damage caused by these weapons and by the fact the probability of hit 
+				    increases when you fire in bursts, due to large number of rounds. Submachine-guns 
+				    are efficient for close combat and at medium range, especially if you need 
+				    to deal with a group of enemies. Average AP costs. Limited variety of ammunition, 
+				    so it makes finding ammunition much easier. You might be able to get hold 
+				    of silenced submachine-guns. Available firing modes include Short Bursts, 
+				    Long Bursts and for some models Snap Shot and Aimed Shot.</p>
+				  <p><i>Heavy machine-guns </i>use rifle 
+				    ammunition to fire in bursts, which makes them a powerful automatic weapon. 
+				    Efficient at all ranges. The only drawback is heavy AP costs (single shots, 
+				    burst fire and reloading). Ammunition takes a lot of space. Available firing 
+				    modes include Short Bursts, Long Bursts and for some models Snap Shot and 
+				    Aimed Shot.</p>
+				  <p><i>Grenade launchers</i>, bazookas 
+				    and their varieties are used to launch jet-propelled grenades; they cause 
+				    damage to the whole area due to the blast wave. Efficient at medium range, 
+				    against groups of enemies and for destroying objects. Drawbacks include heavy 
+				    AP cost, need to reload after each shot and limited amount of ammunition characters 
+				    can carry. Available firing modes: Snap Shot, Aimed Shot, Careful Shot.</p>
+				  <p><i>Melee weapons </i>include knives, 
+				    clubs, brass knuckles, swords etc.; used for hand-to-hand combat. Throwing 
+				    weapons (knives, chakra disks, shuriken stars etc.) are used at close range. 
+				    Throwing weapons give more chances to inflict critical damage than firearms; 
+				    you can pick them up after throwing and use again. Hand-to-hand combat weapons 
+				    also have high probability of hitting the target but they only can be used 
+				    at point-blank range. The main advantage of melee weapons is that they make 
+				    no noise at all; the main drawback is the need to get very close to the enemy 
+				    undetected. Accordingly, melee weapons are used almost exclusively by scouts 
+				    who have appropriate skills.</p>
+				  <p><i>Grenades </i>are used to damage 
+				    individual enemy characters and groups of them with blast waves and fragments. 
+				    Grenades is a close- and medium-range weapon. Grenadiers can use them most 
+				    efficiently. There are many different kinds of grenades, but all of them can 
+				    be de divided into two classes: offensive and defensive grenades. Offensive 
+				    grenades are lighter, have fewer fragments and smaller scattering range, so 
+				    they can be used without taking cover. Defensive grenades are heavier, have 
+				    more fragments and a wider scattering range; they are most efficient against 
+				    enemy groups (the thrower must take cover to avoid being damaged). Grenades 
+				    can be set at doors and windows as booby-traps for enemies leaving buildings.</p>
+				  <p><i>Mines and explosives </i>are 
+				    used to mine areas or objects; they explode after the fuse is triggered. Efficient 
+				    against enemy patrols on set routes; also can be set up on roads leading to 
+				    doors or gates.</p>
+				  <p>Apart from standard grenades and mines there are also plain 
+				    explosives that can be used as grenades, but the effect of their use depends 
+				    on the engineering skill of the character that uses these explosives.</p>
+				  <p><i>Panzerklein armoured suits' weapons </i>include 
+				    grenade launchers, heavy machine-guns and certain unique weapons. All these 
+				    weapons cause heavy damage. They have about the same efficiency as stationary 
+				    weapons and are used at all ranges; can be used against enemies also wearing 
+				    armoured suits. Drawbacks include the need for special ammunition and impossibility 
+				    to use these weapons without an armoured suit.</p>
+				  <p><i>Ammunition</i>includes cartridges and magazines for firearms, grenades for grenade 
+				    launchers, missiles etc. In addition to standard cartridges, you may be able 
+				    to get hold of special firearms ammunition causing heavier damage to enemy 
+				    personnel, or with higher armour-piercing ability.</p>
+				  <h3>Probability of hitting targets</h3>
+				  <p>This parameter (very important for efficient use of weapons 
+				    and successful attacks) depends on two factors: accuracy of shot and protection 
+				    of target (if it happens to be behind a cover). Accuracy is determined by 
+				    the following:</p>
+				  <li><p> 
+				     Distance to target;</p></li>
+				  <li><p>
+				     Presence of obstacles between shooter and 
+				    target;</p></li>
+				  <li><p>
+				     Weapon's parameters (maximum range);</p></li>
+				  <li><p>
+				     Character's Shooting skill;</p></li>
+				 <li><p>
+				     Character's skill of using this weapon class 
+				    and familiarity with the actual gun;</p></li>
+				  <li><p>
+				     Zeroing in: with each next shot fired at stationary 
+				    target or target moving within the weapon's arc of fire, accuracy increases;</p></li>
+				  <li><p> 
+				     Shooter's movements and position: firing from 
+				    position most suited for the weapon ensures higher accuracy (lying position 
+				    for rifles, crouching position for grenade-launchers); if character fires 
+				    immediately after running during the current turn, accuracy significantly 
+				    decreases;</p></li>
+				 <li><p> 
+				     Time spent to take aim (depends on the selected 
+				    firing mode and APs spent on taking aim with Sniper Shooting);</p></li>
+				  <li><p>
+				     Target's movement (it's harder to hit a moving 
+				    target);</p></li>
+				  <li><p>
+				     Firing at specific body part (the probability 
+				    of hit decreases for smaller body parts);</p></li>
+				  <li><p>
+				     Weather (rain or wind affect bullets' trajectories);</p></li>
+				  <li><p>
+				     Time of day (it's more difficult to take aim 
+				    and therefore hit the target at night).</p></li>
+				  <p>Target's cover determines how many bullets will not reach 
+				    the enemy (will be absorbed by the obstacle). The bullet's interaction with 
+				    the obstacle (tree trunk, fence, wall or corner of building, Panzerklein armour 
+				    etc.) is calculated. If only part of the target's body is covered, the probability 
+				    of hit decreases only for this part. Various bullets have different penetration 
+				    ability, so they'll affect the cover differently.</p>
+				  <h3>Wounds and damage zones</h3>
+				  <p>Characters can get wounded by weapons or blast waves. The 
+				    damage they suffer equals the damage inflicted by the weapon (it can vary 
+				    randomly within certain limits). If the bullet went through an obstacle, the 
+				    damage my be less heavy. Also, the amount of damage depends on the body part 
+				    (damage zone). Note that firing shots aimed at specific body parts doesn't 
+				    guarantee hitting the part you aimed at. The amount of damage the character 
+				    suffers when hit at a body part is multiplied by the following factors:</p>
+				  <table border=1 cellspacing=0 cellpadding=3 width=570 bordercolor="#595F60">
+				    <tr> 
+				      <td width="150" align="center" valign="top"> <p style='text-autospace:none'><i>Body 
+				          part</i></p></td>
+				      <td width=200 valign=top align="center"> <p><i>Ordinary wound</i></p></td>
+				      <td width=200 valign=top align="center"> <p><i>Critical damage</i></p></td>
+				    </tr>
+				    <tr> 
+				      <td valign=top> <p style='text-autospace:none'>Head</p></td>
+				      <td valign=top> <p align=center style='text-align:center;text-autospace:none'>1,5</p></td>
+				      <td valign=top> <p align=center style='text-align:center;text-autospace:none'>1,5 
+				          — 4,5</p></td>
+				    </tr>
+				    <tr> 
+				      <td valign=top> <p>Arms</p></td>
+				      <td valign=top> <p align=center style='text-align:center;text-autospace:none'>0,7</p></td>
+				      <td valign=top> <p align=center style='text-align:center;text-autospace:none'>0,7 
+				          — 1,05</p></td>
+				    </tr>
+				    <tr> 
+				      <td valign=top> <p>Legs</p></td>
+				      <td valign=top> <p align=center style='text-align:center;text-autospace:none'>0,85</p></td>
+				      <td valign=top> <p align=center style='text-align:center;text-autospace:none'>0,85— 
+				          1,7</p></td>
+				    </tr>
+				    <tr> 
+				      <td valign=top> <p>Body</p></td>
+				      <td valign=top> <p align=center style='text-align:center;text-autospace:none'>1,0</p></td>
+				      <td valign=top> <p align=center style='text-align:center;text-autospace:none'>1,0 
+				          — 2,5</p></td>
+				    </tr>
+				  </table>
+				  <p>As you see, critical head wounds are the most dangerous. 
+				    Wounded characters act less efficiently — their AP parameters and skills affecting 
+				    fighting abilities (Shooting, Melee, Throwing) start to decrease proportionally:</p>
+				  <table border=1 cellspacing=0 cellpadding=3 width=570 bordercolor="#595F60">
+				    <tr> 
+				      <td width=150 valign=top> <p align=center style='text-align:center'>Remaining 
+				          VP, %</p></td>
+				      <td width=200 valign=top> <p align=center style='text-align:center'>AP 
+				          value</p></td>
+				      <td width=200 valign=top> <p align=center style='text-align:center'>Skill 
+				          value</p></td>
+				    </tr>
+				    <tr> 
+				      <td valign=top> <p align=center style='text-align:center'>100 
+				          — 75</p></td>
+				      <td valign=top> <p align=center style='text-align:center'>1,0</p></td>
+				      <td valign=top> <p align=center style='text-align:center'>1,0</p></td>
+				    </tr>
+				    <tr> 
+				      <td valign=top> <p align=center style='text-align:center'>75 
+				          — 50</p></td>
+				      <td valign=top> <p align=center style='text-align:center'>0,95</p></td>
+				      <td valign=top> <p align=center style='text-align:center'>0,9</p></td>
+				    </tr>
+				    <tr> 
+				      <td valign=top> <p align=center style='text-align:center'>50 
+				          — 25</p></td>
+				      <td valign=top> <p align=center style='text-align:center'>0,9</p></td>
+				      <td valign=top> <p align=center style='text-align:center'>0,75</p></td>
+				    </tr>
+				    <tr> 
+				      <td valign=top> <p align=center style='text-align:center'>25 
+				          — 0</p></td>
+				      <td valign=top> <p align=center style='text-align:center'>0,8</p></td>
+				      <td valign=top> <p align=center style='text-align:center'>0,5</p></td>
+				    </tr>
+				  </table>
+				  <p>After a while the wounded character's health deteriorates 
+				    due to bleeding. After losing more than 50% VPs he starts losing more VPs 
+				    each turn. The only way to stop bleeding is to dress the wounds.</p>
+				  <h3>Critical damage</h3>
+				  <p>Each wound can seriously affect characters' general state 
+				    or some of their abilities, cause major bleeding, loss of hearing or eye-sight, 
+				    decrease accuracy of firing, prevent them from using weapons or moving around, 
+				    decrease their AP values etc. That kind of damage is called Critical Damage 
+				    (indicated in characters' interfaces by special icons). Critical damage can 
+				    be temporary, long-term or permanent. Temporary damage disappears automatically 
+				    after a while; long-term and permanent damage need medical assistance.</p>
+				  <p><i>Damage to head:</i></p>
+				  <table border=1 cellspacing=0 cellpadding=3 width=570 bordercolor="#595F60">
+				    <tr> 
+				      <td width=165 valign=top> <p>Unconscious</p></td>
+				      <td width=421 valign=top> <p>Character can 
+				          take no action.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Stun</p></td>
+				      <td width=421 valign=top> <p>Character can 
+				          take no action during 1 — 3 turns, can be healed by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Bleeding</p></td>
+				      <td width=421 valign=top> <p>Character loses 
+				          5 VPs each turn (in addition to damage due to bleeding from wounds).</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Blindness</p></td>
+				      <td width=421 valign=top> <p>Character cannot 
+				          see; can be healed by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Deafness</p></td>
+				      <td width=421 valign=top> <p>Character cannot 
+				          hear; can be healed by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Temporary Blindness</p></td>
+				      <td width=421 valign=top> <p>Character cannot 
+				          see during 2 — 5 turns; can be healed by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Temporary Deafness</p></td>
+				      <td width=421 valign=top> <p>Character cannot 
+				          hear during 2 — 5 turns; can be healed by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>AP Reduction</p></td>
+				      <td width=421 valign=top> <p>Character loses 
+				          half his APs during 1 — 3 turns; can be healed by medic.</p></td>
+				    </tr>
+				  </table>
+				  <p><i>Damage to body:</i></p>
+				  <table border=1 cellspacing=0 cellpadding=3  width=570 bordercolor="#595F60">
+				    <tr> 
+				      <td width=165 valign=top> <p>AP Reduction</p></td>
+				      <td width=411 valign=top> <p>Character's 
+				          APs decrease by a factor of 3; can be healed by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Temporary AP 
+				          Reduction</p></td>
+				      <td width=411 valign=top> <p>Character's 
+				          APs decrease by a factor of 3 during 3 — 6 turns; can be healed by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Temporary Motionless</p></td>
+				      <td width=411 valign=top> <p>Character cannot 
+				          move; has only 3/4 of APs for firing during 1 — 3 turns; can be healed 
+				          by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Bleeding</p></td>
+				      <td width=411 valign=top> <p>Character loses 
+				          5 10 or 15 VPs each turn (in addition to damage due to bleeding from 
+				          wounds).</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>AP Reduction</p></td>
+				      <td width=411 valign=top> <p>Character's 
+				          APs decrease by a factor of 1.33; can be healed by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Temporary Weapon 
+				          Skill Reduction</p></td>
+				      <td width=411 valign=top> <p>Weapon skill 
+				          decreases by a factor of 1.25 during 2 — 4 turns; can be healed by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Temporary AP 
+				          Reduction</p></td>
+				      <td width=411 valign=top> <p>Character's 
+				          APs decrease by a factor of 1.33 during 1 — 6 turns; can be healed by 
+				          medic.</p></td>
+				    </tr>
+				  </table>
+				  <p><i>Damage to arms:</i></p>
+				  <table border=1 cellspacing=0 cellpadding=3 width=570 bordercolor="#595F60">
+				    <tr> 
+				      <td width=165 valign=top> <p>Crippled Arm</p></td>
+				      <td width=411 valign=top> <p>Character drops 
+				          weapon which can only be handled by both arms (submachine-gun etc.) 
+				          and cannot use it; can be healed by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Bleeding</p></td>
+				      <td width=411 valign=top> <p>Character loses 
+				          4 or 8 VPs each turn (in addition to damage due to bleeding from wounds).</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Weapon Skill 
+				          Reduction</p></td>
+				      <td width=411 valign=top> <p>Weapon skill 
+				          decreases by a factor of 4; can be healed by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Weapon Disarm</p></td>
+				      <td width=411 valign=top> <p>Weapon which 
+				          can only be handled by both arms drops under character's feet, single-arm 
+				          weapon bounces away.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Weapon Skill 
+				          Reduction</p></td>
+				      <td width=411 valign=top> <p>Weapon skill 
+				          decreases by a factor of 2; can be healed by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Accidental 
+				          Shot</p></td>
+				      <td width=411 valign=top> <p>A single shot 
+				          is fired in random direction; character doesn't turn.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Temporary Weapon 
+				          Skill Reduction</p></td>
+				      <td width=411 valign=top> <p>Weapon skill 
+				          decreases by a factor of 2 during 2 — 6 turns; can be healed by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Temporary Weapon 
+				          Skill Reduction</p></td>
+				      <td width=411 valign=top> <p>Weapon skill 
+				          decreases by a factor of 1.25 during 1 — 4 turns; can be healed by medic.</p></td>
+				    </tr>
+				  </table>
+				  <p><i>Damage to legs:</i></p>
+				  <table border=1 cellspacing=0 cellpadding=3 width=570 bordercolor="#595F60">
+				    <tr> 
+				      <td width=165 valign=top> <p>Unconscious</p></td>
+				      <td width=411 valign=top> <p>Character can 
+				          take no action.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>AP Reduction</p></td>
+				      <td width=411 valign=top> <p>Character's 
+				          APs decrease by a factor of 4; can be healed by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Temporary Motionless</p></td>
+				      <td width=411 valign=top> <p>Character cannot 
+				          move; has only 3/4 of APs for firing during 2 — 5 turns; can be healed 
+				          by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Bleeding</p></td>
+				      <td width=411 valign=top> <p>Character loses 
+				          4, 8 or12 VPs each turn (in addition to damage due to bleeding from 
+				          wounds).</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>AP Reduction</p></td>
+				      <td width=411 valign=top> <p>Character's 
+				          APs decrease by a factor of 2; can be healed by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Temporary AP 
+				          Reduction</p></td>
+				      <td width=411 valign=top> <p>Character's 
+				          APs decrease by a factor of 2 during 3 — 6 turns; can be healed by medic.</p></td>
+				    </tr>
+				    <tr> 
+				      <td width=165 valign=top> <p>Temporary AP 
+				          Reduction</p></td>
+				      <td width=411 valign=top> <p>Character's 
+				          APs decrease by a factor of 1.25 during 1 — 4 turns; can be healed by 
+				          medic.</p></td>
+				    </tr>
+				  </table>
+				  <h3>Healing wounds and conditions.</h3>
+				  <p>Medical assistance includes two main tasks — dressing wounds 
+				    and healing critical damage (except temporary damage). Any character can dress 
+				    wounds providing he has dressing materials; however, the efficiency depends 
+				    on Medicine skill value: medic can dress more wounds than any other character. 
+				    When the wound is dressed, bleeding stops; accordingly, the character stops 
+				    losing VPs during each turn. Dressing wounds takes some time; the amount is 
+				    proportional to the amount of lost VPs and depends on Medicine skill level. 
+				    Dressing wounds may take several turns; medic will carry on dressing wounds 
+				    until he reaches the limit determined by his skill level or item he is using 
+				    to dress wounds. You can order characters to stop dressing wound and then 
+				    resume the process later on as need be.</p>
+				  <p>Also, medic can heal critical damage; the time it takes 
+				    depends on how heavy the damage is. Bleeding can be treated most efficiently 
+				    with styptic powder or forceps. Other kinds of critical damage can be treated 
+				    more efficiently with special tools and bondages. When medic uses tools, he 
+				    gets a bonus to his Medicine skill. If you interrupt the process, critical 
+				    damage returns to the initial level.</p>
+				  <p>When using bondages, the wounds are treated first and when 
+				    finished the critical conditions are treated. Medical tools treat conditions 
+				    first and wounds second. </p>
+				  <p>Short-term and long-term critical damage is automatically 
+				    healed when you switch to real-time mode. Permanent 
+				    damage remains and needs treatment, either by medic on the spot or at base.</p>
+		
+		
+		
+		
+		</div>
+		</td>
+	</tr>	
+</table>
+
+
+
+</body>
+</html>

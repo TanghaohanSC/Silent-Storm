@@ -1,0 +1,243 @@
+digraph g
+{
+  concentrate=true;
+  nodesep=.3;
+  ranksep=.3;
+  ELab[shape = box, label = "ELab\n7"];
+  ECom[shape = box, style=filled, label = "4\nECom\n7"];
+  EVip[shape = box, label = "EVip\n7"];
+  ETStore[shape = box, label = "ETStore\n12"];
+  GTwn[shape = box, style=filled, label = "3\nGTwn\n5\nBlockers:\nDocs_GeneralDead\nDocsRussian_GeneralDead\nGeneral_Survived\n"];
+  GStore[shape = box, fontcolor=darkgreen, style=filled, label = "1\nGStore\n1"];
+  GFact[shape = box, label = "GFact\n9"];
+  GLab[shape = box, label = "GLab\n8"];
+  GCom[shape = box, style=filled, label = "2\nGCom\n3"];
+  GVip[shape = box, style=dotted, label = "GVip\n1\nBlockers:\nDocs_GeneralDead\nDocsRussian_GeneralDead\n"];
+  GTVip[shape = box, label = "GTVip\n11"];
+  RCom[shape = box, style=filled, label = "5\nRCom\n9"];
+  RFact[shape = box, style=dotted, label = "RFact\n0"];
+  GTFact[shape = box, style=filled, label = "7\nGTFact\n13"];
+  RTLab[shape = box, style=filled, label = "6\nRTLab\n11"];
+  FFight[shape = box, style=filled, label = "8\nFFight\n15"];
+  EHid3[shape = box, label = "EHid3\n7"];
+  EHid2[shape = box, label = "EHid2\n8"];
+  EHid1[shape = box, style=dotted, label = "EHid1\n0"];
+  Base[shape = box, fontcolor=darkgreen, style=filled, label = "Base\n1"];
+  ECct[shape = box, style=dotted, label = "ECct\n0"];
+  EVlg[shape = box, label = "EVlg\n7"];
+  ETwn[shape = box, label = "ETwn\n7"];
+  EStore[shape = box, label = "EStore\n7"];
+  Assault_Agent[shape = ellipse, style=filled, label = "Assault_Agent"];
+  Common_operation_details[shape = ellipse, label = "Common_operation_details"];
+  Docs_about_Ironmen[shape = ellipse, style=filled, label = "Docs_about_Ironmen"];
+  Delivery_T_Boss[shape = ellipse, style=filled, label = "Delivery_T_Boss"];
+  Assault_Plan[shape = ellipse, style=filled, label = "Assault_Plan"];
+  Hanke_Pass[shape = ellipse, label = "Hanke_Pass"];
+  Find_HankeDiary[shape = ellipse, label = "Find_HankeDiary"];
+  Free_Captured_Agent[shape = ellipse, label = "Free_Captured_Agent"];
+  Capture_Colonel[shape = ellipse, label = "Capture_Colonel"];
+  Hanke_GeneralKilled[shape = ellipse, label = "Hanke_GeneralKilled"];
+  ShipContent[shape = ellipse, label = "ShipContent"];
+  Find_Helenas_Letter[shape = ellipse, label = "Find_Helenas_Letter"];
+  RocketConstruction[shape = ellipse, label = "RocketConstruction"];
+  TechnologyExchange[shape = ellipse, label = "TechnologyExchange"];
+  Captured_Officer[shape = ellipse, style=filled, label = "Captured_Officer"];
+  TerrorsPlan[shape = ellipse, label = "TerrorsPlan"];
+  Defend_Russian_Engineer[shape = ellipse, style=dotted, label = "Defend_Russian_Engineer"];
+  Delivery_Request[shape = ellipse, style=filled, label = "Delivery_Request"];
+  Docs_GeneralDead[shape = ellipse, style=filled, label = "Docs_GeneralDead"];
+  Shattered_Weapon[shape = ellipse, style=filled, label = "Shattered_Weapon"];
+  Docs_InquiryRocketFuel[shape = ellipse, label = "Docs_InquiryRocketFuel"];
+  Message_Delivery[shape = ellipse, style=dotted, label = "Message_Delivery"];
+  R_General_Killed_On_GVIP[shape = ellipse, style=dotted, label = "R_General_Killed_On_GVIP"];
+  Obtain_German_Pk[shape = ellipse, label = "Obtain_German_Pk"];
+  Hanke_Construction[shape = ellipse, label = "Hanke_Construction"];
+  General_Killed_On_GVIP[shape = ellipse, style=dotted, label = "General_Killed_On_GVIP"];
+  Construction_ColonelInfo[shape = ellipse, label = "Construction_ColonelInfo"];
+  Colonel_Courier[shape = ellipse, label = "Colonel_Courier"];
+  Save_E_Scientist[shape = ellipse, label = "Save_E_Scientist"];
+  FIN_DESCRIPTION[shape = ellipse, style=filled, label = "FIN_DESCRIPTION"];
+  General_Unordinary_Killed[shape = ellipse, style=filled, label = "General_Unordinary_Killed"];
+  R_General_Killed_On_GTWN[shape = ellipse, style=filled, label = "R_General_Killed_On_GTWN"];
+  Helena_Exchange_Letter[shape = ellipse, style=filled, label = "Helena_Exchange_Letter"];
+  General_Killed_On_GTWN[shape = ellipse, style=filled, label = "General_Killed_On_GTWN"];
+  Capture_General[shape = ellipse, label = "Capture_General"];
+  SpaceRocket[shape = ellipse, label = "SpaceRocket"];
+  DocsRussian_GeneralDead[shape = ellipse, style=filled, label = "DocsRussian_GeneralDead"];
+  Hanke_Terror[shape = ellipse, label = "Hanke_Terror"];
+  Docs_ReportBetaVersion[shape = ellipse, label = "Docs_ReportBetaVersion"];
+  Letter_from_H[shape = ellipse, label = "Letter_from_H"];
+  Draft_Letter_to_Andersen[shape = ellipse, label = "Draft_Letter_to_Andersen"];
+  RocketConstruction_PlaceUnknown[shape = ellipse, label = "RocketConstruction_PlaceUnknown"];
+  Colonel_Escaped[shape = ellipse, label = "Colonel_Escaped"];
+  INFO_E_AGENTS_NEAR_G_STORE[shape = ellipse, fontcolor=darkgreen, style=filled, label = "INFO_E_AGENTS_NEAR_G_STORE"];
+  Obtain_Pk_prototype[shape = ellipse, label = "Obtain_Pk_prototype"];
+  LaserWeapon_Theory[shape = ellipse, label = "LaserWeapon_Theory"];
+  Capture_Stielmann[shape = ellipse, style=filled, label = "Capture_Stielmann"];
+  Docs_CongratulationsonDefence[shape = ellipse, label = "Docs_CongratulationsonDefence"];
+  T_Boss_Documents[shape = ellipse, style=filled, label = "T_Boss_Documents"];
+  Docs_ListOfScientists[shape = ellipse, style=filled, label = "Docs_ListOfScientists"];
+  TerrorsPlan_and_location[shape = ellipse, style=dotted, label = "TerrorsPlan_and_location"];
+  PK_R_D_Docs[shape = ellipse, label = "PK_R_D_Docs"];
+  Capture_Hanke[shape = ellipse, label = "Capture_Hanke"];
+  Docs_LetteronGermanResearch[shape = ellipse, label = "Docs_LetteronGermanResearch"];
+  StrangeEncounter[shape = ellipse, label = "StrangeEncounter"];
+  Orbital_Weapon_Programm_Docs[shape = ellipse, style=filled, label = "Orbital_Weapon_Programm_Docs"];
+  MapX[shape = ellipse, style=dotted, label = "MapX"];
+  Colonel_LostShip[shape = ellipse, label = "Colonel_LostShip"];
+  Saved_Courier[shape = ellipse, label = "Saved_Courier"];
+  Docs_ReportStolenItems[shape = ellipse, label = "Docs_ReportStolenItems"];
+  Obtain_Terror_Pk[shape = ellipse, style=filled, label = "Obtain_Terror_Pk"];
+  Shattered_weapon_saved[shape = ellipse, label = "Shattered_weapon_saved"];
+  Colonel_Hanke_Terror[shape = ellipse, label = "Colonel_Hanke_Terror"];
+  General_Survived[shape = ellipse, style=dotted, label = "General_Survived"];
+  Find_Lebedev_ResearchDocs[shape = ellipse, style=filled, label = "Find_Lebedev_ResearchDocs"];
+  Find_Steinberg_LogBook[shape = ellipse, label = "Find_Steinberg_LogBook"];
+  British_PK_Transfer[shape = ellipse, label = "British_PK_Transfer"];
+  Pass_To_Lab[shape = ellipse, label = "Pass_To_Lab"];
+  LostShipNote[shape = ellipse, label = "LostShipNote"];
+  RocketTechnology[shape = ellipse, label = "RocketTechnology"];
+  Docs_GeneralsInspection[shape = ellipse, style=filled, label = "Docs_GeneralsInspection"];
+  Find_Cipher_key[shape = ellipse, label = "Find_Cipher_key"];
+  Capture_T_Boss[shape = ellipse, style=filled, label = "Capture_T_Boss"];
+  ELab -> Docs_InquiryRocketFuel;
+  ELab -> StrangeEncounter;
+  ELab -> Save_E_Scientist;
+  ECom -> Docs_GeneralDead;
+  ECom -> Captured_Officer;
+  ECom -> Docs_ListOfScientists;
+  EVip -> Docs_LetteronGermanResearch;
+  EVip -> Capture_Colonel;
+  EVip -> LostShipNote;
+  ETStore -> Obtain_Pk_prototype;
+  ETStore -> British_PK_Transfer;
+  ETStore -> Draft_Letter_to_Andersen;
+  GTwn -> General_Unordinary_Killed;
+  GTwn -> Shattered_Weapon;
+  GStore -> Assault_Plan;
+  GFact -> Obtain_German_Pk;
+  GFact -> PK_R_D_Docs;
+  GFact -> Capture_General;
+  GLab -> Pass_To_Lab;
+  GLab -> Shattered_weapon_saved;
+  GCom -> Docs_GeneralsInspection;
+  GCom -> Assault_Agent;
+  GVip -> General_Survived;
+  GTVip -> Find_Steinberg_LogBook;
+  GTVip -> Find_HankeDiary;
+  GTVip -> Find_Helenas_Letter;
+  GTVip -> Letter_from_H;
+  GTVip -> Capture_Hanke;
+  RCom -> Docs_about_Ironmen;
+  RCom -> DocsRussian_GeneralDead;
+  RFact -> Defend_Russian_Engineer;
+  GTFact -> Orbital_Weapon_Programm_Docs;
+  GTFact -> Obtain_Terror_Pk;
+  GTFact -> Capture_Stielmann;
+  RTLab -> Find_Lebedev_ResearchDocs;
+  RTLab -> T_Boss_Documents;
+  RTLab -> Capture_T_Boss;
+  RTLab -> Delivery_Request;
+  RTLab -> Helena_Exchange_Letter;
+  FFight -> FIN_DESCRIPTION;
+  EHid3 -> Docs_ReportBetaVersion;
+  EHid2 -> Common_operation_details;
+  EHid1 -> Message_Delivery;
+  Base -> INFO_E_AGENTS_NEAR_G_STORE;
+  ECct -> MapX;
+  EVlg -> Docs_CongratulationsonDefence;
+  EVlg -> Saved_Courier;
+  ETwn -> Free_Captured_Agent;
+  ETwn -> Find_Cipher_key;
+  EStore -> Docs_ReportStolenItems;
+  Assault_Agent -> ECom
+  Common_operation_details -> RCom
+  Docs_about_Ironmen -> RTLab
+  Delivery_T_Boss -> RocketConstruction_PlaceUnknown
+  Assault_Plan -> GCom
+  Hanke_Pass -> Hanke_GeneralKilled
+  Hanke_Pass -> RTLab
+  Find_HankeDiary -> RTLab
+  Free_Captured_Agent -> EHid2
+  Capture_Colonel -> Colonel_Courier
+  Capture_Colonel -> Colonel_LostShip
+  Capture_Colonel -> Colonel_Hanke_Terror
+  Capture_Colonel -> Colonel_Escaped
+  Capture_Colonel -> EVlg
+  Hanke_GeneralKilled -> TechnologyExchange
+  ShipContent -> RocketConstruction
+  Find_Helenas_Letter -> Hanke_Terror
+  RocketConstruction -> TerrorsPlan_and_location
+  TechnologyExchange -> RocketTechnology
+  TechnologyExchange -> GFact
+  Captured_Officer -> ETwn
+  Defend_Russian_Engineer -> RTLab
+  Delivery_Request -> Delivery_T_Boss
+  Delivery_Request -> ShipContent
+  Docs_GeneralDead -> General_Killed_On_GVIP
+  Docs_GeneralDead -> General_Killed_On_GTWN
+  Shattered_Weapon -> GLab
+  Docs_InquiryRocketFuel -> EStore
+  Message_Delivery -> GTVip
+  Obtain_German_Pk -> GFact
+  Hanke_Construction -> Construction_ColonelInfo
+  General_Killed_On_GVIP -> R_General_Killed_On_GVIP
+  General_Killed_On_GVIP -> RCom
+  Construction_ColonelInfo -> ShipContent
+  Colonel_Courier -> GTVip
+  Save_E_Scientist -> EVip
+  General_Unordinary_Killed -> General_Killed_On_GTWN
+  General_Unordinary_Killed -> Hanke_GeneralKilled
+  General_Unordinary_Killed -> ECom
+  Helena_Exchange_Letter -> TechnologyExchange
+  General_Killed_On_GTWN -> R_General_Killed_On_GTWN
+  General_Killed_On_GTWN -> RCom
+  Capture_General -> RocketTechnology
+  Capture_General -> GTFact
+  SpaceRocket -> RocketConstruction
+  SpaceRocket -> RocketConstruction_PlaceUnknown
+  DocsRussian_GeneralDead -> R_General_Killed_On_GVIP
+  DocsRussian_GeneralDead -> R_General_Killed_On_GTWN
+  Hanke_Terror -> Hanke_Pass
+  Hanke_Terror -> Colonel_Hanke_Terror
+  Hanke_Terror -> Hanke_Construction
+  Hanke_Terror -> ETStore
+  Docs_ReportBetaVersion -> EVip
+  Letter_from_H -> Hanke_Construction
+  Draft_Letter_to_Andersen -> Colonel_Escaped
+  RocketConstruction_PlaceUnknown -> TerrorsPlan
+  INFO_E_AGENTS_NEAR_G_STORE -> GStore
+  Obtain_Pk_prototype -> ETStore
+  LaserWeapon_Theory -> TerrorsPlan_and_location
+  LaserWeapon_Theory -> TerrorsPlan
+  Capture_Stielmann -> FFight
+  Docs_CongratulationsonDefence -> EStore
+  T_Boss_Documents -> GFact
+  Docs_ListOfScientists -> ELab
+  TerrorsPlan_and_location -> FFight
+  PK_R_D_Docs -> GTFact
+  Capture_Hanke -> Hanke_Terror
+  Docs_LetteronGermanResearch -> ECom
+  Orbital_Weapon_Programm_Docs -> FFight
+  MapX -> EHid1
+  Colonel_LostShip -> Construction_ColonelInfo
+  Saved_Courier -> Colonel_Courier
+  Saved_Courier -> EHid3
+  Docs_ReportStolenItems -> ETwn
+  Obtain_Terror_Pk -> GTFact
+  Shattered_weapon_saved -> LaserWeapon_Theory
+  Colonel_Hanke_Terror -> RocketTechnology
+  General_Survived -> General_Killed_On_GVIP
+  General_Survived -> GStore
+  General_Survived -> GTwn
+  Find_Lebedev_ResearchDocs -> SpaceRocket
+  Find_Steinberg_LogBook -> LaserWeapon_Theory
+  British_PK_Transfer -> GTFact
+  Pass_To_Lab -> Hanke_Pass
+  Pass_To_Lab -> GTVip
+  LostShipNote -> Colonel_LostShip
+  RocketTechnology -> SpaceRocket
+  Docs_GeneralsInspection -> GTwn
+  Capture_T_Boss -> Delivery_T_Boss
+  Capture_T_Boss -> GTFact
+}

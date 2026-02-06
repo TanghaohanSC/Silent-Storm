@@ -1,0 +1,8 @@
+global proc saveClipDialog()
+{
+     string $char[] = `ls -sl -typ character`;
+     if ( size($char) == 0)
+          $char = `ls -typ character`;
+     saveClip $char[0];
+}
+

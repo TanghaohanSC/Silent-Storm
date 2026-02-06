@@ -1,0 +1,92 @@
+	BODY {
+	scrollbar-face-color : #B3A07F; 
+	scrollbar-shadow-color : #8C7D63; 
+	scrollbar-highlight-color : #C5B48F; 
+	scrollbar-3dlight-color : #8C7D63; 
+    scrollbar-darkshadow-color : #8C7D63; 
+	scrollbar-track-color : #CDB991; 
+    scrollbar-arrow-color : #EDDEC1
+	}
+	
+	 a:link { 
+	COLOR: #000000;
+	text-decoration : none;
+	font-size: 15px;
+}	
+	 a:hover, a:visited { 
+	COLOR: #000000;
+	text-decoration : none;
+	font-size: 15px;
+}	
+
+	 a.menu:link { 
+	COLOR: #312822;
+	font-weight: bold;
+	text-decoration : none;
+	font-size: 15px;
+}	
+	 a.menu:hover, a.menu:visited { 
+	COLOR: #312822;
+	font-weight: bold;
+	text-decoration : none;
+	font-size: 15px;
+}	
+
+table{
+	color: #000000;
+	font-weight: normal;
+	font-family: "Times New Roman", Times, serif;
+	
+}
+td.level2 {
+	background-image : url(img/fon_menu1.gif);
+	border : 2px solid #7D6C61;
+}
+p.copy{
+	color: #A19271;
+	font-weight: normal;
+	font-family: Tahoma, Times, serif;
+	font-size: 80%;
+	line-height : 15px;
+	
+}
+p.br {
+  margin-top : 8px;
+  margin-bottom : 0px; 
+}
+p.under {
+  margin-top : 3px;
+  margin-bottom : 0px; 
+}
+p {
+
+  line-height : 20px;
+}
+p.level {
+  margin-top : 2px;
+  margin-left : 4px;
+   margin-right : 0px;
+  margin-bottom : 2px; 
+  line-height : 15px;
+}
+div {
+  margin-top : 3px;
+  margin-left : 9px;
+  margin-right : 5px;
+  margin-bottom : 6px; 
+}
+h2{
+color: #1E1A12;
+	font-size: 20px;
+}
+h3{
+color: #1E1A12;
+	font-size: 17px;
+	font-weight: bold;
+}
+h4{
+color: #1E1A12;
+	font-size: 16px;
+	font-weight: bold;
+	font-style : italic;
+}

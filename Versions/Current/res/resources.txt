@@ -1,0 +1,108 @@
+[Scenario Items]
+AckInfo		=	Quotes settings depending on the character,dialogue and intonation. Setting the face animation matching the dialogue.								
+Clues		=	Clue — source of information that allows to complete scenario mission and get access to other scenario missions. It can be an item or character. During campaign the order in which the clues are collected defines the order of accessing the missions. Clues provide information in form of documents that contain information that justifies the need to complete the next mission. Some clues come in the form of objects that have to be found on the mission zone (a weapon sample for example) or in the form of a character, that has to be escorted from the mission zone (in case of ally) or made uncounscious and carried out of the mission zone (enemy). The most simple case is the document clue. 
+DialogPers	=	The table that sets the relation of character code and PersID. It is used during import of dialogues from .xls files with connection to chracter.								
+Dialogs		=	Various dialogues. They are played from script on the mission zone. Used during dialog import from .xls table with correspondence to mission zone.
+Goals		=	The mission objectives can be placed on the mission zone by script. First it should be created in the Goals tab. Create a new item there and in the task fields (Task1..Task6) set the objectives themselves.
+Hints		=	Game hints that are randomly placed in RPGItems\Hint Slot placeholder.
+Script		=	Scripts used in the different resources(Templates, Chapters, Global Map)								
+Tasks		=	The items in this resource tab are the Tasks for the scenario Goals that allow to track completing the objective from script. To track copleting this tsk from script set field Tag to "Complete by script".
+Objectives	=	The list of main actions (ZoneToOpen/ZoneToBlock), that has to be performed if a clue is obtained. Can be capture as well as destroy. 
+
+[Scenario Globals]
+Chapters	=	Different regions of Global map with random encounters' areas and corresponding camp zone.								
+GlobalMaps	=	Global map of a scenario with base location and the beginning mission zone.								
+Scenario	=	Campaign name, description and corresponding set of clues, that should be edited directly in the game database.								
+ScenarioZones	=	Here the zone is defined as belonging to one or another campaign. 							
+							
+[RPG]
+AI Materials	=	The differences between concrete, wood, stone, glass, metal and other mateials are set here as well as the corresponding sounds for each material.					
+Medals		=	The rarity of the medals and model names are set here. 						
+Nationality	=	Nationalities and their different parameters. Used to define the nationalities that belong to one or another side.   						
+RPG Materials	=	Materials of the different strength and UltimateMoment.						
+Sides		=	Parameters of the opposing sides (Axis - Allies)						
+RPG APs		=	APs costs for different actions.
+							
+[RPG Settings]
+BaseValues	=	Basic parameters of characters/panzerkleins						
+Classes		=	Basic parameters of characters' professions -  Enemy, Engineer, Grenadier, Medic, Scout, ScoutUK, Sniper, Soldier, SoldierUK, WeakEnemy. Here it is possible to define the corresponding ability panel for this profession,as well as ToolTip and Icon. 
+Criticals	=	Different effects from critical hits depending on the location of the hit.					
+Diplomacies	=	Table of bidirectional diplomacy settings. Cells may contain the values: En, Ally, Neut.						
+Perks		=	Some common paramters of abilities.						
+Pers		=	NPC parameters ( Side, ModelID, FaceID, WeaponID, WearingPanzercleinID ... )						
+Store Items	=	Raiting system for items in stores on the base for both sides.					
+Chests		=	RPG chests for looting wit hdestribution corresponding to mission difficulty.						
+WeaponType	=	Weapon Type and corresponding NameID
+
+[RPG Items]
+AmmoType	=	Different ammo types
+Clips		=	Quantity - number of bullets in clip. AmmoGroup - the group this clip belongs to (affects the ammo interchangeability).
+Eng grenades	=	Engineers' grenades.
+First aid	=	Medical items. Effect - result of successful use of the item. RequiredSkill - Skill value necessary for using the item. SkillModifier - Skill improvement when using the item. 
+Grenades	=	Grenades. Sound1ID - first effect sound. Effect1ID - effect of corresponding number.
+Keys		=	Keys. Correspondence of ItemID and KeyID.
+Mines		=	Mines parameters are set here. Explosion - Explosion type coresponding to grenade that is set in this field. APToSet - AP cost, for setting this mine. ItemID - item that represents the mine.
+Panzerkleins	=	Armored suits parameters.
+Picklocks	=	Lockpicks
+RPG Items	=	Items parameters( ModelID, SubType ) and other supplimentary options. Used to define the parameters of Clips, RPG Weapons, Grenades, Firs Aid, Store Item, Mines, Tools, Keys etc.
+RPG Weapons	=	RPG оружие, использование которого указывается в ресурсных закладках Pers и Objects. 
+Tools		=	Parameters of engineering tools.
+
+[Graphics]
+AIGeometries	=	SrcName points to a model in .mb file, LadderPart defines if this geometry a part of vertical ladders. other parameters define the effect of this geometry on passageability, visibiliy, covers etc.  
+Animations	=	SrcName moints to animation in .ma file. Also animation type, speed, compatible weapon are defined here.
+AnimWeapon	=	Strting spatial parameters for each pose, possibility of strafe without loosing aim etc.
+Cubemaps	=	Environment maps that allow to place the reflections on the objects correctly. 
+Debris		=	Some materials' debris parameters.
+DebrisMaterials	=	Debris materials.
+Geometries	=	Geometry for different objects including link to RootJoint and to corresponding AI geometry.
+Materials	=	Material textures with mapping information.
+Skeletons	=	Parameters for exporting models with skeletons.
+Textures	=	2D textures of interfaces, fonts, etc.
+Terr Tiles	=	Terrain colouring tiles.
+
+[Effects/Lights]
+Light		=	Lightning presets for different video cards.
+LightInstances	=	Lighting sources presets with their position.
+LightsAnim	=	Animated light sources. 
+Effects		=	Effects of explosions, falling leaves, destruction etc.
+Particles	=	Effect exporting parameters. 
+
+[Misc]
+ComplexHeads	=	Character heads
+Containers	=	Sets of models, sounds, effects for each object destruction stage. 
+Doors		=	Object link to opening/closing sounds
+Grass		=	Texture and material for grass.
+Guns		=	Stationary weapons.
+Models		=	Models of objects, chracters, interface elements etc.
+Uniforms	=	Uniforms parameters, items on the gear, definition of the models used.
+Difficulty	=	
+
+[Interfaces]
+Cursors		=	Cursors
+Fonts		=	Fonts for different resolutions.
+Interfaces	=	All game interfaces.
+Strings		=	Text strings.
+UITextures	=	Linking of textures to resolutions.
+
+[Zones]
+Constructor	=	Elements for constructing the buildings.
+Objects		=	Objects that are used in templates with corresponding links to containers
+PassageObj	=	Links to objects that are the gateways to another mission zones. 
+Spots		=	Flat textures to be placed on top of terrain. 
+Templates	=	Rectangular area that can contain objects and building blocks and serve as mission zone.
+WaypointNames	=	List of way points - used to set routes for units.
+
+[Facegen]
+FaceExpressions	=	Face expressions parameters.
+FaceGen glasses	=	Links to eye models and  textures of different characters that are used in face generator. 
+FaceGen hair	=	Links to hair models and  textures of different characters that are used in face generator. Ссылки на модели и текстуры для волос различных персонажей, использующихся при генераторе лиц. 
+Heads		=	Character heads
+HeadSeqs	=	Head animations
+Race		=	For races for Face generator.
+
+[Music/Sound]
+Music		=	Music in .wav format wit hdifferent parameters.
+Rnd sound	=	Sets of different sounds for each effect groups.
+Sound		=	Different sounds/sound effects.
+Sound Effects	=	Special sound effects for specific objects.

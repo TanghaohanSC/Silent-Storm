@@ -1,0 +1,33 @@
+//
+// Creation Date: : 28.01.2000
+// Author: Andrew Chernyshov
+//
+// Description:
+// This script adds extra bool attribute "destructibleBlock" to the selected
+// transform nodes and sets it to default value of 0
+//
+
+global proc int addBodyPart()
+{
+     string $list[] = `ls -sl -l`;
+	if(size($list)==0)
+          error "Nothing selected";
+
+	for ($object in $list)
+	{
+          string $tmp[] = `listAttr -st "bodyPart" $object`;
+		if (size($tmp) != 0)
+		{
+               warning ("bodyPart attribute already exists in " + $object);
+			continue;
+		}
+
+          addAttr -ln bodyPart -at "enum" -en "Body:Head:Right Hand:Left Hand:Right Leg:Left Leg:"  $object;
+          setAttr -e -keyable true ($object+".bodyPart");
+          setAttr ($object + ".bodyPart") 0;
+        }
+
+	return 1;
+}
+
+addBodyPart;

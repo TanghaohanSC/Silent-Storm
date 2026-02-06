@@ -1,0 +1,12 @@
+global proc loadClipDialog()
+{
+     string $clipfileName = `fileDialog -dm "*.ma"`;
+     if ($clipfileName != "")
+     {
+          string $char[] = `ls -sl -typ character`;
+          if ( size($char) == 0)
+               $char = `ls -typ character`;
+          loadClip $clipfileName $char[0];
+     }
+}
+

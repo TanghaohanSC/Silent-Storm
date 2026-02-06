@@ -1,0 +1,475 @@
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Nasdaq Boom (World of Cracking) -->
+<Zones>
+	<Zone Description="Одиночное строение в Англии" Code="ECct" ItemSlots="1" PersonSlots="1" MaxClues="1" Location="Cross-country" Country="England"/>
+	<Zone Description="Город в Англии" Code="ETwn" ItemSlots="2" PersonSlots="1" Location="TownFragment" Country="England"/>
+	<Zone Description="Деревенька в Англии" Code="EVlg" ItemSlots="1" PersonSlots="1" Location="VillageFragment" Country="England"/>
+	<Zone Description="Город в Германии" Code="GTwn" ItemSlots="2" PersonSlots="1" MaxClues="1" Location="TownFragment" Country="Germany"/>
+	<Zone Description="Деревенька в Германии" Code="GVlg" ItemSlots="1" PersonSlots="1" Location="VillageFragment" Country="Germany"/>
+	<Zone Description="Импытательный полигон в Германии" Code="GCct" ItemSlots="1" PersonSlots="1" Location="Cross-country" Country="Germany"/>
+	<Zone Description="Пересеченная местность в Англии с тайником" Code="EHid" ItemSlots="1" PersonSlots="1" Location="Cross-country" Country="England"/>
+	<Zone Description="Пересеченная местность в Англии" Code="EMis" ItemSlots="1" PersonSlots="1" Location="Cross-country" Country="England"/>
+	<Zone Description="Русский завод" Code="RFFact" ItemSlots="1" PersonSlots="1" Location="FriendlyСomplex" Country="Russia"/>
+	<Zone Description="Русская коммендатура" Code="RFCom" ItemSlots="1" PersonSlots="1" Location="FriendlyСomplex" Country="Russia"/>
+	<Zone Description="Английский склад" Code="EFStore" ItemSlots="1" PersonSlots="1" Location="FriendlyСomplex" Country="England"/>
+	<Zone Description="Английская лаборатория" Code="EFLab" ItemSlots="1" PersonSlots="1" Location="FriendlyСomplex" Country="England"/>
+	<Zone Description="Английская комендатура" Code="EFCom" ItemSlots="1" PersonSlots="1" Location="FriendlyСomplex" Country="England"/>
+	<Zone Description="Усадьба английской шишки" Code="EFVip" ItemSlots="1" PersonSlots="1" Location="FriendlyСomplex" Country="England"/>
+	<Zone Description="Склад в Германии" Code="GEStore" ItemSlots="1" PersonSlots="1" Location="EnemyСomplex" Country="Germany"/>
+	<Zone Description="Завод в Германии" Code="GEFact" ItemSlots="1" PersonSlots="1" Location="EnemyСomplex" Country="Germany"/>
+	<Zone Description="Лаборатория в Германии" Code="GELab" ItemSlots="1" PersonSlots="1" Location="EnemyСomplex" Country="Germany"/>
+	<Zone Description="Немецкая комендатура" Code="GECom" ItemSlots="2" PersonSlots="1" Location="EnemyСomplex" Country="Germany"/>
+	<Zone Description="Усадьба немецкой шишки №2" Code="GEVip" ItemSlots="1" PersonSlots="1" Location="EnemyСomplex" Country="Germany"/>
+	<Zone Description="Склад террористов в Англии" Code="ETStore" ItemSlots="2" PersonSlots="1" Location="TerrorsComplex" Country="England"/>
+	<Zone Description="Усадьба шишки террористов в Германии" Code="GTVip" ItemSlots="1" PersonSlots="1" Location="TerrorsComplex" Country="Germany"/>
+	<Zone Description="Лаборатория терористов в России" Code="RTLab" ItemSlots="1" PersonSlots="1" Location="TerrorsComplex" Country="Russia"/>
+	<Zone Description="Завод террористов в Швейцарии" Code="GTFact" ItemSlots="1" PersonSlots="1" Location="TerrorsComplex" Country="Germany"/>
+	<Zone Description="Последняя миссия" Code="FFight" ItemSlots="1" PersonSlots="1" Location="FinalFight" Country="Island"/>
+	<Zone Description="Первая миссия" Code="ETutor" ItemSlots="1" PersonSlots="1" Location="Tutorial" Country="England"/>
+	<Zone Description="Наша база" Code="Base" ItemSlots="1" PersonSlots="1" Location="Base" Country="England"/>
+	<Clues DescriptionEng="British PK transfer Docs" Type="Item" Code="British_PK_Transfer" Description="Документы о переправке PK в Англию">
+		<Obj Action="Capture" Description="Документы о получении партии  PK от некой фирмы, расположенной в Швейцарии. ">
+			<ZoneToOpen>GTFact</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>ETStore</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Major Roger Hawkins" Type="Person" Code="Capture_Double_Agent" Description="Майор Роджер Хоукинс">
+		<Obj Action="Destroy" Description="Английский офицер, работавший на немцев. При попытке его арестовать оказал яростное сопротивление и был убит.">
+			<ClueToOpen>StrangeActivity_KC</ClueToOpen>
+		</Obj>
+		<Obj Action="Capture" Description="Английский майор, продавшийся немцам.  На допросе рассказывет о планах взрыва на английском военном складе">
+			<ClueToOpen>StrangeActivity</ClueToOpen>
+			<ZoneToOpen>EFStore</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>EFVip</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="German Agent 2" Type="Person" Code="Capture_G_Agent2" Description="Немецкий агент №2">
+		<Obj Action="Capture" Description="Немецкий агент, после пленения рассказывающий о том, что задания получал от некоего английского майора, являющегося двойным агентом немцев. ">
+			<ZoneToOpen>EFVip</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>EMis</ZoneToPlace>
+		<ZoneToPlace>ECct</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="German Agent 3" Type="Person" Code="Capture_G_Agent3" Description="Немецкий агент №1">
+		<Obj Action="Capture" Description="Немецкий агент после пленения рассказавший  об оперативной  базе немецких диверсантов откуда те совершали диверсионные вылазки. Кроме этого пленный рассказал о тайнике в лесу, где хранится  радиооборудование с помощью которого осуществлялась связь с Германией. ">
+			<ZoneToOpen>ECct</ZoneToOpen>
+			<ZoneToOpen>EHid</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>EFCom</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="German Diversant" Type="Person" Code="Capture_G_Diversant" Description="Плененный немецкий диверсант">
+		<Obj Action="Capture" Description="Плененный немецкий диверсант, рассказывет о  расположении перевалочного пункта немецкой агентуры">
+			<ZoneToOpen>EVlg</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>EFStore</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="German Theft Leader" Type="Person" Code="Capture_G_ThftLeader" Description="Руководитель группы диверсантов">
+		<Obj Action="Capture" Description="Немецкий агент, руководитель операции по краже английских секретных документов. Сообщает, что похищенные накануне документы  были переправлены в Германию вышестоящему руководству.  ">
+			<ZoneToOpen>GEVip</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>ETwn</ZoneToPlace>
+		<ZoneToPlace>EVlg</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="General Gobler" Type="Person" Code="Capture_General" Description="Генерал Гёблер">
+		<Obj Action="Capture" Description="Немецкий генерал, рассказывающий о фирме Штильмана и информации по ракетным двигателям, которые этой фирме были переданы.">
+			<ZoneToOpen>GTFact</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GEFact</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Helmut Hanke" Type="Person" Code="Capture_Hanke" Description="Полковник Ханке">
+		<Obj Action="Capture" Description="Немецкий полковник отказывающийся отвечать на вопросы">
+			<ClueToOpen>Hanke_Terror</ClueToOpen>
+		</Obj>
+		<ZoneToPlace>GTVip</ZoneToPlace>
+		<ZoneToPlace>GEStore</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Major Roger Hawkins" Type="Person" Code="Capture_Officer_traitor" Description="Майор Роджер Хоукинс">
+		<Obj Action="Destroy" Description="Английский офицер, работавший на немцев. При попытке его арестовать оказал яростное сопротивление и был убит. ">
+			<ClueToOpen>StrangeActivity_KC</ClueToOpen>
+		</Obj>
+		<Obj Action="Capture" Description="Английский офицер, на допросе рассказал о помощи которую он оказывал немецкой разведке. ">
+			<ClueToOpen>StrangeActivity</ClueToOpen>
+			<ZoneToOpen>GECom</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>EFVip</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Find Stielmann" Type="Person" Code="Capture_Stielmann" Description="Генрих Штильман" Permanent="yes">
+		<Obj Action="Capture" Description="Генрих Штильман, руководитель  производства PK в Европе и один из лидеров Организации.  Рассказывает о деталях проекта PK, известной ему части  структуры Организации, ее ключевых фигурах (Хелена, Ханке, Лебедев). Рассказывает о партиях оборудования, которые переправлялись на остров в Северном море. ">
+			<ZoneToOpen>FFight</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GTFact</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Terrorist Boss" Type="Person" Code="Capture_T_Boss" Description="Начальник русской террористической базы">
+		<Obj Action="Capture" Description="Начальник русского комплекса террористов, преемник Лебедева на этом посту, после пленения выдает информацию о Швейцарском заводе Организации и рассказывает, что материал, добываемый на комплексе отправлялся на строительство которое ведется где-то на севере Европы. Что строится и где  именнно - начальник завода не знает. ">
+			<ClueToOpen>Russian_TB_Activity</ClueToOpen>
+			<ZoneToOpen>GTFact</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>RTLab</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Documents about PK transations" Type="Item" Code="T_Boss_Documents" Description="Документы содержащие схему продажи PK" Permanent="yes">
+		<Obj Action="Capture" Description="У Орлова были найдены документы, описывающие операции, включающие поставку Panzerkleine в Англию и Германию за подписью Лебедева.">
+			<ZoneToOpen>ETStore</ZoneToOpen>
+			<ZoneToOpen>GEFact</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>RTLab</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="CapturedBritScientist" Type="Person" Code="CapturedBritScientist" Description="Похищенный Организацией английский ученый. " Permanent="yes">
+		<Obj Action="Capture" Description="Похищенный Организацией английский ученый. "/>
+		<ZoneToPlace>FFight</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Friendly Informer" Type="Person" Code="Defend_Informer" Description="Расказ английского научного работника">
+		<Obj Action="Capture" Description="Английский научный работник, работающий на немцев. Если удается спасти его от смерти - рассказывает о штабе секретного подразделения немецкой разведки, с которым он был связан в прошлом. ">
+			<ZoneToOpen>GECom</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>EFLab</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Info about kidnappings in Russia" Type="Item" Code="Defend_russian_docs" Description="Информация о похищении ученых с русских объектов">
+		<Obj Action="Capture" Description="Информация о серии похищений с русских военных заводов. Указывает на зону где русские хранят собранные на эту тему  документы">
+			<ZoneToOpen>RFCom</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GEVip</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Russian Engineer" Type="Person" Code="Defend_Russian_Engineer" Description="Русский инженер Синицин">
+		<Obj Action="Capture" Description="Русский инженер. После своего спасения рассказывает о комплексе террористов">
+			<ZoneToOpen>RTLab</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>RFFact</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="New Consignment Delivery Request" Type="item" Code="Delivery_Request" Description="Запрос на поставку" Permanent="yes">
+		<Obj Action="Capture" Description='Письмо с запросом на поставку новой партии материала. "В связи  с потерей предыдущей партии  срочно требуется новая поставка. Постарайтесь  отправить материал до двадцатого числа. Если мы не получим партию в назначенный срок - вся операция будет поставлена под вопрос."  Письмо подписано инициалами Х.А. '>
+			<ClueToOpen>Russian_TB_Activity</ClueToOpen>
+			<ClueToOpen>RussianActivity</ClueToOpen>
+		</Obj>
+		<ZoneToPlace>RTLab</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Radio Equipment and notes" Type="Item" Code="DiscoverRadioEquipment" Description="Рация и блокнот радиста-диверсанта">
+		<Obj Action="Capture" Description="Тайник с радиооборудованием и документами (банковскими переводами на чье-то имя) из которых неопровержимо следует, что некий английский офицер работает на немецкую разведку. Так же становится известным местонахождение человека, через которого этот офицер может выйти на связь с немецкой разведкой в Германии">
+			<ZoneToOpen>EFVip</ZoneToOpen>
+			<ZoneToOpen>GTwn</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>EHid</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Docs_about_Ironmen" Type="Item" Code="Docs_about_Ironmen" Description="Отчёт о железных людях">
+		<Obj Action="Capture" Description='Рапорт, с пометкой написанной размашистым почерком: "Бред!!! Отправить в архив, а то вдруг кто увидит, позору не оберемся!". В рапорте на имя подполковника П содержится информация о докладе участкового К о жалобах местных жителей на "железных людей", появившихся неподалеку от охотничьих угодий. Также содержится жалоба полученная лично составителем отчета, в которой говорится о пропаже участкового К. В рапорте сделан вывод что в указанном районе может действовать отряд диверсантов и содержится предложение по принятию неотложных мер.'>
+			<ZoneToOpen>RTLab</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>RFCom</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Final Description" Type="Person" Code="FIN_DESCRIPTION" Description="Подведение иготов" Permanent="yes">
+		<Obj Action="Capture" Description="Краткое описание хронологии действий Организации"/>
+		<ZoneToPlace>FFight</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Docs about German Secret Research" Type="Item" Code="Find_about_Research" Description="Документы о секретных немецких испытаниях">
+		<Obj Action="Capture" Description="Документы, содержащие техническую информацию об образцах, проходящих испытания на полигоне. Указывает на немецкую лабораторию, где чертежи были составлены.">
+			<ZoneToOpen>GELab</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GCct</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Sheet of Paper with address" Type="Item" Code="Find_address" Description="Обгоревший клочёк бымаги">
+		<Obj Action="Capture" Description="Клочок бумаги с адресом. Указывает на зону где находится временное прибежище нем. агентов">
+			<ZoneToOpen>ETwn</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>EVlg</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Helena's Letter to Brit Colonel" Type="Item" Code="Find_BritLetter" Description="Письмо Хелены майору Хоукинсу" Permanent="yes">
+		<Obj Action="Capture" Description="Письмо от некой Х. В письме Х интересуется подробностями провала некой сделки, а так же сообщает что строительство скоро начнется и что надо приложить все силы к тому что бы известные силы не помешали транспортировке грузов предназначенных для проекта.  ">
+			<ClueToOpen>StrangeActivity</ClueToOpen>
+		</Obj>
+		<ZoneToPlace>EFVip</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Docs about kidnapped british scientist transfer" Type="item" Code="Find_BritScientist_TranferDocs" Description="Документы о перемещении английского ученого">
+		<Obj Action="Capture" Description="Документы о перемещении похищеного английского ученого в местную лабораторию">
+			<ZoneToOpen>GELab</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GEVip</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Coded Message" Type="Item" Code="Find_Cipher_key" Description="Шифрокод">
+		<Obj Action="Capture" Description="Ключ к шифрокоду. (В совокупности с зашифрованным посланием открывают план покушения террористов  на русского инженера, случайно узнавшего об их существовании)" ClueToOpen="INFO_Coded_ Message_assasination"/>
+		<ZoneToPlace>ETwn</ZoneToPlace>
+		<ZoneToPlace>EFVip</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Cipher key to coded mesage" Type="Item" Code="Find_Coded_Message" Description="Закодированное послание">
+		<Obj Action="Capture" Description="Зашифрованное послание." ClueToOpen="INFO_Coded_ Message_assasination"/>
+		<ZoneToPlace>GECom</ZoneToPlace>
+		<ZoneToPlace>GTVip</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Dossier" Type="Item" Code="Find_dossier" Description="Досье о вербовщике">
+		<Obj Action="Capture" Description="Досье на члена специального отдела немецкой разведки, занимавшегося  вербовкой английских ученых.">
+			<ZoneToOpen>GTwn</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GECom</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="EmptyContainers" Type="Item" Code="Find_Empty_Containers" Description="Пустые контейнеры">
+		<Obj Action="Capture" Description='Пустые контейнеры для транспортировки некоего оборудования. Контейнеры помечены непонятной символикой с надписью "Der höchste Krieger". Чуть ниже расположен адрес военной лаборатории откуда контейнеры были отправлены.  '>
+			<ZoneToOpen>GELab</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GCct</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="German Technician" Type="Person" Code="Find_G_Technician" Description="Немецкий техник">
+		<Obj Action="Capture" Description="Немецкий техник поведавший  о прошедших испытаниях и рассказвший, что машины, проходившие испытания на полигоне были получены из  специальной немецкой лаборатории.">
+			<ZoneToOpen>GELab</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GCct</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="German Secret Research" Type="Item" Code="Find_german_experimental_equipment" Description="Маркированные контейнеры">
+		<Obj Action="Capture" Description="Контейнеры с образцами экспериментального оборудования Промаркированы производителем. Указывает на зону где это оборудование было изготовлено">
+			<ZoneToOpen>GEFact</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GEStore</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="German Intelligence Officer" Type="Person" Code="Find_German_Intel_Officer" Description="Немецкий офицер разведки">
+		<Obj Action="Capture" Description="Немецкий офицер разведки,  рассказавший о схеме похищений ученых на территории Англии.  Почти все похищенные англичане попадали в специальный отдел разведки, где решалась их дальнейшая судьба. Считанные единицы (в основном выдающиеся ученые)  попадали в распоряжение некоего полковника Ханке. Что происходило с ними в дальнейшем - офицер не знает.        ">
+			<ClueToOpen>Hanke_KidnappedScientist</ClueToOpen>
+			<ZoneToOpen>GTVip</ZoneToOpen>
+			<ZoneToOpen>GEVip</ZoneToOpen>
+		</Obj>
+		<Obj Action="Destroy" Description="Рядом с телом немецкого офицера была найдена полусгоревшая визитная карточка некоего немецкого чиновника. Ясно что карточка представляет определенную важность, так как в спешке ее явно пытались уничтожить. На карточке все еще можно разобрать имя и адрес.">
+			<ZoneToOpen>GTVip</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GTwn</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Hanke Diary" Type="Item" Code="Find_HankeDiary" Description="Дневник полковника Ханке">
+		<Obj Action="Capture" Description="Дневник полковника Ханке, где тот описал деятельность террористической организации, действующей  на территории Германии. В дневнике множество интересной информации, однако наиболее важной является ссылка на секретный  комплекс террористов, расположенный в России ">
+			<ZoneToOpen>RTLab</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GTVip</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Letter from Helena" Type="Item" Code="Find_Helenas_Letter" Description="Письмо Хелены" Permanent="yes" Timer="yes">
+		<Obj Action="Capture" Description="Папка и письмо от некой Хелены. В папке находится несколько документов из которых становится ясно что Ханке работает на некую третью силу.  В письме Хелена благодарит Ханке за проделанную работу и сообщает, что  информация подчерпнутая из секретных английских документов оказалось очень полезной. Так же Хелена интересуется как обстоят дела с переправкой PK в Англию. (В постскриптуме Хелена сетует на удаленность и изолированность ее настоящего местонахождения от цивилизации и добавляет, что даже до окупированной  Швеции придется добираться несколько дней). ">
+			<ClueToOpen>Hanke_Terror</ClueToOpen>
+		</Obj>
+		<ZoneToPlace>GTVip</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Lebedev Rocket Research" Type="Item" Code="Find_Lebedev_ReserchDocs" Description="Журнал Лебедева" Permanent="yes">
+		<Obj Action="Capture" Description="Чертежи огромной ракеты и множество бумаг с математическими расчетами. После беглого просмотра становится ясно, что ракета специально  спроектирована для вывода грузов на орбиту планеты. ">
+			<ClueToOpen>LebedevRocket</ClueToOpen>
+			<ClueToOpen>LebedevRocketB</ClueToOpen>
+		</Obj>
+		<ZoneToPlace>RTLab</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Microfilm " Type="Item" Code="Find_Microfilm" Description="Микрофильм">
+		<Obj Action="Capture" Description="Микрофильм, запечатлевший испытания странной боевой машины. После тщательного изучения, аналитики пришли к выводу что пленка была снята на одном из немецких полигонов. ">
+			<ZoneToOpen>GCct</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>EFVip</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Note from special branch of German Intelligence" Type="Item" Code="Find_note" Description="Запрос на на подготовку отчёта">
+		<Obj Action="Capture" Description="Записка из штаба специального отдела разведки к некоему агенту  с требованием предоставить отчет о проделанной работе ">
+			<ZoneToOpen>GEVip</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GTwn</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Annonymous note concerning coming terrorist attack " Type="item" Code="Find_note_about_TerrAttack" Description="Предупреждение о готовешемся нападении">
+		<Obj Action="Capture" Description="Информация о возможном нападении на русский завод">
+			<ZoneToOpen>RFFact</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>RFCom</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Pass to Factory" Type="Item" Code="Find_Pass" Description="Пропуск в на завод">
+		<Obj Action="Capture" Description="Пропуск на военный завод. Указывает на зону с военным объектом">
+			<ZoneToOpen>GEFact</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GEStore</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Report to special branch of German Intelligence" Type="Item" Code="Find_report" Description="Отчёт о похищении английских ученых">
+		<Obj Action="Capture" Description="Отчет офицера немецкой разведки о проведенной операции по похищению ряда английских ученых. На пакете с отчетом  написан адрес получателя. ">
+			<ZoneToOpen>GEVip</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GTwn</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Dr. Stenberg's Logbook" Type="Item" Code="Find_Steinberg_LogBook" Description="Записная книжка доктара Штайнберга" Permanent="yes">
+		<Obj Action="Capture" Description="Документы в которых описывается прототип лучевого оружия. Также в папке пристуствует чертеж непонятного устройства, на которое может быть установлена оружие. Принцип действия и сфера применения устройства не совсем ясны - данные указанные в чертеже показывают, что платформа сможет нормально функционировать только в вакууме.  К документам прлиложена копия древнего манускрипта. ">
+			<ClueToOpen>TerrorPlan</ClueToOpen>
+			<ClueToOpen>TerrorPlanB</ClueToOpen>
+		</Obj>
+		<ZoneToPlace>GTVip</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="StolenDocs" Type="Item" Code="Find_Stolen_Docs" Description="Документы украденные у англичан" Permanent="yes">
+		<Obj Action="Capture" Description="Секретные документы, похищенные у англичан">
+			<ZoneToOpen>FFight</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>FFight</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Note About Stolen Docs  " Type="Item" Code="Find_StolenDocs_Note" Description="Расписка полковника Ханке">
+		<Obj Action="Capture" Description="Информация о том, что похищенные английские документы были переданы в cпециальный отдел разведки, возглавляемый полковником Ханке. Особо отмечено, что документы были переданы под личную ответственность Ханке.">
+			<ClueToOpen>Hanke_StolenDocs</ClueToOpen>
+			<ZoneToOpen>GTVip</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GECom</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Theft Plans" Type="Item" Code="Find_TheftPlans" Description="Планы нападения на английский склад">
+		<Obj Action="Capture" Description="Планы нападения на английский склад с целью похищения некоторых образцов английского вооружения">
+			<ZoneToOpen>EFStore</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>ECct</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Captured friendly agent" Type="Person" Code="Free_our_agent" Description="Освобождённый англиский агент">
+		<Obj Action="Capture" Description="Пленный британский сотрудник контрразведки. После освобождения рассказывает о планах покушения на английского научного работника. ">
+			<ZoneToOpen>EFLab</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>ECct</ZoneToPlace>
+		<ZoneToPlace>EVlg</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Hanke somehow connected with secret construction" Type="item" Code="Hanke_Construction" Description="Связь Ханке со неизвестным стороительством">
+		<Obj Action="Capture" Description="Похоже немецкий полковник является частью некой схемы и как-то связан с неизвестным строительством. К сожалению полковник практически не дал никакой полезной информации, кроме того что строительство ведется где-то в северном море, а  Лебедев, упомянутый в письме, является русским ученым, работающим на Организацию. Что именно за испытания Лебедев проводил - Ханке не знает.">
+			<ClueToOpen>StrangeActivity_Germany</ClueToOpen>
+		</Obj>
+	</Clues>
+	<Clues DescriptionEng="Information obtained from Captured British Scientist and Hanke" Type="item" Code="Hanke_KidnappedScientist" Description="Рассказ Ханке об украденных ученых">
+		<Obj Action="Capture" Description="На основании ранее собранной информации стало ясно, что полковник  переправил нескольких из похищенных английских ученых на секретную базу Организации, расположенную в России. Так же Ханке рассказал, что играл ключевую роль в осуществлении сделки по продаже технологии  ПК немцам. ">
+			<ZoneToOpen>RTLab</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues DescriptionEng="Information obtained from StolenDocs Note and Hanke" Type="item" Code="Hanke_StolenDocs" Description="Рассказ Ханке об украденных документах">
+		<Obj Action="Capture" Description="На основании ранее собранной информации стало ясно, что Ханке переправил похищенныe из Англии документы своему руководству. После допроса открывает игроку месторасположение  секретной базы организации в России.">
+			<ZoneToOpen>RTLab</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues DescriptionEng="Helmut Hanke" Type="Person" Code="Hanke_Terror" Description="Полковник Ханке">
+		<Obj Action="Capture" Description="На основаниии письма Хелены и найденных документов стало ясно, что Ханке является двойным агентом, работающим на неизвестную сторону. На  допросе Ханке прзнался, что является руководителем европейского отделения некой секретной организации, в основном занимающийся тоговлей оружием и шпионажем. Информация, которую добывали агенты Ханке, продавалось заинтересованным лицам. Суммы получаемые в результате подобных сделок исчислялись цифрами с большим количеством нулей.  На просьбу более подробно рассказать о механизмах продажи оружия Ханке неохотно указал на месторасположение секретного склада организации на территории Англии.                                                        ">
+			<ZoneToOpen>ETStore</ZoneToOpen>
+			<ClueToOpen>Hanke_Construction</ClueToOpen>
+			<ClueToOpen>Hanke_StolenDocs</ClueToOpen>
+			<ClueToOpen>Hanke_KidnappedScientist</ClueToOpen>
+		</Obj>
+	</Clues>
+	<Clues DescriptionEng="Orders to assasinate russian engineer" Type="Item" Code="INFO_Coded_ Message_assasination" Description="План покушения на русского инженера">
+		<Obj Action="Capture" Description="План покушения террористов на русского инженера, работавшего на Организацию, а в последнее время мучимого угрызениями совести и решившего пойти и сдаться властям. Узнав о состоянии русского инженера террористы решают его уничтожить.">
+			<ZoneToOpen>RFFact</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues DescriptionEng="INFO about hostile recruitment attempt" Type="Item" Code="INFO_German_recruitment" Description="Похищенные ученые">
+		<Obj Action="Capture" Description="После некоторого времени относительного бездействия немецкая агентура, действующая на территории Великобритании, возобновила свою деятельность. Зафиксировано несколько попыток крупного саботажа на стратегически важных объектах. За прошедшую неделю было похищенно несколько  секретных документов. Исчезло несколько ученых и высокопоставленных офицеров. Ни один из них до сих пор не был найден. Было установлено расположение временной базы немецких агентов, где возможно те держат похищенных англичан.">
+			<ZoneToOpen>ECct</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>Base</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Unusual Attention to British Military Installations" Type="Item" Code="INFO_Spy_Activity" Description="Возможное нападение на местный штаб контрразведки">
+		<Obj Action="Capture" Description="Немецкая разведка резко активизировала свои действия на территории Великобритании. За последнее время вражеским агентам удалось похитить ряд секретных документов. Несколько ученых, занимавшихся секретными разработками бесследно  исчезли. На днях было замечено, что за некоторыми стратегически важными объектами ведется наблюдение. Наши информаторы утверждают, что в ближайшее время возможно будет совершенно нападение на местный штаб контрразведки.">
+			<ZoneToOpen>EFCom</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>Base</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="INFO about Stolen Secret Docs" Type="Item" Code="INFO_Stolen_TopSecretDocs" Description="Пошищенные документы">
+		<Obj Action="Capture" Description="Похоже Германская разведка оправилась от разгрома, который был нанесен в прошлом месяце ее агентурной сети. На этой неделе неожиданно исчезло несколько  ученых. Так же произошло нападение на один из вспомогательных складов ГСМ. Охрана при этом была полностью уничтожена, а сам склад сожжен. Однако наиболее важным проишествием является нападение на курьера, перевозившего пакет с особо секретными документами. Курьер был убит, а пакет с документами исчез. Неясно каким образом немцам удалось узнать о маршруте курьера, не исключено, что в наших рядах появился предатель. Необходимо в кратчайшие сроки вернуть похищенные документы. ">
+			<ZoneToOpen>EMis</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>Base</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Lab Note" Type="Item" Code="Lab_Note" Description="Письмо из лаборатории">
+		<Obj Action="Capture" Description="Короткое письмо из лаборатории, сообщающее что партия полученного оборудования готова к испытаниям">
+			<ZoneToOpen>GELab</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GTVip</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="LebedevRocket" Type="item" Code="LebedevRocket" Description='Ракета "Лебедева"'>
+		<Obj Action="Capture" Description="На основании найденных на секретном комплексе образцов материала и чертежей Лебедева, аналитики предположили, что  Организация ведет строительство огромной ракеты, по мощности и размерам превосходящей аналогичные разработки немцев. Для чего Организация затеяла это стрительство - пока неясно.">
+			<ClueToOpen>TerrorPlan</ClueToOpen>
+		</Obj>
+	</Clues>
+	<Clues DescriptionEng="LebedevRocket" Type="item" Code="LebedevRocketB" Description='Ракета "Лебедева"'>
+		<Obj Action="Capture" Description="На основании найденных на секретном комплексе образцов материала и чертежей Лебедева, аналитики предположили, что  Организация ведет строительство огромной ракеты, по мощности и размерам превосходящей аналогичные разработки немцев. Для чего Организация затеяла это стрительство - пока неясно.">
+			<ClueToOpen>TerrorPlanB</ClueToOpen>
+		</Obj>
+	</Clues>
+	<Clues DescriptionEng="Helenas Letter 2" Type="item" Code="Letter_from_H" Description='Письмо полковнику Ханке от неизвестного "Х"' Permanent="yes">
+		<Obj Action="Capture" Description="Письмо адресованное полковнику Ханке без адреса отправителя. В письме некто Х интересуется, когда наконец Лебедев завершит свои испытания – строительство уже началось и он нужен на острове.">
+			<ClueToOpen>StrangeActivity_Germany</ClueToOpen>
+			<ClueToOpen>Hanke_Construction</ClueToOpen>
+		</Obj>
+		<ZoneToPlace>GTVip</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Lost Ship Note" Type="Item" Code="LostShipNote" Description='Затонувшее судно "Полярная звезда"' Permanent="yes">
+		<Obj Action="Capture" Description="Документ с информацией о затонувшем нейтральном транспортном судне в нескольких сотнях километров от побережья  Шотландии. Неясно, откуда эта информация у майора и зачем ему понадобилась. ">
+			<ClueToOpen>StrangeActivity_NSea</ClueToOpen>
+		</Obj>
+		<ZoneToPlace>EFVip</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="PK_Container" Type="Item" Code="Obtain_German_Pk" Description="Немецкие PK" Permanent="yes">
+		<Obj Action="Capture" Description="Контейнер с действующим образцом ПК">
+			<ZoneToOpen>GEFact</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GEFact</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="PK_Container" Type="Item" Code="Obtain_Pk_prototype" Description="Английские PK" Permanent="yes">
+		<Obj Action="Capture" Description="Контейнер с действующим образцом ПК">
+			<ZoneToOpen>ETStore</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>ETStore</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="PK_Container" Type="Item" Code="Obtain_Terror_Pk" Description="Террористические PK" Permanent="yes">
+		<Obj Action="Capture" Description="Контейнер с действующим образцом ПК">
+			<ZoneToOpen>GTFact</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GTFact</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Orbital Weapon Programm Docs" Type="Item" Code="Orbital_Weapon_Programm_Docs" Description="Документы о программе орбитального оружия">
+		<Obj Action="Capture" Description="Папка с документами в которых содержится подробное описание плана по выведению на орбиту дистанционно контролируемого спутника с лучевым оружием на борту.  ">
+			<ZoneToOpen>FFight</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GTFact</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="PK Research and Development Docs" Type="Item" Code="PK_R_D_Docs" Description="Документы о разработке PK">
+		<Obj Action="Capture" Description="Информация связанная с началом производства германских PK. Из документов становится ясно, что прототип PK был получен немцами от некой фирмы Штильмана, расположенной в Швейцарии.">
+			<ZoneToOpen>GTFact</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GEFact</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="British Captured Scientist" Type="Person" Code="Recapture_Scientist" Description="Освобождённая английская ученая, пожилая женьщина">
+		<Obj Action="Capture" Description="Похищенный ранее британский ученый, рассказывающий о фактах своего похищения. После своего освобождения ученый охотно делится всей информацией к которой у него был доступ. В частности становится известно, что лаборатория дорабатывала прототип новейшего типа вооружения для нужд немецкой армии, который  были передан немцам неизвестной стороной. Ученый сообщает что образцы были переправлены в лабораторию с одного из немецких военных складов.  После некоторого изучения вооружение было отправлено на полигон для проведения испытаний. ">
+			<ZoneToOpen>GEStore</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GELab</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="RocketEngineInfo" Type="Item" Code="Rocket_Eng_Info" Description="Факт передачи Организации германских ракетных разроботок">
+		<Obj Action="Capture" Description="Информация о передаче организации  документо связанных с ракетным двигателем способным вывести ракету лебедева на орбиту, полученная от нем генерала">
+			<ZoneToOpen>FFight</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>FFight</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Russian TB Activity" Type="item" Code="Russian_TB_Activity" Description="Рассказ Главы русского отдела Организации " Timer="yes">
+		<Obj Action="Capture" Description="Неизвестная организация занималась добычей редкоземельного материала под самым носом у русских, а затем отправляла добытый материал в неизвестном направлении. Полученная от начальника русского комплекса информация недвусмысленно указывает на то, что Организация ведет крупное строительство неизвестного объекта, ключевым элементом которого является добываемый в России редкоземельный материал.  Однако почему строительство ведется в такой строгой секретности остается загадкой. ">
+			<ClueToOpen>LebedevRocketB</ClueToOpen>
+		</Obj>
+	</Clues>
+	<Clues DescriptionEng="Russian Activity" Type="item" Code="RussianActivity" Description="Активность Организации в России" Timer="yes">
+		<Obj Action="Capture" Description="Организация занималась добычей редкоземельного материала под самым носом у русских, а затем отправляла добытый материал в неизвестном направлении. Собранная ранее информация недвусмысленно указывает на то, что Организация ведет крупное строительство неизвестного объекта где-то в Северном море, ключевым элементом которого является добываемый в России редкоземельный материал.  Однако почему строительство ведется в такой строгой секретности остается загадкой. ">
+			<ClueToOpen>LebedevRocket</ClueToOpen>
+		</Obj>
+	</Clues>
+	<Clues DescriptionEng="Shipment to island Docs" Type="Item" Code="Shipment_Docs" Description="Документы о пересылки оборудования">
+		<Obj Action="Capture" Description="Документы об отправке партии оборудования на Базу Террористов в Северном Море. Открывает финальную зону.">
+			<ZoneToOpen>FFight</ZoneToOpen>
+		</Obj>
+		<ZoneToPlace>GTFact</ZoneToPlace>
+	</Clues>
+	<Clues DescriptionEng="Strange Activity" Type="item" Code="StrangeActivity" Description="Странные связи Хоукинса" MinLinksToOpen="2">
+		<Obj Action="Capture" Description="На допросе из майора не удалось вытянуть сколь-нибудь толковой информации - все указывает на то, что майор работал на немцев.  Тем не менее найденные в результате обыска странные  денежные переводын плюс некоторые моменты в поведении и ответах Хокинса указывают на возможность того,  что майор был связан еще и с третей стороной, пока нам неизвестной.">
+			<ClueToOpen>StrangeActivity_NSea</ClueToOpen>
+		</Obj>
+	</Clues>
+	<Clues DescriptionEng="Strange Activity 3" Type="item" Code="StrangeActivity_Germany" Description="Связь Ханке с Организацией и строительством в Северном море" MinLinksToOpen="2">
+		<Obj Action="Capture" Description="Деятельность организации, которую представлял Ханке, всестороне затрагивает Германию. До сих пор не совсем ясна роль немецкого полковника в этой схеме, однако очевидно что Ханке и отделение Организации, которым он руководил каким-то образом связаны со строительством в Северном море.    ">
+			<ClueToOpen>RussianActivity</ClueToOpen>
+		</Obj>
+	</Clues>
+	<Clues DescriptionEng="Strange Activity_KC" Type="item" Code="StrangeActivity_KC" Description="Денежные переводу Хоукинсу">
+		<Obj Action="Capture" Description="К сожалению майор мертв и уже ничего не сможет рассказать, однако странные денежные переводы, найденные в его бумагах указывают на то, что майор мог быть связан еще и с третей стороной, пока нам неизвестной.">
+			<ClueToOpen>StrangeActivity_NSea</ClueToOpen>
+		</Obj>
+	</Clues>
+	<Clues DescriptionEng="Strange Activity 2" Type="item" Code="StrangeActivity_NSea" Description="Информация о Северном море собранная Хоукинсом" MinLinksToOpen="2">
+		<Obj Action="Capture" Description="Похоже майор передавал кому-то информацию о передвижении английских боевых кораблей в Северном Море. Возможно судно, затонувшего у берегов Шотландии и непонятные денежные переводы Хокинса являются звеньями  одной цепи.  Не исключено, что осмотр затонувшего корабля пролил бы свет на ситуацию, однако глубина на которой покоится  корабль исключает водолазные работы.">
+			<ClueToOpen>StrangeActivity_Germany</ClueToOpen>
+		</Obj>
+	</Clues>
+	<Clues DescriptionEng="TerrorPlan" Type="item" Code="TerrorPlan" Description="План террористов">
+		<Obj Action="Capture" Description="Похоже стало ясно, зачем Организация ведет строительство ракеты. В середине тридцатых годов некий профессор Штайнберг  на основании загадочного тибетского манускрипта спроектировал абсолютно новый тип оружия чудовищной мощности (описания принципа действия лучевой пушки). Аналитики предполагают, что  Организация разработала систему, которая сделает оружие Штайнберга недосягаемым для  обычных средств. Используяу свою ракету  Организация может вывести лучевую пушку на орбиту планеты. И оттуда, совершенно безнаказано сможет поражать практически любые объекты на поверхности планеты. На основании собраных вами сведений, а так же на основании данных полученых от морской разведки аналитики утверждают, что стрительво может вестись на небольшом скалистом острове в северном море (координаты прилагаются).">
+			<ZoneToOpen>FFight</ZoneToOpen>
+		</Obj>
+	</Clues>
+	<Clues DescriptionEng="TerrorPlan" Type="item" Code="TerrorPlanB" Description="TerrorPlan">
+		<Obj Action="Capture" Description="Похоже стало ясно, зачем Организация ведет строительство ракеты. В середине тридцатых годов некий профессор Штайнберг  на основании загадочного египетского манускрипта спроектировал абсолютно новый тип оружия чудовищной мощности (описания принципа действия лучевой пушки). Аналитики предполагают, что  Организация разработала систему, которая сделает оружие Штайнберга недосягаемым для  обычных средств. Используяу свою ракету  Организация может вывести лучевую пушку на орбиту планеты. И оттуда, совершенно безнаказано сможет поражать практически любые объекты на поверхности планеты. На основании собраных вами сведений, а так же на основании данных полученых от морской разведки аналитики утверждают, что стрительво может вестись на небольшом скалистом острове в северном море (координаты прилагаются).">
+			<ZoneToOpen>FFight</ZoneToOpen>
+		</Obj>
+	</Clues>
+</Zones>

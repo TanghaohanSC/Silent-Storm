@@ -1,0 +1,33 @@
+//
+// Creation Date: : 19.04.2001
+// Author: Andrew Chernyshov
+//
+// Description:
+// This script saves clip from specified character.
+//
+
+global proc int saveClip(string $char)
+{
+     deleteAllClips;
+
+     int $start = `playbackOptions -q -min`;
+     int $end = `playbackOptions -q -max`;
+
+     string $tmp[] = `clip -name "clip00" -sc 1 -startTime $start -endTime $end $char`;
+     string $clip = $tmp[0];
+
+     if ($clip == "")
+          error "Cannot create clip!";
+
+     string $sourceClip = `clip -q -scn $clip`;
+
+     select -r $clip;
+     doExportClipArgList 1 {""};
+
+     clip -e -active $sourceClip $char;
+
+     deleteAllClips;
+
+     return 1;
+}
+

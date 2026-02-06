@@ -1,0 +1,24 @@
+//
+// Creation Date: : 07.02.2000
+// Author: Andrew Chernyshov
+//
+// Description:
+// This script adds a materalIndex attribute to all Shading Groups in scene.
+// This attributes are requiered for proper work of A5 Export plug-in.
+//
+
+global proc int addMI()
+{
+     string $list[] = `ls -l -typ shadingEngine`;
+
+	for ($pShape in $list)
+	{
+          string $tmp[] = `listAttr -st "materialIndex" $pShape`;
+		if (size($tmp) != 0)
+               warning ("\"materialIndex\" attribute is already exists in " + $pShape);
+          else
+               addAttr -ln "materialIndex" -at long $pShape;
+     }
+	return 1;
+}
+

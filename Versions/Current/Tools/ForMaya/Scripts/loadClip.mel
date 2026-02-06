@@ -1,0 +1,60 @@
+//
+// Creation Date: : 07.02.2000
+// Author: Andrew Chernyshov
+//
+// Description:
+// This script loads specified clip on specified character.
+//
+
+global proc loadClip(string $path, string $char)
+{
+     string $list[];
+
+     if ($char == "")
+          $list = `ls -typ character`;
+     else
+          $list = `ls -typ character $char`;
+
+     $char = $list[0];
+
+     if (size($list) == 0)
+          error ("No " + $char + "character in current scene.");
+
+     deleteAllClips;
+     // Testing wether character has keys
+     string $keys[] = `listConnections -t "animCurve" $char`;
+     if (size($keys) != 0)
+     {
+          int $start = `playbackOptions -q -min`;
+          int $end = `playbackOptions -q -max`;
+          clip -name "clip00" -sc 1 -startTime $start -endTime $end $char;
+          deleteAllClips;
+     }
+
+     // Importing clip
+     file -i $path;
+
+     $list = `ls -typ animClip`;
+
+     if (size($list) == 0)
+          error ("No animClips in " + $path);
+
+     string $clip = $list[0];
+
+     clip -copy $clip;
+     clip -paste -sc 1 -absolute 1 -s 0 -mm "byNodeName" $char;
+
+     string $sourceClip[] = `clip -q -n $char`;
+
+     clip -e -active $sourceClip[0] $char;
+
+     int $max = eval("getAttr " + $clip + ".duration");
+     int $min = eval("getAttr " + $clip + ".start");
+
+     playbackOptions -min $min;
+     playbackOptions -max $max;
+
+     deleteAllClips;
+     return;
+}
+

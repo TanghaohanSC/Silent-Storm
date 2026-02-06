@@ -1,0 +1,25 @@
+//
+// Creation Date: : 10.04.2001
+// Author: Andrew Chernyshov
+//
+
+global proc triangulateAll()
+{
+     // Remember selection
+     string $save[] = `ls -sl`;
+
+     string $list[] = `ls -ni -typ mesh -dag`;
+
+     for ($item in $list)
+	{
+          int $i[] = `polyEvaluate -f $item`;
+          $i[0]-=1;
+          eval("polyTriangulate -ch 1 "+$item+".f[0:"+$i[0]+"]");
+     }
+
+     // Restore selection
+     select -cl;
+     for($item in $save)
+          select -add $item;
+}
+
