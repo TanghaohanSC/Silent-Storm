@@ -1,0 +1,19 @@
+#ifndef __RPGObject_H_
+#define __RPGObject_H_
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace NRPG
+{
+class IObject: virtual public CObjectBase
+{
+public:
+	virtual void Kill() = 0;
+	virtual int GetDestroyStage() = 0;
+	virtual bool IsDead() const = 0;
+};
+
+} // namespace
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif

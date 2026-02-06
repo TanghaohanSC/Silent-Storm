@@ -1,0 +1,75 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "FModSound"=..\FModSound\FModSound.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    "$/A5/FModSound", QGOAAAAA
+    ..\fmodsound
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "Misc"=..\Misc\Misc.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    "$/A5/Misc", KDLAAAAA
+    ..\misc
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "Sound"=.\Sound.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    "$/A5/Sound", IHOAAAAA
+    .
+    end source code control
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name FModSound
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Misc
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+    begin source code control
+    "$/A5/Sound", IHOAAAAA
+    .
+    end source code control
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

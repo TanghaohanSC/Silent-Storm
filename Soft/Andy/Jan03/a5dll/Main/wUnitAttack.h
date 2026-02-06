@@ -1,0 +1,56 @@
+#ifndef __WUNITATTACK_H_
+#define __WUNITATTACK_H_
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace NRPG
+{
+	class IGrenadeItem;
+}
+namespace NAI
+{
+	enum EFindPathParams;
+	class CPath;
+	struct SUnitPosition;
+}
+#include "wEActiveItem.h"
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace NWorld
+{
+////////////////////////////////////////////////////////////////////////////////////////////////////
+enum EUnitCommandResult;
+class CCmd;
+class CWorld;
+class CCannon;
+class CCommand;
+class CUnitServer;
+class CCommandExecute;
+////////////////////////////////////////////////////////////////////////////////////////////////////
+enum EActionType
+{
+	AT_SHOOT,
+	AT_BAZOOKA,
+	AT_MELEE,
+	AT_GRENADE,
+	AT_FIRSTAID,
+	AT_CANNON,
+	AT_THROW,
+	AT_SNIPE,
+	AT_MINE,
+	AT_TOOL,
+	AT_KEY,
+	AT_NONE
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+CCommandExecute* CreateMoveExecutor( CUnitServer *_pUS, NAI::CPath *pPath, NAI::EFindPathParams _eParams, ENeedActiveItem eActive, EUnitCommandResult *pError, bool bCheckCanRotate = true );
+CCommandExecute* CreateActionExecutor( CUnitServer *pUS, CCmd *pCmd, EUnitCommandResult *pError );
+////////////////////////////////////////////////////////////////////////////////////////////////////
+EActionType GetActionType( CUnitServer *pUS );
+//EUnitCommandResult CanDoFirstAid( CUnitServer *pUS, const NAI::SUnitPosition &from, CUnitServer *pTarget );
+//EUnitCommandResult CanUnitThrowGrenade( CUnitServer *pUS, const NAI::SUnitPosition &from, const CVec3 &ptTarget, NRPG::IGrenadeItem *pGrenade ); // AI
+//EUnitCommandResult CanAttackWithCannon( CCannon *pCannon, const CVec3 &ptTarget ); // AI
+////////////////////////////////////////////////////////////////////////////////////////////////////
+} // NAMESPACE
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif

@@ -1,0 +1,5 @@
+SCC = This is a Source Code Control file
+
+[Main.vcproj]
+SCC_Aux_Path = "\\vss-server\VSS"
+SCC_Project_Name = "$/A5/Main", ODLAAAAA

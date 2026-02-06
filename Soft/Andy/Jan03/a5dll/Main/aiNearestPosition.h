@@ -1,0 +1,14 @@
+#ifndef __AINEARESTPOSITION_H_
+#define __AINEARESTPOSITION_H_
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace NAI
+{
+class IPathNetwork;
+SPosition GetNearestPosition( CVec3 ptPos, IPathNetwork *pPathNetwork, 
+	bool bMustHaveLink = false, const CVec3 &ptLink = CVec3() );
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif

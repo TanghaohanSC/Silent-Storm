@@ -1,0 +1,38 @@
+#ifndef __INTERFACE_UNITPANEL_H_
+#define __INTERFACE_UNITPANEL_H_
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace NUI
+{
+////////////////////////////////////////////////////////////////////////////////////////////////////
+class CUnitsTabBar;
+class CInfoPanelSingleUnit;
+class CInfoPanelMultipleUnits;
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// CUnitPanel
+////////////////////////////////////////////////////////////////////////////////////////////////////
+class CUnitPanel: public CWindow
+{
+	OBJECT_BASIC_METHODS(CUnitPanel)
+private:
+	ZDATA_(CWindow)
+	CPtr<NGame::IMission> pMission;
+	////
+	CObj<CUnitsTabBar> pUnitsTabBar;
+	CObj<CInfoPanelSingleUnit> pInfoPanelSingleUnit;
+	CObj<CInfoPanelMultipleUnits> pInfoPanelMultipleUnits;
+public:
+	ZEND int operator&( CStructureSaver &f ) { f.Add(1,(CWindow*)this); f.Add(2,&pMission); f.Add(3,&pUnitsTabBar); f.Add(4,&pInfoPanelSingleUnit); f.Add(5,&pInfoPanelMultipleUnits); return 0; }
+
+public:
+	CUnitPanel() {}
+	CUnitPanel( const SWindowInfo &sInfo, NGame::IMission *pMission );
+
+	bool ProcessMessage( const SEvent &sEvent );
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+} // Namespace
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif

@@ -1,0 +1,39 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: A5ExportModel - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\monster\LOCALS~1\Temp\RSP12.tmp" with contents
+[
+/nologo /MD /W3 /GX /O2 /I "." /I "C:\AW\Maya3.0\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "NT_PLUGIN" /Fp"c:\home\a5\a5exportmodel\Release/A5ExportModel.pch" /Yu"StdAfx.h" /Fo"c:\home\a5\a5exportmodel\Release/" /Fd"c:\home\a5\a5exportmodel\Release/" /FD /c 
+"W:\Soft\Monster\A5ExportModel\A5ExportModel.cpp"
+]
+Creating command line "xicl6.exe @C:\DOCUME~1\monster\LOCALS~1\Temp\RSP12.tmp" 
+Creating temporary file "C:\DOCUME~1\monster\LOCALS~1\Temp\RSP13.tmp" with contents
+[
+Foundation.lib OpenMaya.lib OpenMayaAnim.lib /nologo /subsystem:windows /dll /incremental:no /pdb:"c:\home\a5\a5exportmodel\Release/A5ExportModel.pdb" /machine:I386 /out:"C:\AW\Maya3.0\bin\plug-ins\A5ExportModel.mll" /implib:"c:\home\a5\a5exportmodel\Release/A5ExportModel.lib" /libpath:"C:\AW\Maya3.0\lib" /export:initializePlugin /export:uninitializePlugin 
+c:\home\a5\a5exportmodel\Release\A5ExportModel.obj
+c:\home\a5\a5exportmodel\Release\BasicChunk1.obj
+c:\home\a5\a5exportmodel\Release\Converter.obj
+c:\home\a5\a5exportmodel\Release\pluginMain.obj
+c:\home\a5\a5exportmodel\Release\StdAfx.obj
+c:\home\a5\a5exportmodel\Release\Streams.obj
+]
+Creating command line "xilink6.exe @C:\DOCUME~1\monster\LOCALS~1\Temp\RSP13.tmp"
+<h3>Output Window</h3>
+Compiling...
+A5ExportModel.cpp
+Linking...
+xilink6: executing 'C:\PROGRA~1\MICROS~2\VC98\bin\link.exe'
+   Creating library c:\home\a5\a5exportmodel\Release/A5ExportModel.lib and object c:\home\a5\a5exportmodel\Release/A5ExportModel.exp
+
+
+
+<h3>Results</h3>
+A5ExportModel.mll - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

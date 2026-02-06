@@ -1,0 +1,102 @@
+#ifndef __MakeBuilding_H_
+#define __MakeBuilding_H_
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#include "BuildingClip.h"
+#include "BuildingPart.h"
+#include "dg.h"
+namespace NDb
+{
+	class CRPGArmor;
+	class CMaterial;
+}
+namespace NBuilding
+{
+class CBuildingGrid;
+class CBuildInfo;
+////////////////////////////////////////////////////////////////////////////////////////////////////
+const int WALL_THIN_ID  = 1;
+const int WALL_MED_ID   = 2;
+const int WALL_THICK_ID = 3;
+const float WALL_THIN  = 0.1f;
+const float WALL_MED   = 0.2f;
+const float WALL_THICK = 0.3f;
+////////////////////////////////////////////////////////////////////////////////////////////////////
+float ID2Width( int nWidthID );
+int   Width2ID( float fWidth );
+////////////////////////////////////////////////////////////////////////////////////////////////////
+struct SStoreyInfo
+{
+	struct SSpot
+	{
+		CVec3 ptOrigin;
+		CVec3 ptNormal;
+		CVec2 ptSize;
+		int   nRotation;
+		CDBPtr<NDb::CMaterial> pMaterial;
+		int   nMaterialMask; // если бит включен - на этот материал спот не накладываетс€
+		SSpot() {}
+		SSpot( const CVec3 &ptO, const CVec3 &ptN, const CVec2 &ptS, int _nRotation, NDb::CMaterial *pM, int nMatMask )
+			: ptOrigin(ptO), ptNormal(ptN), ptSize(ptS), nRotation(_nRotation), pMaterial(pM), nMaterialMask(nMatMask)
+		{
+		}
+	};
+	struct SFragment
+	{
+		int nFragmentID;
+		CDBPtr<NDb::CRPGArmor> pArmor;
+		SClipInfo info;
+		vector<SSpot> spots;
+
+		SFragment() {}
+		SFragment( const SClipInfo &clip, int nFragID, NDb::CRPGArmor *_pArmor )
+			: info(clip), nFragmentID( nFragID ), pArmor(_pArmor) {}
+	};
+	int nFloor;
+	vector<SFragment> fragments;
+	vector<SFragment> walls;
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+struct SBuildingInfo
+{
+	hash_map<SPart, SStoreyInfo, SPart> info;
+	SStoreyInfo& GetPart( const SPart &part )
+	{
+		SStoreyInfo &s = info[part];
+		s.nFloor = part.nFloor;
+		return s;
+	}
+	//void Clear() { stories.clear(); }
+	void Clear() { info.clear(); }
+
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+class CBuildingInfoHold: public CObjectBase
+{
+	OBJECT_BASIC_METHODS(CBuildingInfoHold);
+	SBuildingInfo info;
+	ZDATA
+	CDGPtr<CBuildingGrid> pBuildingGrid;
+	CDGPtr< CPtrFuncBase<CBuildInfo> > pBuildInfo;
+	bool bSplitParts;
+public:
+	ZEND int operator&( CStructureSaver &f ) { f.Add(2,&pBuildingGrid); f.Add(3,&pBuildInfo); f.Add(4,&bSplitParts); return 0; }
+
+	CBuildingInfoHold() {}
+	CBuildingInfoHold( CBuildingGrid *pGrid, int nBuildingID, bool bSplitParts = false );
+	const SBuildingInfo& GetInfo();
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void MakeBuilding( SBuildingInfo *pInfo, const CBuildingGrid &grid, CBuildInfo *pBuildInfo, bool bParts );
+void BuildingHP( CBuildInfo *pBuildInfo, CBuildingGrid *pGrid );
+bool UpdateBuildingStability( int nBuildingID, CBuildingGrid *pGrid, int nMaxIterations = 1 );
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// объ€вление вынесено дл€ WYSIWYG
+class CBuildingSchema;
+void MakeBuildingSchema( CBuildingSchema *pSchema, CBuildingGrid *pGrid, CBuildInfo *pBuildInfo );
+////////////////////////////////////////////////////////////////////////////////////////////////////
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#endif

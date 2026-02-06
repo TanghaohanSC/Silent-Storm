@@ -1,0 +1,202 @@
+'------------------------------------------------------------------------------
+'FILE DESCRIPTION: New Macro File
+'------------------------------------------------------------------------------
+
+Sub Serialize()
+
+	Dim curLine, curCol, endLine, endCol
+
+	curLine = ActiveDocument.Selection.CurrentLine
+	curCol = ActiveDocument.Selection.CurrentColumn	
+
+	ActiveDocument.Selection.EndOfDocument dsMove
+	ActiveDocument.Selection.EndOfLine dsMove
+	endLine = ActiveDocument.Selection.CurrentLine
+	endCol = ActiveDocument.Selection.CurrentColumn
+
+	ActiveDocument.Selection.StartOfDocument
+	ActiveDocument.Selection.StartOfLine
+
+	SerializeStep True, False, "public:", endLine, endCol
+
+	ActiveDocument.Selection.MoveTo curLine, curCol
+
+End Sub
+
+Sub SerializeStep( bTerminate, bDecl, sInMode, endLine, endCol )
+
+	Dim bRet, sMode, nBracketCount
+	bRet = True
+	sMode = sInMode
+	nBracketCount = 0
+
+'	MsgBox( sMode )
+
+	if InStr( ActiveDocument.Selection, "}") <> 0 then
+		Exit Sub
+	End If
+
+	ActiveDocument.Selection.Cancel
+	ActiveDocument.Selection.WordRight dsExtend
+	Do
+		if InStr( ActiveDocument.Selection, "//") <> 0 then
+			ActiveDocument.Selection.Cancel
+			ActiveDocument.Selection.LineDown
+			ActiveDocument.Selection.StartOfLine
+		else
+			if InStr( ActiveDocument.Selection, "{") <> 0 then
+				SerializeStep False, False, sMode, endLine, endCol
+				if Decl then 
+					Exit Sub
+				End If
+			ElseIf InStr( ActiveDocument.Selection, "}") <> 0 then
+				Exit Sub
+			ElseIf InStr( ActiveDocument.Selection, ";") <> 0 And bDecl then
+				Exit Sub
+			End If
+
+			if InStr( ActiveDocument.Selection, "struct") <> 0 then
+				SerializeStep False, True, "public:", endLine, endCol
+			ElseIf InStr( ActiveDocument.Selection, "class") <> 0 then
+				SerializeStep False, True, "private:", endLine, endCol
+			ElseIf InStr( ActiveDocument.Selection, "public:") <> 0 then
+				sMode = "public:"
+			ElseIf InStr( ActiveDocument.Selection, "private:") <> 0 then
+				sMode = "private:"
+			ElseIf InStr( ActiveDocument.Selection, "protected:") <> 0 then
+				sMode = "protected:"
+			End If
+
+			if InStr( ActiveDocument.Selection, "ZDATA_" ) then
+				MsgBox( sMode )
+				bRet = SerializeOneClass( 2, sMode )
+			elseIf InStr( ActiveDocument.Selection, "ZDATA" ) then
+				MsgBox( sMode )
+				bRet = SerializeOneClass( 1, sMode )
+			End If
+		End If
+
+		ActiveDocument.Selection.Cancel
+		ActiveDocument.Selection.WordRight dsExtend
+
+		If bRet = False Then
+			Exit Do
+		End If
+		If endLine = ActiveDocument.Selection.TopLine And endCol = ActiveDocument.Selection.CurrentColumn Then
+			if bTerminate then
+				Exit Do
+			Else
+				Exit Sub
+			End If
+		End If
+	Loop
+
+End Sub
+
+Function SerializeOneClass(find, sMode)
+	Dim strRez
+	strRez = "ZEND public: int operator&( CStructureSaver &f ) { "
+	Dim IsEnd, nNumb
+	NotEnd = true
+	nNumb = 2
+
+	if find = 2 then
+		ActiveDocument.Selection.Cancel
+		ActiveDocument.Selection.StartOfLine
+		ActiveDocument.Selection.WordRight
+		ActiveDocument.Selection.WordRight
+		ActiveDocument.Selection.WordRight
+		ActiveDocument.Selection.WordRight dsExtend
+		strRez = strRez + "f.Add(1,(" + ActiveDocument.Selection + "*)this); "
+	End If
+
+	ActiveDocument.Selection.Cancel
+	ActiveDocument.Selection.StartOfLine
+	ActiveDocument.Selection.LineDown
+
+	Do While NotEnd
+		ActiveDocument.Selection.StartOfLine
+		ActiveDocument.Selection.EndOfLine dsExtend
+		If InStr( ActiveDocument.Selection, "ZEND") <> 0 then
+			NotEnd = false
+		Else
+			' line not empty?
+			If ActiveDocument.Selection.CurrentColumn <> 1 then
+				' Is in line ';'
+				if InStr( ActiveDocument.Selection, "}" ) <> 0 then
+					SerializeOneClass = False
+					MsgBox "Script error: ZEND not found", vbCritical
+					Exit Function
+				End If
+				if InStr( ActiveDocument.Selection, "{" ) <> 0 then
+					SerializeOneClass = False
+					MsgBox "Script error: Can't use blocks in serialize", vbCritical
+					Exit Function
+				End If
+
+				if InStr( ActiveDocument.Selection, ";" ) <> 0 then
+					ActiveDocument.Selection.StartOfLine dsFirstText
+					ActiveDocument.Selection.WordRight dsExtend
+					if InStr( ActiveDocument.Selection, "//" ) = 0 then
+						ActiveDocument.Selection.Cancel
+						ActiveDocument.Selection.WordRight dsExtend
+
+						If InStr( ActiveDocument.Selection, "::" ) <> 0 then
+							ActiveDocument.Selection.Cancel
+							ActiveDocument.Selection.WordRight
+							ActiveDocument.Selection.WordRight dsExtend
+						End if
+
+						if InStr( ActiveDocument.Selection, "<" ) <> 0 then
+							Count = 1
+							ActiveDocument.Selection.Cancel
+							ActiveDocument.Selection.WordRight dsExtend
+							Do While Count <> 0
+								if InStr( ActiveDocument.Selection, ">" ) <> 0 then
+									Count = Count - 1
+								elseif InStr( ActiveDocument.Selection, "<" ) <> 0 then
+									Count = Count + 1
+								End if
+								ActiveDocument.Selection.Cancel
+								ActiveDocument.Selection.WordRight dsExtend
+							Loop
+						End if
+                                                
+						Do While InStr( ActiveDocument.Selection, ";" ) = 0
+							if InStr( ActiveDocument.Selection, "," ) <> 0 then
+								ActiveDocument.Selection.Cancel
+								ActiveDocument.Selection.WordRight dsExtend
+							End IF
+							strRez = strRez + "f.Add(" + CStr(nNumb) + ",&" + ActiveDocument.Selection + "); "
+							nNumb = nNumb + 1
+							ActiveDocument.Selection.Cancel
+							ActiveDocument.Selection.WordRight dsExtend
+						Loop
+
+					ElseIf InStr( ActiveDocument.Selection, "ZSKIP" ) <> 0 then
+							nNumb = nNumb + 1
+					End If
+				End If
+			End if
+			ActiveDocument.Selection.LineDown
+		End If
+	Loop
+	strRez = strRez + "return 0; } " + sMode
+	ActiveDocument.Selection.Cancel
+	ActiveDocument.Selection.StartOfLine
+	ActiveDocument.Selection.WordRight
+	ActiveDocument.Selection.EndOfLine dsExtend
+	ActiveDocument.Selection = strRez
+	ActiveDocument.Selection.StartOfLine
+	SerializeOneClass = True
+End Function
+
+Sub SkipSpace
+        ActiveDocument.Selection.Cancel
+        ActiveDocument.Selection.CharRight dsExtend
+        Do While ActiveDocument.Selection = " "
+                ActiveDocument.Selection.Cancel
+                ActiveDocument.Selection.CharRight dsExtend
+        Loop
+        ActiveDocument.Selection.CharLeft
+End Sub

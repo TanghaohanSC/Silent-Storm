@@ -7,7 +7,6 @@ Data/masterserver/statistics.MYI filter=lfs diff=lfs merge=lfs -text
 Data/masterserver/statistics.MYD filter=lfs diff=lfs merge=lfs -text
 Data/ib_logfile0 filter=lfs diff=lfs merge=lfs -text
 Data/ib_logfile1 filter=lfs diff=lfs merge=lfs -text
-
 Tools/Base/A5Game.mdf filter=lfs diff=lfs merge=lfs -text
 Tools/Base/A5Game_Data.mdf filter=lfs diff=lfs merge=lfs -text
 Tools/LogExplorer/le311.exe filter=lfs diff=lfs merge=lfs -text
@@ -25,3 +24,15 @@ Tools/SQL2K/x86/other/sqlredis.exe filter=lfs diff=lfs merge=lfs -text
 Tools/SQL2K/x86/system/dll/msmdcb80.pdb filter=lfs diff=lfs merge=lfs -text
 Tools/SQL2K/x86/system/dll/msmdgd80.pdb filter=lfs diff=lfs merge=lfs -text
 Tools/SQL2K/x86/system/dll/msolap80.pdb filter=lfs diff=lfs merge=lfs -text
+Soft/Andy/EnglishGold/Game.exe filter=lfs diff=lfs merge=lfs -text
+Soft/Andy/EnglishGold/Game.pdb filter=lfs diff=lfs merge=lfs -text
+Soft/Andy/Jan03/a5dll/A5.ncb filter=lfs diff=lfs merge=lfs -text
+Soft/Andy/KRI/Gulin.ppt filter=lfs diff=lfs merge=lfs -text
+Soft/Andy/RussianGold/Game.exe filter=lfs diff=lfs merge=lfs -text
+Soft/Andy/RussianGold/Game.pdb filter=lfs diff=lfs merge=lfs -text
+Soft/Andy/RussianGold/Sounds.res filter=lfs diff=lfs merge=lfs -text
+Soft/Andy/RussianPatch1/Game.exe filter=lfs diff=lfs merge=lfs -text
+Soft/Andy/RussianPatch1/Game.pdb filter=lfs diff=lfs merge=lfs -text
+Soft/Bandures/NVStatInstall_12.60.exe filter=lfs diff=lfs merge=lfs -text
+Soft/SDK/stlport/lib/stlport_vc7_static.lib filter=lfs diff=lfs merge=lfs -text
+Soft/SDK/stlport/lib/stlport_vc7_stldebug_static.lib filter=lfs diff=lfs merge=lfs -text

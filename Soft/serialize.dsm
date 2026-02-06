@@ -1,0 +1,157 @@
+'------------------------------------------------------------------------------
+'FILE DESCRIPTION: New Macro File
+'------------------------------------------------------------------------------
+Function FindData(str)
+	FindData = ActiveDocument.Selection.FindText (str, dsMatchWord + dsMatchCase)
+End Function
+
+Function ExtractString()
+
+	ActiveDocument.Selection.Cancel
+	CurLine = ActiveDocument.Selection.CurrentLine
+	CurPosition = ActiveDocument.Selection.CurrentColumn
+
+	ActiveDocument.Selection.MoveTo CurLine, dsEndOfLine, dsExtend
+	nPos = InStr( ActiveDocument.Selection, ")" )
+	if nPos <> 0 then
+
+		ActiveDocument.Selection.MoveTo CurLine, CurPosition
+		ActiveDocument.Selection.MoveTo CurLine, CurPosition + nPos - 1, dsExtend
+
+		ExtractString = ActiveDocument.Selection
+
+	end if
+
+End Function
+
+Sub Serialize()
+'DESCRIPTION: Добовляет строчки сериализации каждому классу в текущем файле
+
+	firstCol = 0
+	firstLine = 0
+	ActiveDocument.Selection.StartOfDocument
+	if FindData("ZDATA") then
+		firstLine = ActiveDocument.Selection.CurrentLine
+		firstCol = ActiveDocument.Selection.CurrentColumn
+		Do While true
+			SerializeOneClass(1)
+			FindData("ZDATA")
+			If firstLine = ActiveDocument.Selection.TopLine And firstCol = ActiveDocument.Selection.CurrentColumn Then
+				Exit Do	' Jump out of loop before repeat
+			End If
+		Loop
+	End If
+	ActiveDocument.Selection.StartOfDocument
+	if FindData("ZDATA_") then
+		firstLine = ActiveDocument.Selection.TopLine
+		firstCol = ActiveDocument.Selection.CurrentColumn
+		Do While true
+			SerializeOneClass(2)
+			FindData("ZDATA_")
+			If firstLine = ActiveDocument.Selection.TopLine And firstCol = ActiveDocument.Selection.CurrentColumn Then
+				Exit Do	' Jump out of loop before repeat
+			End If
+		Loop
+	End If
+End Sub
+
+Sub SerializeOneClass(find)
+'       ActiveDocument.Selection.FindText "ZDATA", dsMatchWord + dsMatchCase
+	nNumb = 2
+	NotEnd = true
+	strRez = "ZEND int operator&( CStructureSaver &f ) { "
+	ActiveDocument.Selection.Cancel
+	ActiveDocument.Selection.WordRight dsExtend
+	if find = 2 then
+		ActiveDocument.Selection.Cancel
+		strRez = strRez + "f.Add(1,(" + ExtractString() + "*)this); "
+		ActiveDocument.Selection.LineDown
+	Else
+		ActiveDocument.Selection.Cancel
+		ActiveDocument.Selection.StartOfLine
+	end if
+	Do While NotEnd
+		ActiveDocument.Selection.StartOfLine
+		ActiveDocument.Selection.EndOfLine dsExtend
+		If InStr( ActiveDocument.Selection, "ZEND") <> 0 then
+			NotEnd = false
+		ElseIf InStr( ActiveDocument.Selection, "ZPARENT") <> 0 then
+			ActiveDocument.Selection.Cancel
+			ActiveDocument.Selection.StartOfLine
+			ActiveDocument.Selection.WordRight
+			ActiveDocument.Selection.WordRight
+			ActiveDocument.Selection.WordRight dsExtend
+			strRez = strRez + "f.Add(" + CStr(nNumb) + ",(" + ExtractString() + "*)this); "
+			nNumb = nNumb + 1
+			ActiveDocument.Selection.LineDown
+		Else
+		' line not empty?
+			If ActiveDocument.Selection.CurrentColumn <> 1 then
+			' Is in line ';'
+				if InStr( ActiveDocument.Selection, ";" ) <> 0 then
+					ActiveDocument.Selection.StartOfLine dsFirstText
+					ActiveDocument.Selection.WordRight dsExtend
+					if InStr( ActiveDocument.Selection, "//" ) = 0 then
+						ActiveDocument.Selection.Cancel
+						ActiveDocument.Selection.WordRight dsExtend
+
+						If InStr( ActiveDocument.Selection, "::" ) <> 0 then
+							ActiveDocument.Selection.Cancel
+							ActiveDocument.Selection.WordRight
+							ActiveDocument.Selection.WordRight dsExtend
+						End if
+						if InStr( ActiveDocument.Selection, "<" ) <> 0 then
+							Count = 1
+							ActiveDocument.Selection.Cancel
+							ActiveDocument.Selection.WordRight dsExtend
+							Do While Count <> 0
+								if InStr( ActiveDocument.Selection, ">" ) <> 0 then
+									Count = Count - 1
+								elseif InStr( ActiveDocument.Selection, "<" ) <> 0 then
+									Count = Count + 1
+								End if
+								'MsgBox( ActiveDocument.Selection & ":" & Count )
+								ActiveDocument.Selection.Cancel
+								ActiveDocument.Selection.WordRight dsExtend
+							Loop
+						End if
+						Do While InStr( ActiveDocument.Selection, ";" ) = 0
+							if InStr( ActiveDocument.Selection, "," ) <> 0 then
+								ActiveDocument.Selection.Cancel
+								ActiveDocument.Selection.WordRight dsExtend
+							End IF
+							'MsgBox( "Add:- " & ActiveDocument.Selection )
+							strRez = strRez + "f.Add(" + CStr(nNumb) + ",&" + ActiveDocument.Selection + "); "
+							nNumb = nNumb + 1
+							ActiveDocument.Selection.Cancel
+							ActiveDocument.Selection.WordRight dsExtend
+						Loop
+					ElseIf InStr( ActiveDocument.Selection, "ZSKIP" ) <> 0 then
+						nNumb = nNumb + 1
+					End If
+				End If
+			End if
+			ActiveDocument.Selection.LineDown
+		End If
+	Loop
+	strRez = strRez + "return 0; }"
+'	MsgBox( strRez )
+	ActiveDocument.Selection.Cancel
+	ActiveDocument.Selection.StartOfLine
+	ActiveDocument.Selection.WordRight
+	ActiveDocument.Selection.EndOfLine dsExtend
+	ActiveDocument.Selection = strRez
+	ActiveDocument.Selection.StartOfLine
+'        ActiveDocument.Selection = strRez
+'        ActiveDocument.Selection.StartOfLine
+End Sub
+
+Sub SkipSpace
+        ActiveDocument.Selection.Cancel
+        ActiveDocument.Selection.CharRight dsExtend
+        Do While ActiveDocument.Selection = " "
+                ActiveDocument.Selection.Cancel
+                ActiveDocument.Selection.CharRight dsExtend
+        Loop
+        ActiveDocument.Selection.CharLeft
+End Sub

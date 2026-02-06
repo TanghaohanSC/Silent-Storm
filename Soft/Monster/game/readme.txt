@@ -1,0 +1,47 @@
+tasklist (feel free to add new tasks and remove done ones)
+-EXPORT
+ -format for objects
+ -Maya exporter
+ -generator of Maya open/export cmds (partly done)
+ -copying converted files to local storage
+-INTERFACE
+ -shooting
+ -unit death (try to remove units too)
+ -enemies turn
+ -more convinient camera (need more convinient input)
+-INPUT
+ -event binding object (automated register/unregister event)
+ -interface remapping layer=input
+ -different sets of binds for different operating modes
+-MODEL LOADING/DG
+ -load model by its number
+ -managers for objects & their sync with database
+-EDITOR
+ -rectangles placer
+ -object repository
+ -parameters specification
+ -input/output
+ -levels
+-BUILDINGS DESTRUCTIONs
+ -object simplifier
+-GDG
+ -additive lighting
+ -2 pass rendering = light+objects itself
+ -shadow projector working only in square range (disable texture wrapping)
+ -several parallel shadow projectors simultaneously
+ -perspective light sources
+ -polygon overlap & additive lighting(problem exists?) - solution with stencil buffer looks best so far
+-GFX
+ -pure device when possible
+ -compressed textures
+ -texture mips & changing data
+ -managed/non managed -> when no memory for non managed - discard bytes and try again
+ -do not erase managed when reinitializing device
+ -strip primitive
+-FILE IO
+ -exceptions on errors?
+-AI
+ -enclosing polyhedras, building database of them
+ -tracing through set of polyhedras
+ -passable areas building
+ -pathfind based on areas

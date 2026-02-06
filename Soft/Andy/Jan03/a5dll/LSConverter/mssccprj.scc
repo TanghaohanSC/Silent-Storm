@@ -1,0 +1,5 @@
+SCC = This is a Source Code Control file
+
+[LSConverter.vcproj]
+SCC_Aux_Path = "\\vss-server\VSS"
+SCC_Project_Name = "$/A5/LSConverter", TFSAAAAA

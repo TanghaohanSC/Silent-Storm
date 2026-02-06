@@ -1,0 +1,30 @@
+-interface with data from scene
+ -some faces of polyhedron can be marked as passable
+-multiple storey pathfinding
+-for cases when dest is inside unpassable search reachable point
+-for cases when src is inside unpassable get out with fastest way
+-for different heights but same radius - mark links & polygons what height they accept
+-to search paths for units of different size need to create different graphs for each size
+-moving obstacles problem, recalc graph?
+
+-optimize data layout
+ -SLink should take as little space as possible
+ -points should be array to separate fEstimate from data, it can be erased on data starving
+-optimize polys/points peek
+ -quadtree structure to peek only needed polys/points
+-optimize graph build
+ -take into account symmetry
+-optimize graph search
+ -use some sort of heap in graph search
+ -alpha star optimization for graph search, difficult to devise estimate for multiple storey case
+-improve path optimizer
+ -more cool path optimize add middle cutter trick
+-test on real data for number of edges 
+ -if it is low no need in additional optimizations
+ -in case of their high number need some way to reduce their number preserving connectivity
+-optimize DoTrace()
+ -replace atan2 in DoTrace with some simple monotone function or table lookup it somehow
+  -if division were evaded would be perfect
+  -inside test will get more complicated so its better to calc atan2 blazing FAST
+
+-estimate number of polys in game: ~65k * 100b/point * 2type ~12Mb; tiles: 512*512*10 = 2.5Mb

@@ -1,0 +1,54 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: Game - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\monster\LOCALS~1\Temp\RSP1F0.tmp" with contents
+[
+/nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Fp"c:\home\A5\Game\Debug/Game.pch" /Yu"StdAfx.h" /Fo"c:\home\A5\Game\Debug/" /Fd"c:\home\A5\Game\Debug/" /FD /GZ /c 
+"W:\Soft\Monster\game\GfxEffects.cpp"
+"W:\Soft\Monster\game\wMain.cpp"
+]
+Creating command line "xicl6.exe @C:\DOCUME~1\monster\LOCALS~1\Temp\RSP1F0.tmp" 
+Creating temporary file "C:\DOCUME~1\monster\LOCALS~1\Temp\RSP1F1.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib d3d8.lib d3dx8.lib /nologo /subsystem:windows /incremental:yes /pdb:"c:\home\A5\Game\Debug/Game.pdb" /debug /machine:I386 /out:"c:\home\A5\Game\Debug/Game.exe" /pdbtype:sept 
+c:\home\A5\Game\Debug\Main.obj
+c:\home\A5\Game\Debug\StdAfx.obj
+c:\home\A5\Game\Debug\Gfx.obj
+c:\home\A5\Game\Debug\GfxEffects.obj
+c:\home\A5\Game\Debug\GfxUtils.obj
+c:\home\A5\Game\Debug\DG.OBJ
+c:\home\A5\Game\Debug\GFormat.obj
+c:\home\A5\Game\Debug\GScene.obj
+c:\home\A5\Game\Debug\GSceneGraph.obj
+c:\home\A5\Game\Debug\Camera.obj
+c:\home\A5\Game\Debug\iMain.obj
+c:\home\A5\Game\Debug\iMission.obj
+c:\home\A5\Game\Debug\iInput.obj
+c:\home\A5\Game\Debug\wInterface.obj
+c:\home\A5\Game\Debug\wMain.obj
+c:\home\A5\Game\Debug\BasicChunk1.obj
+c:\home\A5\Game\Debug\BasicDBfake.obj
+c:\home\A5\Game\Debug\FilesPackage.obj
+c:\home\A5\Game\Debug\Streams.obj
+c:\home\A5\Game\Debug\HPTimer.obj
+c:\home\A5\Game\Debug\StrProc.obj
+c:\home\A5\Game\Debug\Transform.obj
+c:\home\A5\Game\Debug\WinFrame.obj
+c:\home\A5\Game\Debug\DataFormat.obj
+c:\home\A5\Game\Debug\RPGGlobal.obj
+c:\home\A5\Game\Debug\RPGMerc.obj
+c:\home\A5\Game\Debug\RPGMission.obj
+]
+Creating command line "xilink6.exe @C:\DOCUME~1\monster\LOCALS~1\Temp\RSP1F1.tmp"
+<h3>Output Window</h3>
+Compiling...
+xicl6.exe terminated at user request.
+
+</pre>
+</body>
+</html>

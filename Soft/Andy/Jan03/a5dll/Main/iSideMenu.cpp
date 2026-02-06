@@ -1,0 +1,283 @@
+#include "StdAfx.h"
+#include "Transform.h"
+#include "GView.h"
+#include "G2DView.h"
+#include "GSceneUtils.h"
+#include "wInterface.h"
+#include "Sound.h"
+#include "RWGame.h"
+#include "RWSound.h"
+#include "RPGGame.h"
+#include "RPGGlobal.h"
+#include "Interface.h"
+#include "iMain.h"
+#include "iRenderWorld.h"
+#include "iCommonUI.h"
+#include "iSideMenu.h"
+#include "iHeroMenu.h"
+#include "..\Misc\StrProc.h"
+#include "..\MiscDll\Commands.h"
+#include "..\Input\Bind.h"
+#include "..\DBFormat\DataMap.h"
+#include "..\DBFormat\DataRPG.h"
+#include "..\DBFormat\DataSound.h"
+#include "..\DBFormat\DataFormat.h"
+#include "..\DBFormat\DataCamera.h"
+////////////////////////////////////////////////////////////////////////////////////////////////////
+const int
+	N_SIDE_AXIS = 1,
+	N_SIDE_ALLIES = 2,
+	N_SIDEMENU_CAMERA = 47,
+	N_SIDEMENU_TEMPLATE = 2387;
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace NUI
+{
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// CScriptHoverButton
+////////////////////////////////////////////////////////////////////////////////////////////////////
+class CScriptHoverButton: public CHoverButton
+{
+	OBJECT_BASIC_METHODS(CScriptHoverButton);
+private:
+	ZDATA_(CHoverButton)
+	CPtr<NGame::CRenderBaseInterface> pInterface;
+	////
+	bool bHoverNotify;
+	ZEND int operator&( CStructureSaver &f ) { f.Add(1,(CHoverButton*)this); f.Add(2,&pInterface); f.Add(3,&bHoverNotify); return 0; }
+
+protected:
+	void OnAction();
+
+public:
+	CScriptHoverButton() {}
+	CScriptHoverButton( const SWindowInfo &sInfo, NGame::CRenderBaseInterface *pInterface );
+
+	void Draw( const STime &sTime, NGScene::I2DGameView *pView );
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+CScriptHoverButton::CScriptHoverButton( const SWindowInfo &sInfo, NGame::CRenderBaseInterface *_pInterface ):
+	CHoverButton( sInfo ), pInterface( _pInterface ), bHoverNotify( false )
+{
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CScriptHoverButton::Draw( const STime &sTime, NGScene::I2DGameView *pView )
+{
+	if ( IsMouseCover() != bHoverNotify )
+	{
+		NWorld::CCommand *pCmd = 
+			new NWorld::CCmdCallScriptFunction( "OnScriptNotify", "si", GetWindowID().c_str(), IsMouseCover() ? 1 : 0 );
+		pInterface->Command( pCmd );
+	}
+
+	bHoverNotify = IsMouseCover();
+
+	CHoverButton::Draw( sTime, pView );
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CScriptHoverButton::OnAction()
+{
+	NWorld::CCommand *pCmd = new NWorld::CCmdCallScriptFunction( "OnScriptNotify", "si", GetWindowID().c_str(), 2 );
+	pInterface->Command( pCmd );
+
+	CHoverButton::OnAction();
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// CSideMenuUI
+////////////////////////////////////////////////////////////////////////////////////////////////////
+class CSideMenuUI: public CWindow
+{
+	OBJECT_BASIC_METHODS(CSideMenuUI);
+public:
+	enum ESide
+	{
+		SIDE_NONE,
+		SIDE_AXIS,
+		SIDE_ALLIES
+	};
+
+private:
+	ZDATA_(CWindow)
+	CPtr<NGame::CRenderBaseInterface> pInterface;
+	////
+	ESide eSide;
+	CObj<CHoverButton> pBack;
+	CObj<CHoverButton> pNext;
+	CObj<CHoverButton> pAxis;
+	CObj<CHoverButton> pAllies;
+	ZEND int operator&( CStructureSaver &f ) { f.Add(1,(CWindow*)this); f.Add(2,&pInterface); f.Add(3,&eSide); f.Add(4,&pBack); f.Add(5,&pNext); f.Add(6,&pAxis); f.Add(7,&pAllies); return 0; }
+public:
+	CSideMenuUI() {}
+	CSideMenuUI( const SWindowInfo &sInfo, NGame::CRenderBaseInterface *pInterface );
+
+	ESide GetSide() const { return eSide; }
+
+	bool ProcessMessage( const SEvent &sEvent );
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+CSideMenuUI::CSideMenuUI( const SWindowInfo &sInfo, NGame::CRenderBaseInterface *_pInterface ): 
+	CWindow( sInfo ), pInterface( _pInterface ), eSide( SIDE_NONE )
+{
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CSideMenuUI::ProcessMessage( const SEvent &sEvent )
+{
+	switch( sEvent.nEvent )
+	{
+		case EVENT_NOTIFY:
+			{
+				if ( sEvent.szID == "axis" )
+				{
+					eSide = SIDE_AXIS;
+					return true;
+				}
+				else if ( sEvent.szID == "allies" )
+				{
+					eSide = SIDE_ALLIES;
+					return true;
+				}
+
+				break;
+			}
+		case EVENT_TEMPLATELOAD:
+			{
+				pBack = new CHoverButton( sEvent.pLoader->GetControl( "cancel" ) );
+				pBack->AddTextState( CHoverButton::STATE_HOVER, GetDBString( 11130 ) + GetDBString( 11174 ) );
+				pBack->AddTextState( CHoverButton::STATE_NORMAL, GetDBString( 11129 ) + GetDBString( 11174 ) );
+
+				pAxis = new CScriptHoverButton( sEvent.pLoader->GetControl( "axis" ), pInterface );
+				pAxis->AddTextState( CHoverButton::STATE_HOVER, GetDBString( 11130 ) + GetDBString( 11131 ) );
+				pAxis->AddTextState( CHoverButton::STATE_NORMAL, GetDBString( 11129 ) + GetDBString( 11131 ) );
+
+				pNext = new CScriptHoverButton( sEvent.pLoader->GetControl( "next" ), pInterface );
+				pNext->AddTextState( CHoverButton::STATE_HOVER, GetDBString( 11130 ) + GetDBString( 11132 ) );
+				pNext->AddTextState( CHoverButton::STATE_NORMAL, GetDBString( 11129 ) + GetDBString( 11132 ) );
+
+				pAllies = new CScriptHoverButton( sEvent.pLoader->GetControl( "allies" ), pInterface );
+				pAllies->AddTextState( CHoverButton::STATE_HOVER, GetDBString( 11130 ) + GetDBString( 11132 ) );
+				pAllies->AddTextState( CHoverButton::STATE_NORMAL, GetDBString( 11129 ) + GetDBString( 11132 ) );
+				break;
+			}
+	}
+
+	return CWindow::ProcessMessage( sEvent );
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+} // NAMESPACE
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace NGame
+{
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// CSideMenuInterface
+////////////////////////////////////////////////////////////////////////////////////////////////////
+class CSideMenuInterface: public CRenderBaseInterface
+{
+	OBJECT_BASIC_METHODS(CSideMenuInterface);
+private:
+	NInput::CBind bindClose, bindNext;
+
+	ZDATA_(CRenderBaseInterface)
+	CObj<NUI::CSideMenuUI> pSideMenuUI;
+public:
+	ZEND int operator&( CStructureSaver &f ) { f.Add(1,(CRenderBaseInterface*)this); f.Add(2,&pSideMenuUI); return 0; }
+
+public:
+	CSideMenuInterface();
+
+	void Initialize();
+
+	void Step();
+	bool ProcessEvent( const NInput::SEvent &sEvent );
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// CSideMenuInterface
+////////////////////////////////////////////////////////////////////////////////////////////////////
+CSideMenuInterface::CSideMenuInterface():
+	bindClose( "cancel" ), bindNext( "next" )
+{
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CSideMenuInterface::Initialize()
+{
+	CRenderBaseInterface::Initialize( N_SIDEMENU_TEMPLATE );
+
+	CPtr<NDb::CDBCamera> pDBCamera = NDb::GetDBCamera( N_SIDEMENU_CAMERA );
+	ICamera::SCameraPos sCameraPos( pDBCamera->vAnchor, pDBCamera->fDistance, pDBCamera->fPitch, pDBCamera->fYaw, pDBCamera->fRoll, pDBCamera->fFOV );
+	GetCamera()->SetPlacement( sCameraPos );
+
+	pSideMenuUI = new NUI::CSideMenuUI( NUI::SWindowInfo( GetInterface(), NUI::SPoint( 0, 0 ), NUI::SPoint( 1024, 768 ), "mainmenuUI" ), this );
+	NUI::LoadTemplate( pSideMenuUI, NDb::GetUIContainer( 353 ) );
+	pSideMenuUI->ShowWindow( NUI::SWTYPE_SHOW );
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CSideMenuInterface::ProcessEvent( const NInput::SEvent &sEvent )
+{
+	NInput::SetSection( "menu" );
+
+	if ( CRenderBaseInterface::ProcessEvent( sEvent ) )
+		return true;
+
+	if ( bindClose.ProcessEvent( sEvent ) )
+	{
+		NMainLoop::Command( new NMainLoop::CICExitModal() ); 
+		return true;
+	}
+	else if ( bindNext.ProcessEvent( sEvent ) )
+	{
+		switch( pSideMenuUI->GetSide() )
+		{
+		case NUI::CSideMenuUI::SIDE_AXIS:
+			{
+				NMainLoop::Command( new NGame::CICHeroMenu( NDb::GetDBSide( N_SIDE_AXIS ) ) ); 
+				break;
+			}
+		case NUI::CSideMenuUI::SIDE_ALLIES:
+			{
+				NMainLoop::Command( new NGame::CICHeroMenu( NDb::GetDBSide( N_SIDE_ALLIES ) ) ); 
+				break;
+			}
+		}
+		return true;
+	}
+
+	return false;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CSideMenuInterface::Step()
+{
+	CRenderBaseInterface::Step();
+
+	if ( CanRender() )
+	{
+		NUI::SRect sScrWindow;
+		NUI::SPoint sScrPosition;
+		NUI::CWindow *pClientWindow = NUI::GetUIWindow<NUI::CWindow>( pSideMenuUI, "clientview" );
+		const NUI::SPoint &sScrSize = pClientWindow->GetSize();
+		pClientWindow->ClientToScreen( &sScrPosition, &sScrWindow );
+
+		NUI::SRect sScrClientRect( sScrPosition.x, sScrPosition.y, sScrPosition.x + sScrSize.x, sScrPosition.y + sScrSize.y );
+		GetCamera()->SetScreenRect( CTRect<float>( float( sScrClientRect.x1 ) / 1024.0f, float( sScrClientRect.y1 ) / 768.0f, float( sScrClientRect.x2 ) / 1024.0f, float( sScrClientRect.y2 ) / 768.0f ) );
+
+		RenderFrame( GetTime(), GetCamera() );
+	}
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// CICMainMenu
+////////////////////////////////////////////////////////////////////////////////////////////////////
+CICSideMenu::CICSideMenu()
+{
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CICSideMenu::Exec()
+{
+	CSideMenuInterface *pRes = new CSideMenuInterface;
+	pRes->Initialize();
+	PushInterface( pRes );
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+using namespace NUI;
+REGISTER_SAVELOAD_CLASS( 0xB1112180, CSideMenuUI );
+REGISTER_SAVELOAD_CLASS( 0xB1112181, CScriptHoverButton );
+using namespace NGame;
+REGISTER_SAVELOAD_CLASS( 0xB111218A, CSideMenuInterface );
