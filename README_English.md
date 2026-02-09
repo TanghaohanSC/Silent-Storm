@@ -106,6 +106,7 @@ This is a **historical source code release** from 2003. The code is provided as-
 
 - **Issues:** Use GitHub Issues
 - **Improvements:** If you want to suggest a fix or new feature, please create a pull request
+- **Community:** If you are an owner or active participant of a game community and you are interested in the project development, please write to karim.kimsanbaev@gmail.com.
 
 ---
 

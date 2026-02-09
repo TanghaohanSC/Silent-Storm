@@ -106,6 +106,7 @@ Il s'agit d'une **publication historique du code source** de 2003. Le code est f
 
 - **Problèmes:** Utilisez GitHub Issues
 - **Améliorations:** Si vous souhaitez suggérer une correction ou une nouvelle fonctionnalité, veuillez créer une pull request
+- **Communauté :** Si vous êtes propriétaire ou participant actif de la communauté du jeu et que vous êtes intéressé par le développement du projet, veuillez écrire à karim.kimsanbaev@gmail.com.
 
 ---
 

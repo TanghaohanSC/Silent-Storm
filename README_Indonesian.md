@@ -106,6 +106,7 @@ Ini adalah **rilis kode sumber historis** dari tahun 2003. Kode disediakan apa a
 
 - **Masalah:** Gunakan GitHub Issues
 - **Perbaikan:** Jika Anda ingin menyarankan perbaikan atau fitur baru, silakan buat pull request
+- **Komunitas:** Jika Anda adalah pemilik atau peserta aktif komunitas game dan Anda tertarik dengan pengembangan proyek, silakan tulis ke karim.kimsanbaev@gmail.com.
 
 ---
 

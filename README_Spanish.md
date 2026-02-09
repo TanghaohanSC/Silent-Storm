@@ -106,6 +106,7 @@ Este es un **lanzamiento histórico del código fuente** de 2003. El código se 
 
 - **Problemas:** Use GitHub Issues
 - **Mejoras:** Si desea sugerir una corrección o nueva función, por favor cree un pull request
+- **Comunidad:** Si eres propietario o participante activo de la comunidad del juego y estás interesado en el desarrollo del proyecto, por favor escribe a karim.kimsanbaev@gmail.com.
 
 ---
 

@@ -106,6 +106,7 @@ Dies ist eine **historische Quellcode-Veröffentlichung** aus dem Jahr 2003. Der
 
 - **Probleme:** Verwenden Sie GitHub Issues
 - **Verbesserungen:** Wenn Sie eine Korrektur oder neue Funktion vorschlagen möchten, erstellen Sie bitte einen Pull Request
+- **Community:** Wenn Sie ein Eigentümer oder aktives Teilnehmer der Game-Community sind und an der Projektentwicklung interessiert sind, schreiben Sie bitte an karim.kimsanbaev@gmail.com.
 
 ---
 

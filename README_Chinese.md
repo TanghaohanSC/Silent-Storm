@@ -106,6 +106,7 @@
 
 - **问题**：使用 GitHub Issues
 - **改进**：如果您想建议修复或新功能，请创建 pull request
+- **社区**：如果您是游戏社区的所有者或活跃成员，并且对项目发展感兴趣，请发送邮件至 karim.kimsanbaev@gmail.com。
 
 ---
 
