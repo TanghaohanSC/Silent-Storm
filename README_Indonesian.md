@@ -1,52 +1,44 @@
-﻿[English](README_English.md)        [Русский](README_Russian.md)        [中文](README_Chinese.md)        [हिन्दी](README_Hindi.md)        [Español](README_Spanish.md)        [Français](README_French.md)        [Deutsch](README_German.md)        [Português](README_Portuguese.md)        [日本語](README_Japanese.md)        [Bahasa Indonesia](README_Indonesian.md)
+[English](README.md)        [Русский](README_Russian.md)        [中文](README_Chinese.md)        [हिन्दी](README_Hindi.md)        [Español](README_Spanish.md)        [Français](README_French.md)        [Deutsch](README_German.md)        [Português](README_Portuguese.md)        [日本語](README_Japanese.md)        [Bahasa Indonesia](README_Indonesian.md)
 
-[![Silent Storm](https://img.shields.io/badge/Game-Silent_Storm-blue.svg)](https://en.wikipedia.org/wiki/Silent_Storm)
-[![License: Custom](https://img.shields.io/badge/License-Nival_Ltd-yellow.svg)](../../LICENSE.md)
-[![Language: C++](https://img.shields.io/badge/Language-C%2B%2B-blue.svg)](https://isocpp.org/)
+[![Silent Storm Trailer](Silent_Storm.png)](https://www.youtube.com/watch?v=ugRAaC7K_1I)
 
-<p align="center">
-    <a href="https://www.youtube.com/watch?v=NPkFx1h1HEI">
-        <img src="Silent_Storm.png" width="320" alt="Silent Storm">
-    </a>
-</p>
+Permainan komputer [Silent Storm](https://en.wikipedia.org/wiki/Silent_Storm) adalah RPG taktis berbasis giliran yang dikembangkan oleh [Nival Interactive](http://nival.com/) dan dirilis pada tahun 2003.
 
-Permainan komputer [Silent Storm](https://en.wikipedia.org/wiki/Silent_Storm) adalah game strategi/RPG taktis berbasis giliran yang dikembangkan oleh [Nival Interactive](http://nival.com/), dirilis pada tahun 2003.
+Permainan ini masih tersedia di [Steam](https://store.steampowered.com/app/254960/Silent_Storm_Gold_Edition/) dan di [GOG.com](https://www.gog.com/game/silent_storm_gold).
 
-Game ini masih tersedia di [Steam](https://store.steampowered.com/app/254960/Silent_Storm_Gold_Edition/) dan [GOG.com](https://www.gog.com/game/silent_storm_gold).
+Pada tahun 2026, kode sumber permainan ini dirilis di bawah [special license](LICENSE.md) yang melarang penggunaan komersial, tetapi sepenuhnya terbuka untuk komunitas gim, pendidikan, dan riset. Harap pelajari dengan saksama ketentuan [license agreement](LICENSE.md) sebelum menggunakannya.
 
-Kode sumber game telah dirilis di bawah [lisensi khusus](../../LICENSE.md) dari Nival International Ltd., yang sepenuhnya terbuka untuk komunitas, tujuan pendidikan dan penelitian. Harap tinjau dengan cermat ketentuan [perjanjian lisensi](../../LICENSE.md) sebelum menggunakan.
+## Teknologi yang digunakan
 
-## Stack Teknologi
-
-- **Engine**: engine 3D proprietary, terutama ditulis dalam C++
-- **Bahasa scripting**: Lua 4.0
+- **Engine**: Engine 3D proprieter, terutama ditulis dalam C++
+- **Bahasa skrip**: Lua 4.0
 - **Animasi**: Sistem animasi kustom
-- **Video**: Bink Video Technology ⚠️ *Lisensi komersial - tidak termasuk*
-- **Suara**: FMOD sound system ⚠️ *Lisensi komersial - tidak termasuk*
+- **Video**: Bink Video Technology ⚠️ *Lisensi komersial — tidak disertakan*
+- **Suara**: Sistem suara FMOD ⚠️ *Lisensi komersial — tidak disertakan*
 - **Grafis**: DirectX 8
 
-## Apa yang ada di repositori ini
+## Isi repositori ini
 
 - `Soft/` — kode sumber dan alat pengembangan
-- `Complete/` — data dan sumber daya game
-- `Data/` — data konfigurasi game
+- `Complete/` — data dan sumber daya gim
+- `Data/` — data konfigurasi gim
 - `Tools/` — alat pengembangan dan build
-- `bin/` — file executable yang dikompilasi
-- `cfg/` — file konfigurasi
+- `bin/` — berkas executable yang telah dikompilasi
+- `cfg/` — berkas konfigurasi
 - `Versions/Current` — versi pengembang
 
 ---
 
-# Menjalankan Game
+# Menjalankan Gim
 
-## Peluncuran Dasar
+## Peluncuran dasar
 
-1. Navigasi ke direktori `bin/`
-2. Jalankan file executable game `Game.exe`
+1. Masuk ke direktori `bin/`.
+2. Jalankan berkas executable gim, `Game.exe`.
 
-Secara default, game berjalan dalam mode windowed pada resolusi 800x600. Untuk mode windowed, kedalaman warna untuk mode saat ini di Display Properties/Settings/Colors harus 32 bit (truecolor). Untuk menjalankan dalam mode layar penuh, gunakan parameter –fullscreen. Untuk mengubah resolusi, gunakan parameter –640, -1024, -1280 untuk resolusi 640x480, 1024x768, 1280x1024 masing-masing.
+Secara bawaan, gim berjalan dalam mode jendela dengan resolusi 800x600. Untuk mode jendela, kedalaman warna di Display Properties/Settings/Colors harus disetel ke 32-bit (true color). Untuk menjalankan dalam mode layar penuh, gunakan parameter `-fullscreen`. Untuk mengubah resolusi, gunakan parameter `-640`, `-1024`, atau `-1280` masing-masing untuk 640x480, 1024x768, atau 1280x1024.
 
-⚠️ Ada masalah saat menjalankan pada sistem operasi modern. Jika Anda menemukan solusi, harap beri tahu kami melalui GitHub Issues.
+⚠️ Ada masalah saat menjalankan gim di sistem operasi modern. Jika Anda menemukan solusinya, harap beri tahu kami melalui GitHub Issues.
 
 ---
 
@@ -58,59 +50,23 @@ Secara default, game berjalan dalam mode windowed pada resolusi 800x600. Untuk m
 
 ---
 
-# Membangun Proyek
+# Melakukan Build Proyek
 
-## Persyaratan Build
+## Persyaratan build
 
 - Microsoft Visual Studio .NET 2003
 - DirectX 8.1 SDK
 
 ---
 
-## Informasi Lisensi
+### ⚠️ Alat tambahan yang tidak disertakan dalam kode sumber:
 
-Proyek ini dirilis di bawah **lisensi khusus non-komersial** dari NIVAL INTERNATIONAL LTD.
-
-### ⚠️ Alat tambahan yang tidak termasuk dalam kode sumber:
-
-- **FMOD Audio System**
+- **Sistem Audio FMOD**
 - **Bink Video Technology**
 
 ### 📋 Lisensi komponen pihak ketiga:
 
-- **STLport** - Lisensi mirip BSD
-- **zlib** - Lisensi zlib
-- **Lua 4.0** - Lisensi mirip MIT
-- **Ogg Vorbis** - Lisensi mirip BSD
-
-Harap tinjau dengan cermat [perjanjian lisensi](../../LICENSE.md) lengkap sebelum menggunakan kode ini.
-
----
-
-# Informasi Tambahan
-
-## Status Proyek
-
-Ini adalah **rilis kode sumber historis** dari tahun 2003. Kode disediakan apa adanya untuk tujuan pendidikan, pelestarian, dan pengembangan komunitas potensial.
-
-| Komponen                          | Catatan                          |
-|-----------------------------------|----------------------------------|
-| Build asli (VS .NET 2003)         | Memerlukan alat asli             |
-| Dependensi proprietary dihapus    | FMOD, Bink memerlukan pengganti  |
-
-## Penulis
-
-**Pengembangan Asli:** Nival Interactive (2001-2003)
-
-## Dukungan
-
-- **Masalah:** Gunakan GitHub Issues
-- **Perbaikan:** Jika Anda ingin menyarankan perbaikan atau fitur baru, silakan buat pull request
-- **Komunitas:** Jika Anda adalah pemilik atau peserta aktif komunitas game dan Anda tertarik dengan pengembangan proyek, silakan tulis ke karim.kimsanbaev@gmail.com.
-
----
-
-> **Catatan:** Ini adalah rilis kode sumber historis. Game masih tersedia secara komersial. Harap dukung penerbit asli jika Anda menikmati game ini.
-
-**Silent Storm&trade;** adalah merek dagang dari pemiliknya. Repositori ini hanya untuk tujuan pendidikan dan pelestarian.
-
+- **STLport** — lisensi mirip BSD
+- **zlib** — Lisensi zlib
+- **Lua 4.0** — lisensi mirip MIT
+- **Ogg Vorbis** — lisensi mirip BSD
