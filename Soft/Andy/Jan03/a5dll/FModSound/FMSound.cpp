@@ -4,6 +4,49 @@
 #include "FMSound.h"
 #include "..\Misc\HPTimer.h"
 
+// ---- Port compat block (Phase 0) ----
+// Missing FMOD 3.x flag constants not in fmod_stub.h
+#ifndef FSOUND_2D
+#  define FSOUND_2D             0x00000008
+#endif
+#ifndef FSOUND_HW3D
+#  define FSOUND_HW3D           0x00001000
+#endif
+#ifndef FSOUND_CAPS_EAX2
+#  define FSOUND_CAPS_EAX2      0x00000010
+#endif
+// Mixer type constants (debug-only switch, all map to 0 stub)
+#ifndef FSOUND_MIXER_MMXP5
+#  define FSOUND_MIXER_MMXP5            2
+#  define FSOUND_MIXER_MMXP6            3
+#  define FSOUND_MIXER_QUALITY_MMXP5    4
+#  define FSOUND_MIXER_QUALITY_MMXP6    5
+#endif
+
+// 4-param overload of FSOUND_Sample_Load (legacy FMOD 3.x API: no separate offset param)
+inline FSOUND_SAMPLE* FSOUND_Sample_Load(int index, const char* name, unsigned int mode, int length)
+{
+    return FSOUND_Sample_Load(index, name, mode, 0, length);
+}
+
+// 3D channel/listener attribute stubs (missing from fmod_stub.h)
+inline signed char FSOUND_3D_SetAttributes(int channel, const float* pos, const float* vel)
+{
+    (void)channel; (void)pos; (void)vel;
+    return 1;
+}
+inline signed char FSOUND_3D_Listener_SetAttributes(
+    const float* pos, const float* vel,
+    float fx, float fy, float fz,
+    float tx, float ty, float tz)
+{
+    (void)pos; (void)vel;
+    (void)fx; (void)fy; (void)fz;
+    (void)tx; (void)ty; (void)tz;
+    return 1;
+}
+// ---- End port compat block ----
+
 namespace NFMSound 
 {
 static bool bIsFMODInitialized = false;
@@ -35,7 +78,7 @@ struct SFSoundSample
 };
 #define NOCOPIES( c ) c(const c&) {ASSERT(0); } c& operator=(const c&) {ASSERT(0); return *this;}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Это данные по звуку которые распакованны и загруженны в FMod
+// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ FMod
 class CSample2D: public CObjectBase
 {
 	OBJECT_BASIC_METHODS(CSample2D);
@@ -46,7 +89,7 @@ public:
 	operator FSOUND_SAMPLE*() const { return sample.hSample; }
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Это данные по звуку которые распакованны и загруженны в FMod
+// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ FMod
 class CSample3D: public CObjectBase
 {
 	OBJECT_BASIC_METHODS(CSample3D);
@@ -199,7 +242,7 @@ void CSound3D::Update( double dInterval )
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-signed char __cdecl SynchCallback( FSOUND_STREAM *stream, void *buff, int len, int param );
+signed char __cdecl SynchCallback( FSOUND_STREAM *stream, void *buff, int len, void *param );
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class CStream: public CObjectBase
 {
@@ -233,7 +276,7 @@ public:
 		bool bRet;
 		if ( pStream )
 		{
-			bRet = FSOUND_Stream_SetSynchCallback( pStream, &SynchCallback, (int)this );
+			bRet = FSOUND_Stream_SetSynchCallback( pStream, (FSOUND_STREAMCALLBACK)&SynchCallback, (void*)this );
 			nChannel = FSOUND_Stream_Play( 0, pStream );
 			ASSERT( nChannel != -1 );
 			FSOUND_SetPan( nChannel, FSOUND_STEREOPAN );
@@ -275,7 +318,7 @@ public:
 		FSOUND_StopSound( nChannel );
 		nChannel = FSOUND_Stream_Play( 0, pStream );
 		FSOUND_Stream_SetTime( pStream, 1040 );
-		bool bRet = FSOUND_Stream_SetSynchCallback( pStream, &SynchCallback, (int)this );
+		bool bRet = (bool)FSOUND_Stream_SetSynchCallback( pStream, (FSOUND_STREAMCALLBACK)&SynchCallback, (void*)this );
 		return true;
 		PlayStream( szFileName.c_str(), bLoop );
 		return true;
@@ -314,7 +357,7 @@ public:
 	void SetVolume( int n ) { FSOUND_SetVolumeAbsolute( nChannel, n ); }
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-signed char __cdecl SynchCallback( FSOUND_STREAM *stream, void *buff, int len, int param )
+signed char __cdecl SynchCallback( FSOUND_STREAM *stream, void *buff, int len, void *param )
 {
 	if ( !buff )
 		return false;
