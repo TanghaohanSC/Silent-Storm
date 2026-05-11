@@ -559,8 +559,8 @@ class CAckLongBurst: public CAckBase
 	ZPARENT( CAckBase );
 	ZEND int operator&( CStructureSaver &f ) { f.Add(2,(CAckBase *)this); return 0; }
 public:
-	CAckLongBurst( CUnitServer *_pUnit = 0, NDb::CDBAck *_pDBAck = 0 ): 
-		registerEvent( this, OnEvent ), CAckBase( _pUnit, _pDBAck ) {}
+	CAckLongBurst( CUnitServer *_pUnit = 0, NDb::CDBAck *_pDBAck = 0 ):
+		registerEvent( this, &CAckLongBurst::OnEvent ), CAckBase( _pUnit, _pDBAck ) {}  // silent-storm-port
 	//
 	void OnEvent( const CEventOnUnitLongBurst &event )
 	{
@@ -577,14 +577,15 @@ class CAckUnhide: public CAckBase
 	ZPARENT( CAckBase );
 	ZEND int operator&( CStructureSaver &f ) { f.Add(2,(CAckBase *)this); return 0; }
 public:
-	CAckUnhide( CUnitServer *_pUnit = 0, NDb::CDBAck *_pDBAck = 0 ): 
-		registerEvent( this, OnEvent ), CAckBase( _pUnit, _pDBAck ) {}
+	CAckUnhide( CUnitServer *_pUnit = 0, NDb::CDBAck *_pDBAck = 0 ):
+		registerEvent( this, &CAckUnhide::OnEvent ), CAckBase( _pUnit, _pDBAck ) {}  // silent-storm-port
 	//
 	void OnEvent( const CEventOnUnitLongBurst &event )
 	{
-		if ( CDynamicCast<NWorld::CUnitServer> pWho( event.pWho ) )
+		CDynamicCast<NWorld::CUnitServer> pWho((event.pWho));
+		if ( pWho )
 		{
-			if ( GetUnit() == pWho.GetPtr() )
+			if ( GetUnit() == (NWorld::CUnitServer*)pWho )
 				PlayAck();
 		}
 	}

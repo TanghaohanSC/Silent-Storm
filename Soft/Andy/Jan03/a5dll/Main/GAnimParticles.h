@@ -148,7 +148,7 @@ public:
 class CATrailPath: public CAnimator
 {
 	OBJECT_BASIC_METHODS(CATrailPath);
-private:
+public:  // silent-storm-port: STrailPoint accessed by wBullet.cpp
 	struct STrailPoint
 	{
 		ZDATA
@@ -157,6 +157,7 @@ private:
 		STime sPassTime;
 		ZEND int operator&( CStructureSaver &f ) { f.Add(2,&vDir); f.Add(3,&vPosition); f.Add(4,&sPassTime); return 0; }
 	};
+private:
 	ZDATA_(CAnimator)
 	int nTrailCount;
 	STime sCast;

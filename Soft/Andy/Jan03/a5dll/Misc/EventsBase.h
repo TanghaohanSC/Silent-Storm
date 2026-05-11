@@ -25,6 +25,10 @@ class CEventRegister : public IEventRegister
 	typedef void (T::*Member)( const TParam &p );
 	Member func;
 	T *pRealObj;
+	// silent-storm-port: store typeid pointer at construction so the dtor
+	// doesn't re-evaluate typeid(TParam) — that requires TParam complete
+	// at every translation unit holding a CEventRegister field.
+	const type_info *pEventID;
 	//
 	CEventRegister() {ASSERT(0);}
 	void operator=( const CEventRegister &) {ASSERT(0);}
@@ -33,16 +37,17 @@ class CEventRegister : public IEventRegister
 public:
 	template<class TFunc>
 	CEventRegister( T *_pRealObj, TFunc _func )
-	{ 
+	{
 		pRealObj = _pRealObj;
 		func = (Member)_func;
-		RegisterEventHandler( this, typeid(TParam) );
+		pEventID = &typeid(TParam);
+		RegisterEventHandler( this, *pEventID );
 		if ( 0 )
 			(pRealObj->*func)( *(TParam*)0 );
 	}
-	~CEventRegister() 
+	~CEventRegister()
 	{
-		UnregisterEventHandler( this, typeid(TParam) );
+		UnregisterEventHandler( this, *pEventID );
 	}
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////

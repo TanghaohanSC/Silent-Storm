@@ -72,7 +72,8 @@ CUnitTab::CUnitTab( const SWindowInfo &sInfo, NGame::IMission *_pMission ):
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CUnitTab::CanHandleState( NGame::IState *pState ) const
 {
-	if ( CDynamicCast<NGame::CStateMove> pMove( pState ) )
+	CDynamicCast<NGame::CStateMove> pMove((pState));
+	if ( pMove )
 		return false;
 
 	return true;
@@ -509,7 +510,7 @@ void CInfoPanelSlot::GetItemsList( vector<SItem> *pItemsSet )
 	CPtr<NRPG::IInventoryItem> pItem = pInfo->Get( eType );
 	if ( IsValid( pItem ) )
 	{
-		SItem &sItem = *pItemsSet->insert( pItemsSet->end() );
+		SItem &sItem = *pItemsSet->emplace(pItemsSet->end());
 		sItem.sPos = CTPoint<int>( 0, 0 );
 		sItem.pItem = pItem;
 	}
@@ -589,7 +590,8 @@ void CInfoPanelSlot::Draw( const STime &sTime, NGScene::I2DGameView *pView )
 	pFade->SetStyle( STYLE_VISIBLE, pInventory->GetActiveSlot() != eType );
 
 	CPtr<NRPG::IInventoryItem> pItem = pInventory->Get( eType );
-	if ( CDynamicCast<NRPG::IWeaponItemInfo> pWeapon( pItem ) )
+	CDynamicCast<NRPG::IWeaponItemInfo> pWeapon((pItem));
+	if ( pWeapon )
 	{
 		CPtr<NRPG::IClipItem> pRPGClipItem = pWeapon->GetInnerClip();
 		pReload->SetStyle( STYLE_VISIBLE, true );

@@ -66,7 +66,8 @@ static void SetOneWaypointRoute( NWorld::CUnitServer *pUS, NAI::CAIRouteWaypoint
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitSetToWaypoint, "us" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		CPtr<NAI::CAIRouteWaypoint> pWaypoint = pScript->pWorld->GetWaypoint( luaParams[ 1 ].s );
 		if ( IsValid( pWaypoint ) )
@@ -84,12 +85,14 @@ BEGIN_SCRIPT_COMMAND( UnitSetToWaypoint, "us" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitMoveToWaypoint, "us" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		CPtr<NAI::CAIRouteWaypoint> pWaypoint = pScript->pWorld->GetWaypoint( luaParams[ 1 ].s );
 		if ( IsValid( pWaypoint ) )
 		{
-			if ( CDynamicCast<NAI::CAICommander> pAICommander( pUS->GetPlayer()->GetCommander() ) )
+			CDynamicCast<NAI::CAICommander> pAICommander((pUS->GetPlayer()->GetCommander()));
+			if ( pAICommander )
 			{
 				// AI Unit
 				SetOneWaypointRoute( pUS, pWaypoint );			
@@ -107,7 +110,8 @@ BEGIN_SCRIPT_COMMAND( UnitMoveToWaypoint, "us" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitRoaming, "usn" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		CPtr<NAI::CAIRouteWaypoint> pWaypoint = pScript->pWorld->GetWaypoint( luaParams[ 1 ].s );
 		if ( IsValid( pWaypoint ) )

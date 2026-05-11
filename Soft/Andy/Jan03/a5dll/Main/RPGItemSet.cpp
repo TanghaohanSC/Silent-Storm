@@ -130,7 +130,8 @@ CWeaponItem::CWeaponItem( NDb::CRPGWeapon *_pWeapon )
 	int nAmmoQuantity = pDBWeapon->pInnerClip->nQuantity;
 	if ( pDBWeapon->nInnerClipAmmoQuantity > 0 )
 		nAmmoQuantity = pDBWeapon->nInnerClipAmmoQuantity;
-	if ( CDynamicCast<CClipItem> pTmpClip( CreateClipItem( pDBWeapon->pInnerClip,	0, nAmmoQuantity ) ) )
+	CDynamicCast<CClipItem> pTmpClip(CreateClipItem( pDBWeapon->pInnerClip,	0, nAmmoQuantity));
+	if ( pTmpClip )
 	{
 		pInnerClip = pTmpClip;
 		pInnerClip->SetMaxIncQuantity( nAmmoQuantity );
@@ -220,7 +221,7 @@ void CWeaponItem::CreateNewAttackPortion( vector<CAttackPortion> *pRes, bool bSp
 	float fUW = pInnerClip->GetDBAmmo()->fUnitWeight;
 	int nK = (int)( fUW * pDBWeapon->nInitialVelocity );
 	pRes->push_back( CAttackPortion( nK, pInnerClip->GetDBAmmo()->nBulletType, info.nDmgMin, info.nDmgMax,
-	info.nArmorPiercingAbility, 0 ) ); // вероятность и сложность critical вычисляется в RPGUnitMission
+	info.nArmorPiercingAbility, 0 ) ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ critical пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ RPGUnitMission
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 int CWeaponItem::GetClipType() const
@@ -264,13 +265,14 @@ bool CWeaponItem::FindProperClip( IInventoryInfo *pInventory,
 	SFindClipResult *pResult, bool bCheckSameColor ) const
 {
 	ASSERT( pResult );
-	// если патроны в рожке не закончились, то туда можно сыпать только тот же тип патронов
+	// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	bool bSameColor = bCheckSameColor || pInnerClip->GetIncQuantity() > 0;
-	// Ищем обойму такого же типа как сейчас в оружии
-	// ищем в slot-ах
+	// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+	// пїЅпїЅпїЅпїЅ пїЅ slot-пїЅпїЅ
 	for ( int i = 0; i < NDb::N_SLOTS; ++i )
 	{
-		if ( CDynamicCast<CClipItem> pClip( pInventory->Get( NDb::ESlot(i) ) ) )
+		CDynamicCast<CClipItem> pClip(pInventory->Get( NDb::ESlot(i)));
+		if ( pClip )
 		{
 			if ( pInnerClip->IsCompatible( pClip, bSameColor ) )
 			{
@@ -281,11 +283,12 @@ bool CWeaponItem::FindProperClip( IInventoryInfo *pInventory,
 			}
 		}
 	}
-	// ищем в рюкзаке
+	// пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	const vector<SBackPackItem> &items = pInventory->GetItems();
 	for ( int i = 0; i < items.size(); ++i )
 	{
-		if ( CDynamicCast<CClipItem> pClip( items[i].pItem ) )
+		CDynamicCast<CClipItem> pClip((items[i].pItem));
+		if ( pClip )
 		{
 			if ( pInnerClip->IsCompatible( pClip, bSameColor ) )
 			{
@@ -360,8 +363,9 @@ bool CWeaponItem::Unload( IInventory *pInventory )
 	//
 	while ( pInnerClip->GetIncQuantity() > 0 )
 	{
-		if ( CDynamicCast<CClipItem> pUnloadedClip( CreateClipItem( pInnerClip->GetDBClip(), 
-			pInnerClip->GetDBAmmo(), 0 ) ) )
+		CDynamicCast<CClipItem> pUnloadedClip((CreateClipItem( pInnerClip->GetDBClip(), 
+			pInnerClip->GetDBAmmo(), 0 )));
+		if ( pUnloadedClip )
 		{
 			int nUnload = min( pInnerClip->GetIncQuantity(), pInnerClip->GetDBClip()->nQuantity );
 			CPtr<IJoinSplit> pGet = pInnerClip->SplitItem( nUnload );
@@ -398,7 +402,7 @@ void CMeleeWeaponItem::CreateNewAttackPortion( vector<CAttackPortion> *pRes )
 	pRes->push_back( CAttackPortion( 
 		110, 2, 
 		pDBMelee->nDmgMin, pDBMelee->nDmgMax, 
-		0, 0 ) ); // piercing ability(+str*10), вероятность и сложность critical вычисляется в RPGUnitMission
+		0, 0 ) ); // piercing ability(+str*10), пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ critical пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ RPGUnitMission
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 NDb::EWeaponType CMeleeWeaponItem::GetWeaponType() const
@@ -453,7 +457,7 @@ IInventoryItem *CreateClipItem( NDb::CRPGClip *pDBClip, NDb::CRPGAmmo *pDBAmmo, 
 	CDBPtr<NDb::CRPGAmmo> pTmpDBAmmo = pDBAmmo;
 	if ( !IsValid( pTmpDBAmmo ) )
 	{
-		// ищем подходящие патроны
+		// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		CDBTable<NDb::CRPGAmmo> *pAmmoTable = NDatabase::GetTable<NDb::CRPGAmmo>();
 		CDBIterator<NDb::CRPGAmmo> i(*pAmmoTable);
 		while ( pAmmoTable && i.MoveNext() )
@@ -479,8 +483,8 @@ IInventoryItem *CreateClipItem( NDb::CRPGClip *pDBClip, NDb::CRPGAmmo *pDBAmmo, 
 	}
 	else
 	{
-		// В базе данных нет подходящего clip-а
-		// Ошибка дизайнеров
+		// пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ clip-пїЅ
+		// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		ASSERT( 0 );
 	}
 	//
@@ -583,23 +587,24 @@ IInventoryItem* CreateMeleeWeaponItem( NDb::CRPGMeleeWeapon *pDBMelee )
 IInventoryItem* CreateItem( CDBRecord *pItem )
 {
 	IInventoryItem *pIItem = 0;
-	if( CDynamicCast<NDb::CRPGWeapon> pWeapon(pItem) )
+	CDynamicCast<NDb::CRPGWeapon> pWeapon((pItem));
+	if ( pWeapon )
 		pIItem = CreateWeaponItem( pWeapon );
-	else if( CDynamicCast<NDb::CRPGClip> pClip(pItem) )
+	else if ( NDb::CRPGClip* pClip = (NDb::CRPGClip*)(CDynamicCast<NDb::CRPGClip>(pItem)) )
 		pIItem = CreateClipItem( pClip );
-	else if( CDynamicCast<NDb::CRPGGrenade> pGrenade(pItem) )
+	else if ( NDb::CRPGGrenade* pGrenade = (NDb::CRPGGrenade*)(CDynamicCast<NDb::CRPGGrenade>(pItem)) )
 		pIItem = CreateGrenadeItem( pGrenade );
-	else if( CDynamicCast<NDb::CRPGFirstAid> pFirstAid(pItem) )
+	else if ( NDb::CRPGFirstAid* pFirstAid = (NDb::CRPGFirstAid*)(CDynamicCast<NDb::CRPGFirstAid>(pItem)) )
 		pIItem = CreateFirstAidItem( pFirstAid );
-	else if( CDynamicCast<NDb::CRPGMeleeWeapon> pMelee(pItem) )
+	else if ( NDb::CRPGMeleeWeapon* pMelee = (NDb::CRPGMeleeWeapon*)(CDynamicCast<NDb::CRPGMeleeWeapon>(pItem)) )
 		pIItem = CreateMeleeWeaponItem( pMelee );
-	else if( CDynamicCast<NDb::CRPGMineDetector> pMD(pItem) )
+	else if ( NDb::CRPGMineDetector* pMD = (NDb::CRPGMineDetector*)(CDynamicCast<NDb::CRPGMineDetector>(pItem)) )
 		pIItem = new CMineDetectorItem( pMD );
-	else if( CDynamicCast<NDb::CRPGMine> pDB(pItem) )
+	else if ( NDb::CRPGMine* pDB = (NDb::CRPGMine*)(CDynamicCast<NDb::CRPGMine>(pItem)) )
 		pIItem = new CMineItem(pDB);
-	else if( CDynamicCast<NDb::CRPGTool> pDB(pItem) )
+	else if ( NDb::CRPGTool* pDB = (NDb::CRPGTool*)(CDynamicCast<NDb::CRPGTool>(pItem)) )
 		pIItem = new CToolItem(pDB);
-	else if( CDynamicCast<NDb::CRPGKey> pDB(pItem) )
+	else if ( NDb::CRPGKey* pDB = (NDb::CRPGKey*)(CDynamicCast<NDb::CRPGKey>(pItem)) )
 		pIItem = new CKeyItem(pDB);
 	else
 		ASSERT( 0 );

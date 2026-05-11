@@ -244,7 +244,8 @@ bool CAccidentalShotCritical::SetModifiers( CUnit *pRPGUnit, IUnitMission *pRPGM
 bool CDamageWeaponCritical::SetModifiers( CUnit *pRPGUnit, IUnitMission *pRPGMission )
 {
 	ASSERT( pRPGMission );
-	if ( CDynamicCast<CWeaponItem> pW( pRPGMission->GetInventory()->GetActive() ) )
+	CDynamicCast<CWeaponItem> pW((pRPGMission->GetInventory()->GetActive()));
+	if ( pW )
 	{
 		pRPGMission->AddLastCritical( GetCriticalType() );
 		pW->Damage();

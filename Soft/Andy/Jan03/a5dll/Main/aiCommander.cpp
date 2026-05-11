@@ -65,9 +65,11 @@ void CAICommander::GenerateCommand()
 	if ( !IsValid( pCommand ) )
 		pCommand = pTaskCommander->GetCommand();
 	// Передаем команду на исполнение
-	if ( CDynamicCast<NWorld::CCmdUnit> pCmdUnit( pCommand ) )
+	CDynamicCast<NWorld::CCmdUnit> pCmdUnit((pCommand));
+	if ( pCmdUnit )
 	{
-		if ( CDynamicCast<NWorld::CUnitServer> pUS( pCmdUnit->pUnit ) )
+		CDynamicCast<NWorld::CUnitServer> pUS((pCmdUnit->pUnit));
+		if ( pUS )
 		{
 			if ( pWorld->IsUnitActive( pUS ) && pUS->CanFight() )
 			{

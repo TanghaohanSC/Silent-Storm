@@ -52,6 +52,12 @@ public:
 	}
 	T* CreateObject( int nTypeID ) { newFunc f = typeInfo[ nTypeID ]; if ( f ) return f(); return 0; }
 	int GetObjectTypeID( T *pObject ) { return VFT2TypeID( GetObjectType( pObject ) ); }
+	// silent-storm-port: GetTypeID was `int GetTypeID(TT*=0){return VFT2TypeID(&typeid(TT));}`.
+	// Modern MSVC eagerly instantiates this whenever a CDBPtr<X> member's
+	// operator& is instantiated, forcing X to be complete everywhere a
+	// CDBPtr<X> field appears. The original VS2003 toolchain was lax. Move
+	// the typeid() into a non-template helper that the caller passes in.
+	int GetTypeIDByInfo( const type_info* ti ) { return VFT2TypeID( ti ); }
 	template<class TT>
 		int GetTypeID( TT *p = 0 ) { return VFT2TypeID( &typeid(TT) ); }
 };

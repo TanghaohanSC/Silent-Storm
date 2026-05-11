@@ -141,7 +141,7 @@ void CDecalsManager::Register( CDecal *pDecal, CDecalTarget *pTarget )
 		vector<CPtr<CDecal> > &decals = decalsPerUser[ targetParts[k] ];
 		for ( int i = 0; i < decals.size(); ++i )
 		{
-			if ( decals[i] == pDecal )
+			if ( decals[i].GetPtr() == pDecal )  // silent-storm-port: ambiguous CPtr==T*
 			{
 				bFound = true;
 				break;
@@ -165,7 +165,7 @@ void CDecalsManager::Unregister( CDecal *pDecal, CDecalTarget *pTarget )
 		int nRes = 0;
 		for ( int m = 0; m < d.size(); ++m )
 		{
-			if ( d[m] != pDecal )
+			if ( d[m].GetPtr() != pDecal )  // silent-storm-port: ambiguous CPtr!=T*
 				d[ nRes++ ] = d[m];
 		}
 		if ( nRes == 0 )

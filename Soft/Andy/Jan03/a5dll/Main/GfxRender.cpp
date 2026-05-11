@@ -35,7 +35,7 @@ static SRenderParam<SStencilMode> stencilMode( SStencilMode( STENCIL_NONE, 0, 0x
 static SRenderParam<EColorWriteMask> colorMode( COLORWRITE_ALL );
 static SRenderParam<EDepthMode> depthMode( DEPTH_NORMAL );
 static SRenderParam<ECullMode> cullMode( CULL_CW );
-static SRenderParam<SFBTransform> transformMode( SFBTransform() );
+static SRenderParam<SFBTransform> transformMode{ SFBTransform() };  // silent-storm-port: most-vexing-parse
 static NWin32Helper::com_ptr<IDirect3DSurface9> pScreenColor, pScreenDepth, pRegisterDepth;
 static CDepthHash sharedZBuffers;
 static CMObj<CTexture> pRegisters[N_MAX_REGISTERS];
@@ -1163,7 +1163,7 @@ bool InitZBuffer( D3DFORMAT format )
 	ASSERT( D3D_OK == hr );
 	hr = pDevice->GetDepthStencilSurface( pScreenDepth.GetAddr() );
 	ASSERT( D3D_OK == hr );
-	// обрядовый ритуал, без которого nVidia не работает
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ nVidia пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	for ( int k = 0; k < nScreenRegisters; ++ k )
 	{
 		NWin32Helper::com_ptr<IDirect3DSurface9> pTB;

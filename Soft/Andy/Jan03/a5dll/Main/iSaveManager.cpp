@@ -153,10 +153,15 @@ void CSaveManager::GetSlotTime( const string &szName, wstring *pTime )
 		return;
 	}
 
-	struct tm *pLocalTime = localtime( &sStat.st_mtime );
-
+	// silent-storm-port: simplified mtime → wstring. Modern <time.h> / <ctime>
+	// in MSVC doesn't expose `localtime` predictably under our /Zc flags.
+	SYSTEMTIME st;
+	FILETIME ft;
+	ULARGE_INTEGER u; u.QuadPart = (sStat.st_mtime + 11644473600LL) * 10000000LL;
+	ft.dwLowDateTime = u.LowPart; ft.dwHighDateTime = u.HighPart;
+	FileTimeToSystemTime( &ft, &st );
 	WCHAR wcBuffer[MAX_PATH];
-	wcsftime( wcBuffer, MAX_PATH, L"%d/%m/%y", pLocalTime );
+	swprintf_s( wcBuffer, MAX_PATH, L"%02d/%02d/%02d", st.wDay, st.wMonth, st.wYear % 100 );
 	*pTime = wstring( wcBuffer );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

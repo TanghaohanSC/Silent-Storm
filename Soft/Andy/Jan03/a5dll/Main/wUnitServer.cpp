@@ -77,7 +77,7 @@ void CPathViewer::SetPath( NAI::CPath *pPath )
 	}*/
 	if ( IsValid( pMove ) )
 	{
-		IExecMove *pExec = dynamic_cast<IExecMove*>( pMove.GetPtr() );
+		IExecMove *pExec = dynamic_cast<IExecMove*>( pMove.GetPtr() );  // silent-storm-port: pMove is CObj
 		pExec->SetNewPath( pPath, NAI::PF_DEFAULT );
 	}
 	else
@@ -103,7 +103,7 @@ void CPathViewer::GetPoints( vector<SPathPoint> *pRes )
 		return;
 	}
 
-	IExecMove *pExec = dynamic_cast<IExecMove*>( pMove.GetPtr() );
+	IExecMove *pExec = dynamic_cast<IExecMove*>( pMove.GetPtr() );  // silent-storm-port: pMove is CObj
 	list<IExecMove::SPathPoint> pointsList;
 	pExec->GetPathPoints( &pointsList );
 
@@ -120,14 +120,14 @@ void CPathViewer::GetPoints( vector<SPathPoint> *pRes )
 // CUnitServer
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CUnitServer::CUnitServer():
-	registerOnNewPlayerTurnOrTime( this, OnNewPlayerTurnOrTime )
+	registerOnNewPlayerTurnOrTime( this, &CUnitServer::OnNewPlayerTurnOrTime )
 {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CUnitServer::CUnitServer( CWorld *pWorld, NRPG::IUnitMission *_pRPG, NDb::CModel *pModel, 
 	CPlayer *_pPlayer, const NAI::SUnitPosition &pos )
 	:CDumbUnitServer( pWorld, _pRPG, pModel, pos ), bIsPK( false ),
-	registerOnNewPlayerTurnOrTime( this, OnNewPlayerTurnOrTime ), bCanTalk( false ), nDialog( 0 )
+	registerOnNewPlayerTurnOrTime( this, &CUnitServer::OnNewPlayerTurnOrTime ), bCanTalk( false ), nDialog( 0 )
 {
 	pPlayer = _pPlayer;
 	bCallTimeLabel = false;
@@ -181,12 +181,12 @@ void CUnitServer::Die( bool bRemove )
 	GetWorld()->OnUnitDied( this );
 	if ( !bRemove )
 		GetWorld()->GetGlobalAck()->OnUnitDied( this );
-	// убираем ack-и этого unit-а
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ ack-пїЅ пїЅпїЅпїЅпїЅпїЅ unit-пїЅ
 	GetWorld()->GetGlobalAck()->RemoveUnitAcks( this );
 	//
 	if ( !bRemove )
 	{
-		// новое состояние
+		// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		pState->OnDeath();
 		pExec = 0;
 		pCurrentCmd = 0;
@@ -296,20 +296,22 @@ void CUnitServer::Do( CCommand *_pCmd )
 	ASSERT( !bIsRunningForcedAction );
 	if ( bIsRunningForcedAction )
 		return;
-	if ( CDynamicCast<CCmdCancel> p( _pCmd ) )
+	CDynamicCast<CCmdCancel> p((_pCmd));
+	if ( p )
 	{
 		//OutputDebugString(" CCmdCancel \n");
 		CancelAction();
 		//
-		CancelSnipe(); // нельзя вызывать в CancelAction()
+		CancelSnipe(); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ CancelAction()
 		CancelHeal();
 		//
 		pCurrentCmd = 0;
 		return;
 	}
-	else if ( CDynamicCast<CCmdSetCommand> p( _pCmd ) )
+	else if ( CCmdSetCommand* p = (CCmdSetCommand*)(CDynamicCast<CCmdSetCommand>(_pCmd)) )
 	{
-		if ( CDynamicCast<CCmdEmpty> pEmpty(p->GetCmd()) )
+		CDynamicCast<CCmdEmpty> pEmpty(p->GetCmd());
+		if ( pEmpty )
 		{
 			//OutputDebugString(" CCmdEmpty \n");
 			return;
@@ -317,17 +319,20 @@ void CUnitServer::Do( CCommand *_pCmd )
 		if ( IsValid( pCurrentCmd ) && IsValid( pExec ) && pExec->IsExecuting() )
 		{
 			// some command is being executed - have to cancel previous and set new target
-			if ( CDynamicCast<CCmdContinue> pContinue(p->GetCmd()) )
+			CDynamicCast<CCmdContinue> pContinue(p->GetCmd());
+			if ( pContinue )
 			{
 				//OutputDebugString(" CCmdContinue, pExec is valid \n");
 				return;
 			}
-			if ( CDynamicCast<CCmdPath> pCmdPath(p->GetCmd()) )
+			CDynamicCast<CCmdPath> pCmdPath(p->GetCmd());
+			if ( pCmdPath )
 			{
 				EUnitCommandResult eResult;
 				if ( pState->IsCriticalsFailCommand( pCmdPath, &eResult )	)
 					return;
-				if ( CDynamicCast<IExecMove> pMove(pExec) )
+				CDynamicCast<IExecMove> pMove((pExec));
+				if ( pMove )
 				{
 					//OutputDebugString(" CCmdPath, pExec is valid and is a MoveExec\n");
 					vector<NAI::SPathPlace> dst;
@@ -350,7 +355,7 @@ void CUnitServer::Do( CCommand *_pCmd )
 			pExec->Cancel();
 			pAutoRunCmd = p->GetCmd();
 		}
-		else if ( CDynamicCast<CCmdContinue> pContinue(p->GetCmd()) )
+		else if ( CCmdContinue* pContinue = (CCmdContinue*)(CDynamicCast<CCmdContinue>(p->GetCmd() )) )
 		{
 			//OutputDebugString(" CCmdContinue, else \n");
 //			ASSERT( IsValid( pCurrentCmd ) );
@@ -409,7 +414,8 @@ EUnitCommandResult CUnitServer::CanDo( CCmd *p, int *pnStartAP, int *pnFullAP )
 	if ( pnFullAP )
 		*pnFullAP = -1;
 	//
-	if ( CDynamicCast<CCmdEmpty> pEmpty(p) )
+	CDynamicCast<CCmdEmpty> pEmpty((p));
+	if ( pEmpty )
 		return UCR_OK;
 	/*
 	// Reload
@@ -431,7 +437,8 @@ EUnitCommandResult CUnitServer::CanDo( CCmd *p, int *pnStartAP, int *pnFullAP )
 	}
 	*/
 	//
-	if ( CDynamicCast<CCmdContinue> pContinue(p) )
+	CDynamicCast<CCmdContinue> pContinue((p));
+	if ( pContinue )
 	{
 		if ( IsPerformingAction() )
 			return UCR_UNAVAILABLE;
@@ -459,8 +466,8 @@ EUnitCommandResult CUnitServer::CanDo( CCmd *p, int *pnStartAP, int *pnFullAP )
 	CDynamicCast<CCmdPath> pMove(p);
 	if ( pMove && ( !pnStartAP ) )
 	{
-		// Искать путь в случае, когда юнит стоит, а не лежит, гораздо быстрее. Поэтому проверка того, существует ли путь,
-		// производится с WishPose = STAND.
+		// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ,
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ WishPose = STAND.
 		vector<NAI::SPathPlace> dst;
 		dst.push_back( pMove->ptDst.p );
 		NAI::EPose curPose = GetWishPose();
@@ -766,12 +773,13 @@ void CUnitServer::Segment()
 			CDynamicCast<CUnitServer> pUS(locker);
 			if ( IsValid( pUS ) && !pUS->IsMoving() )
 			{
-				if ( pUS.GetPtr() == this ) // BUG - unit locks himself
+				if ( (CUnitServer*)pUS == this ) // BUG - unit locks himself
 				{
 					ASSERT(0);
 				}
 				// set new path
-				if ( CDynamicCast<IExecMove> pMove( pExec ) )
+				CDynamicCast<IExecMove> pMove((pExec));
+				if ( pMove )
 				{
 					NAI::SPathPlace desired;
 					NAI::EFindPathParams eParams;
@@ -870,7 +878,7 @@ void CUnitServer::UpdateVisible( SInterruptInfo *pRes )
 			}
 /*			if ( !pEnemy->CanFight() && find( oldVisible.begin(), oldVisible.end(), pEnemy ) != oldVisible.end() )
 			{
-				// продолжаем видеть все трупы
+				// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 				visible.push_back( pEnemy );
 				continue;
 			}*/
@@ -879,7 +887,7 @@ void CUnitServer::UpdateVisible( SInterruptInfo *pRes )
 			{
 				if ( find( oldVisible.begin(), oldVisible.end(), pEnemy ) != oldVisible.end() )
 				{
-					// враг потерян из вида
+					// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ
 					if ( pEnemy->CanFight() )
 						HearUnit( pEnemy );
 					if ( find( lostUnits.begin(), lostUnits.end(), pEnemy ) == lostUnits.end() )
@@ -903,7 +911,7 @@ void CUnitServer::UpdateVisible( SInterruptInfo *pRes )
 				else
 					pEnemy->Hide( false );
 			}
-			// говорим commander-у, что увидели Unit
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ commander-пїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ Unit
 			if ( pEnemy->CanFight() )
 				GetPlayer()->GetCommander()->OnSeeUnit( this, pEnemy );
 			//
@@ -1066,7 +1074,7 @@ void CUnitServer::UpdateCriticalsState()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CUnitServer::CanSnipe() const
 {
-	// есть снайперское оружие
+	// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	if ( !IsValid( GetUnitRPG()->GetWeaponItem() ) || !GetUnitRPG()->GetWeaponItem()->GetDBWeapon()->bScope )
 		return false;
 	//
@@ -1075,7 +1083,8 @@ bool CUnitServer::CanSnipe() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CUnitServer::IsSniping() const
 {
-	if ( CDynamicCast<CUnitStateSniping> pTmpState(pState) )
+	CDynamicCast<CUnitStateSniping> pTmpState((pState));
+	if ( pTmpState )
 		return true;
 	else
 		return false;
@@ -1083,13 +1092,15 @@ bool CUnitServer::IsSniping() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CUnitServer::CollectSnipeAP( int nExtraAP )
 {
-	if ( CDynamicCast<CUnitStateSniping> pSnipingState(pState) )
+	CDynamicCast<CUnitStateSniping> pSnipingState((pState));
+	if ( pSnipingState )
 		pSnipingState->CollectSnipeAP( nExtraAP );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CUnitServer::CancelSnipe()
 {
-	if ( CDynamicCast<CUnitStateSniping> pSnipingState(pState) )
+	CDynamicCast<CUnitStateSniping> pSnipingState((pState));
+	if ( pSnipingState )
 		pSnipingState->CancelSnipe();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1135,7 +1146,8 @@ void CUnitServer::FetchRPGAcks()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CUnitServer::CancelHeal()
 {
-	if ( CDynamicCast<CUnitStateHealer> pHealer( pState ) )
+	CDynamicCast<CUnitStateHealer> pHealer((pState));
+	if ( pHealer )
 		SetState( new CUnitStateNormal( this ) );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1274,13 +1286,14 @@ bool CUnitServer::GetBarrelDir( CRay *pRay )
 	barrel.rot.GetXAxis( &pRay->ptDir );
 	Normalize( &pRay->ptDir );
 //	if ( GetUnitRPG()->GetWeaponType() == NDb::WT_RLAUNCHER )
-//		pRay->ptDir = -pRay->ptDir; // это не баг, так сделано художниками // это все таки был баг :)
+//		pRay->ptDir = -pRay->ptDir; // пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ // пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ :)
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CDumbUnitServer *CUnitServer::GetCorpse()
 {
-	if ( CDynamicCast<CUnitStateCorpseCarrier> pCarrier( pState ) )
+	CDynamicCast<CUnitStateCorpseCarrier> pCarrier((pState));
+	if ( pCarrier )
 		return pCarrier->GetCorpse();
 	else
 		return 0;
@@ -1370,19 +1383,19 @@ bool CUnitServer::IsUnitVisible( const CUnit *pUnit ) const
 {
 	const list< CPtr<CUnitServer> > &visible = GetTBSVisible();
 	CDynamicCast<CUnitServer> pTargetUS( pUnit );
-	return find( visible.begin(), visible.end(), pTargetUS.GetPtr() ) != visible.end();
+	return find( visible.begin(), visible.end(), (CUnitServer*)pTargetUS ) != visible.end();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CUnitServer::IsUnitAudible( const CUnit *pUnit ) const
 {
 	CDynamicCast<CUnitServer> pTargetUS( pUnit );
-	return IsAudible( pTargetUS.GetPtr() );
+	return IsAudible( (CUnitServer*)pTargetUS );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CUnitServer::CheckStability()
 {
 	if ( CanFight() )
-		return; // падение и forced move происходят не здесь, а в конце WORLD'ового action'a
+		return; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ forced move пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ WORLD'пїЅпїЅпїЅпїЅпїЅ action'a
 	if ( IsEmptyPK() )
 		return;
 	if ( IsWearingPK() )

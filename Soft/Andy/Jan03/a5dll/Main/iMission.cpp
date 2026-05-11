@@ -536,16 +536,17 @@ NWorld::EUnitCommandResult CMission::CanDoCommand( NWorld::CCmd *pCmd, bool bNoT
 
 		if ( bNoTarget )
 		{
-			if ( CDynamicCast<NWorld::CCmdPath> pMove( pCmd ) )
+			CDynamicCast<NWorld::CCmdPath> pMove((pCmd));
+			if ( pMove )
 			{
 				if ( pMove->eParams != NAI::PF_USE_DIR )
 					pMove->ptDst = (*iTemp)->GetTargetPosition();
 				else
 					pMove->ptDst = pUnit->GetPosition().pos;
 			}
-			else if ( CDynamicCast<NWorld::CCmdLook> pLook( pCmd ) )
+			else if ( NWorld::CCmdLook* pLook = (NWorld::CCmdLook*)(CDynamicCast<NWorld::CCmdLook>(pCmd)) )
 				pLook->ptDst = pUnit->GetPosition().pos;
-			else if ( CDynamicCast<NWorld::CCmdSetMineOnTile> pMine( pCmd ) )
+			else if ( NWorld::CCmdSetMineOnTile* pMine = (NWorld::CCmdSetMineOnTile*)(CDynamicCast<NWorld::CCmdSetMineOnTile>(pCmd)) )
 				pMine->ptDst = pUnit->GetPosition().pos;
 		}
 
@@ -1273,7 +1274,8 @@ bool CMission::ProcessEvent( const NInput::SEvent &sEvent )
 		WeaponReload();
 	if ( bindItemUnload.ProcessEvent( sEvent ) )
 	{
-		if ( CDynamicCast<CStateUnloadItem> pState( GetState() ) )
+		CDynamicCast<CStateUnloadItem> pState(GetState());
+		if ( pState )
 		{
 			ResetState();
 		}
@@ -1650,7 +1652,8 @@ void CMission::SelectWeaponMode( int nInc )
 	CPtr<NRPG::IInventoryItem> pItem = unitsSet[0]->GetUnit()->GetRPG()->GetInventoryInfo()->GetActive();
 	if ( IsValid( pItem ) )
 	{
-		if ( CDynamicCast<NRPG::IWeaponItemInfo> pWeapon( pItem ) )
+		CDynamicCast<NRPG::IWeaponItemInfo> pWeapon((pItem));
+		if ( pWeapon )
 		{
 			int nMode = pWeapon->GetShootMode();
 			for ( int nTemp = 0; nTemp < NDb::SM_MAXVALUE; nTemp++ )
@@ -1740,7 +1743,8 @@ void CMission::TraceCursor()
 				break;
 			}
 
-			if ( CDynamicCast<NWorld::IItem> pTempItem( *iTemp ) )
+			CDynamicCast<NWorld::IItem> pTempItem((*iTemp));
+			if ( pTempItem )
 			{
 				pTraceObject = *iTemp;
 				break;
@@ -1813,11 +1817,12 @@ void CMission::ExecWorldCommands()
 		if ( !IsValid( pCmd ) )
 			return;
 
-		if ( CDynamicCast<NWorld::CUICmdPartFinished> pPartFinished( pCmd ) )
+		CDynamicCast<NWorld::CUICmdPartFinished> pPartFinished((pCmd));
+		if ( pPartFinished )
 		{
 			bWaitForPartFinished = false;
 		}
-		else if ( CDynamicCast<NWorld::CUICmdBeginSequence> pBeginSequence( pCmd ) )
+		else if ( NWorld::CUICmdBeginSequence* pBeginSequence = (NWorld::CUICmdBeginSequence*)(CDynamicCast<NWorld::CUICmdBeginSequence>(pCmd)) )
 		{
 			pCamera->SetLimits( ICamera::SCameraLimits() );
 			////
@@ -1825,17 +1830,18 @@ void CMission::ExecWorldCommands()
 			NUI::LoadTemplate( pMissionMovieUI, NDb::GetUIContainer( 364 ) );
 			pMissionMovieUI->ShowDesktop();
 		}
-		else if ( CDynamicCast<NWorld::CUICmdEndSequence> pEndSequence( pCmd ) )
+		else if ( NWorld::CUICmdEndSequence* pEndSequence = (NWorld::CUICmdEndSequence*)(CDynamicCast<NWorld::CUICmdEndSequence>(pCmd)) )
 		{
 			pCamera->SetLimits( cameraLimits );
 			////
 			for ( list<CObj<NUI::CDesktopWindow> >::reverse_iterator iTemp = desktopWindowsList.rbegin(); iTemp != desktopWindowsList.rend(); iTemp++ )
 			{
-				if ( CDynamicCast<NUI::CMissionMovieUI> pMissionMovieUI( *iTemp ) )
+				CDynamicCast<NUI::CMissionMovieUI> pMissionMovieUI((*iTemp));
+				if ( pMissionMovieUI )
 					pMissionMovieUI->HideDesktop();
 			}
 		}
-		else if ( CDynamicCast<NWorld::CUICmdPlayDialog> pDialog( pCmd ) )
+		else if ( NWorld::CUICmdPlayDialog* pDialog = (NWorld::CUICmdPlayDialog*)(CDynamicCast<NWorld::CUICmdPlayDialog>(pCmd)) )
 		{
 			if ( bWaitForPartFinished )
 			{
@@ -1847,11 +1853,11 @@ void CMission::ExecWorldCommands()
 			NUI::LoadTemplate( pMissionDlgUI, NDb::GetUIContainer( 364 ) );
 			pMissionDlgUI->ShowDesktop();
 		}
-		else if ( CDynamicCast<NWorld::CUICmdPlayAck> pAck( pCmd ) )
+		else if ( NWorld::CUICmdPlayAck* pAck = (NWorld::CUICmdPlayAck*)(CDynamicCast<NWorld::CUICmdPlayAck>(pCmd)) )
 			GetDesktop()->PlayAck( pAck->phrases.front() );
-		else if ( CDynamicCast<NWorld::CUICmdSetFloor> pFloor( pCmd ) )
+		else if ( NWorld::CUICmdSetFloor* pFloor = (NWorld::CUICmdSetFloor*)(CDynamicCast<NWorld::CUICmdSetFloor>(pCmd)) )
 			pScene->SetCutFloor( pFloor->nFloor );
-		else if ( CDynamicCast<NWorld::CUICmdShowClue> pClue( pCmd ) )
+		else if ( NWorld::CUICmdShowClue* pClue = (NWorld::CUICmdShowClue*)(CDynamicCast<NWorld::CUICmdShowClue>(pCmd)) )
 		{
 			if ( IsValid( pClue->pClue ) )
 				NMainLoop::Command( new NGame::CICShowClue( pGlobalGame, pClue->pClue ) );
@@ -2261,7 +2267,8 @@ static void CommandSetXPLevel( const string &szID, const vector<wstring> &params
 		return;
 	//
 	CObjectBase *pObject = (CObjectBase *)pContext;
-	if ( CDynamicCast<CMission> pMission( pObject) )
+	CDynamicCast<CMission> pMission((pObject));
+	if ( pMission )
 	{
 		CPtr<NWorld::IWorld> pWorld = pMission->GetWorld();
 		CPtr<IPlayerTracker> pTracker = pMission->GetActivePlayer();
@@ -2301,7 +2308,8 @@ static void CommandSummonUnit( const string &szID, const vector<wstring> &params
 		return;
 	//
 	CObjectBase *pObject = (CObjectBase *)pContext;
-	if ( CDynamicCast<CMission> pMission( pObject) )
+	CDynamicCast<CMission> pMission((pObject));
+	if ( pMission )
 		pMission->GetActivePlayer()->AddUnit( NRPG::CreateMerc( NDb::GetPers( _wtol( paramsSet[0].c_str() ) ) ) );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2313,7 +2321,8 @@ static void CommandUnsummonUnit( const string &szID, const vector<wstring> &para
 	int nTemp = _wtol( paramsSet[0].c_str() );
 	//
 	CObjectBase *pObject = (CObjectBase *)pContext;
-	if ( CDynamicCast<CMission> pMission( pObject ) )
+	CDynamicCast<CMission> pMission((pObject));
+	if ( pMission )
 	{
 		vector< CPtr<NGame::IUnitTracker> > unitsSet;
 		pMission->GetUnits( &unitsSet );

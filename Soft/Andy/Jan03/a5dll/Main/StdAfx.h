@@ -54,6 +54,33 @@ externA5 "C" __declspec(dllimport) DWORD __stdcall  GetTickCount();
 
 using namespace std;
 #include "Specific.h"
+
+// silent-storm-port: Modern MSVC eagerly instantiates CDBPtr<T>::operator&
+// (and CClassFactory<T>::GetTypeID) whenever an enclosing operator& is
+// processed, requiring T complete at every translation unit. Pull in the
+// full NDb data namespace globally so all common NDb:: types are complete
+// in every Main TU.
+#include "..\DBFormat\DataConst.h"
+#include "..\DBFormat\DataText.h"
+#include "..\DBFormat\DataSound.h"
+#include "..\DBFormat\DataLight.h"
+#include "..\DBFormat\DataCamera.h"
+#include "..\DBFormat\DataAnimation.h"
+#include "..\DBFormat\DataGeometry.h"
+#include "..\DBFormat\DataFormat.h"
+#include "..\DBFormat\DataAck.h"
+#include "..\DBFormat\DataAI.h"
+#include "..\DBFormat\DataDifficulty.h"
+#include "..\DBFormat\DataInterface.h"
+#include "..\DBFormat\DataObject.h"
+#include "..\DBFormat\DataPerk.h"
+#include "..\DBFormat\DataRpgConstants.h"
+#include "..\DBFormat\DataRPG.h"
+#include "..\DBFormat\DataRPGTmp.h"
+#include "..\DBFormat\DataScenario.h"
+#include "..\DBFormat\DataScript.h"
+#include "..\DBFormat\DataTerrain.h"
+#include "..\DBFormat\DataMap.h"
 //
 #define for if(false); else for
 #define dbgnew new

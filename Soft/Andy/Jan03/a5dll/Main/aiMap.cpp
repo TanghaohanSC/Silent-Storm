@@ -793,7 +793,7 @@ void CAIMap::AddPieces( NDb::CAIGeometry *pAIGeom, const vector<SPieceMap> &part
 		return;
 	pHull->pieces = pieces;
 	InsertHull( pHull );
-	Register( pHull.GetPtr() );
+	Register( (CConvexHull*)pHull );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CObjectBase* CAIMap::AddAnimatedHull( NDb::CAIGeometry *pAIGeom, NDb::CSkeleton *pSkeleton, 

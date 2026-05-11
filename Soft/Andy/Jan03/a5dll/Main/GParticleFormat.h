@@ -12,6 +12,13 @@ namespace NGScene
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template <class TValue>
 void Interpolate( const TValue &v1, const TValue &v2, float fAlpha, TValue *pRes );
+// silent-storm-port: declare non-template overloads so callers in templates
+// pick them instead of the never-defined primary template.
+void Interpolate( const CVec3 &v1, const CVec3 &v2, float fAlpha, CVec3 *pRes );
+void Interpolate( const CVec2 &v1, const CVec2 &v2, float fAlpha, CVec2 *pRes );
+void Interpolate( const float &v1, const float &v2, float fAlpha, float *pRes );
+void Interpolate( const DWORD &v1, const DWORD &v2, float fAlpha, DWORD *pRes );
+void Interpolate( const short &v1, const short &v2, float fAlpha, short *pRes );
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma pack( push, 2 )
 ////////////////////////////////////////////////////////////////////////////////////////////////////

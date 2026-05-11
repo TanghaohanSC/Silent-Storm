@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "DataFormat.h"
 #include "DataInterface.h"
+#include "DataSound.h"    // NDb::CSound full definition needed for GetTable<CSound>()
 
 namespace NDb
 {

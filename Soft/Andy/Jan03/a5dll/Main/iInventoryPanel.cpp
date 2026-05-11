@@ -53,7 +53,8 @@ CUnitModelShow::CUnitModelShow( const SWindowInfo &sInfo, NGame::IMission *_pMis
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CUnitModelShow::CanHandleState( NGame::IState *pState ) const
 {
-	if ( CDynamicCast<NGame::CStateDragItem> pDrag( pState ) )
+	CDynamicCast<NGame::CStateDragItem> pDrag((pState));
+	if ( pDrag )
 		return true;
 
 	return false;
@@ -276,7 +277,8 @@ void CInventoryPanel::Draw( const STime &sTime, NGScene::I2DGameView *pView )
 		NGame::IState *pState = pMission->GetState();
 
 		bool bUnload = false, bRepair = false;
-		if ( CDynamicCast<NGame::CStateUnloadItem> pUnloadItem( pState ) )
+		CDynamicCast<NGame::CStateUnloadItem> pUnloadItem((pState));
+		if ( pUnloadItem )
 			bUnload = true;
 	//	else if ( CDynamicCast<NGame::CStateRepairItem> pRepairItem( pState ) )
 	//		bRepair = true;
@@ -284,7 +286,8 @@ void CInventoryPanel::Draw( const STime &sTime, NGScene::I2DGameView *pView )
 		pUnload->SetChecked( bUnload );
 		pRepair->SetChecked( bRepair );
 
-		if ( CDynamicCast<NGame::CStateUnloadItem> pUnloadItem( pState ) )
+		CDynamicCast<NGame::CStateUnloadItem> pUnloadItem2((pState));
+		if ( pUnloadItem2 )
 			pUnload->SetChecked( true );
 		else
 			pUnload->SetChecked( false );

@@ -70,8 +70,8 @@
 #include "wMain.h"
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-const int N_REALTIME_TURN = 20000; // 20 с // turn, WaitForTurn, ...
-const int N_REALTIME_FAST_TURN = 6000; // 6 с // heal, unhide, ...
+const int N_REALTIME_TURN = 20000; // 20 пїЅ // turn, WaitForTurn, ...
+const int N_REALTIME_FAST_TURN = 6000; // 6 пїЅ // heal, unhide, ...
 externA5 vector<SSphere> sphereParticles; // for AI Sound test visualisation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 externA5 CPtr<NScript::CScript> pScript;
@@ -106,8 +106,11 @@ void CPlayer::SetCheat( int nCheat, bool bOn )
 	vector< CPtr<CUnit> > units;
 	GetUnits( &units );
 	for ( vector< CPtr<CUnit> >::iterator i = units.begin(); i != units.end(); ++i )
-		if ( CDynamicCast<CUnitServer> pUS( (*i).GetPtr() ) )
+	{
+		CDynamicCast<CUnitServer> pUS(( (*i).GetPtr() ));  // silent-storm-port: brace for-body
+		if ( pUS )
 			pUS->GetUnitRPG()->GetRPGUnit()->SetCheat( nCheat, bOn );
+	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CPlayer::GetVisible( list< CPtr<CUnit> > *pRes ) const
@@ -132,7 +135,8 @@ void CPlayer::GetTrappedObjectsList( list< CPtr<CObjectBase> > *pRes ) const
 		CObjectBase *p = *i;
 		if ( !IsValid(p) )
 			continue;
-		if ( CDynamicCast<IMine> pMine(p) )
+		CDynamicCast<IMine> pMine((p));
+		if ( pMine )
 		{
 			if ( pMine->IsMineSet() )
 				pRes->push_back( p );
@@ -259,7 +263,7 @@ void CPlayer::GetStoreItems( list<CPtr<NRPG::IInventoryItem> > *pItems )
 
 			if ( !bFound )
 			{
-				NRPG::SStoreItem &sItem = *storeItemsList.insert( storeItemsList.end() );
+				NRPG::SStoreItem &sItem = *storeItemsList.emplace(storeItemsList.end());
 				sItem.eType = NRPG::SStoreItem::REGEN_QUANTITY;
 				sItem.nRating = pItem->nRating;
 				sItem.fQuantity = pItem->fQuantity;
@@ -277,7 +281,7 @@ void CPlayer::GetStoreItems( list<CPtr<NRPG::IInventoryItem> > *pItems )
 
 					if ( nCount > 0 )
 					{
-						NRPG::SStoreItem &sItem = *storeItemsList.insert( storeItemsList.end() );
+						NRPG::SStoreItem &sItem = *storeItemsList.emplace(storeItemsList.end());
 						sItem.eType = NRPG::SStoreItem::CONST_QUANTITY;
 						sItem.nRating = -1;
 						sItem.fQuantity = Max( 0, pItem->pItem->sSize.y * ( N_STORESLOT_DEFWIDTH - pItem->pItem->sSize.x ) );
@@ -381,14 +385,14 @@ static void MakeUpperName( const string &szName, string *pUpperName )
 // CWorld
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CWorld::CWorld(): 
-	registerOnNewPlayerFastTurnOrTime( this, OnNewPlayerFastTurnOrTime )
+	registerOnNewPlayerFastTurnOrTime( this, &CWorld::OnNewPlayerFastTurnOrTime )
 {
 }
 //
 const int N_TEST_HIDDEN_DELTA = 10000;
 CWorld::CWorld( NRPG::CGlobalGame *_pGlobalGame ):
-	registerOnNewPlayerFastTurnOrTime( this, OnNewPlayerFastTurnOrTime ),
-	CDebrisController(), pGlobalGame( _pGlobalGame ), bForcedRealTime( false ), nTurnID( 0 ), bLeanAndMean( false )
+	registerOnNewPlayerFastTurnOrTime( this, &CWorld::OnNewPlayerFastTurnOrTime ),
+	CDebrisController(), pGlobalGame( _pGlobalGame ), bForcedRealTime( false ), nTurnID( 0 ), bLeanAndMean( false )  // silent-storm-port
 { 
 	tPrev = 0; 
 	tHiddenDelta = N_TEST_HIDDEN_DELTA;
@@ -494,13 +498,15 @@ CObjectServerBase *CWorld::AddObject( const SObjectPlace &pos,
 			pPassageObject = CreatePassageObject( this, pos, mapElement.bLightmap, pDBObject, pRPGObject, 
 					mapElement.nPassageZoneID, mapElement.nPassageObjectID, mapElement.nAPRadius, mapElement.flags );
 		}
-		if ( CDynamicCast<CObjectServerBase> pPassageObjectOS( pPassageObject ) )
+		CDynamicCast<CObjectServerBase> pPassageObjectOS((pPassageObject));
+		if ( pPassageObjectOS )
 		{
-			objects.push_back( pPassageObjectOS.GetPtr() );
-			if ( CDynamicCast<CAnimObjectServerBase> pAnimPassageObjectOS(pPassageObject) )
-				miscObjects.push_back( pAnimPassageObjectOS.GetPtr() );
+			objects.push_back( (CObjectServerBase*)pPassageObjectOS );
+			CDynamicCast<CAnimObjectServerBase> pAnimPassageObjectOS((pPassageObject));
+			if ( pAnimPassageObjectOS )
+				miscObjects.push_back( (CAnimObjectServerBase*)pAnimPassageObjectOS );
 			if ( pPassageObjectOS->NeedSegment() )
-				segmentObjects.push_back( pPassageObjectOS.GetPtr() );
+				segmentObjects.push_back( (CObjectServerBase*)pPassageObjectOS );
 			pResult = pPassageObjectOS;
 		}
 	}
@@ -717,10 +723,10 @@ void CWorld::CheckInterrupt( SInterruptInfo *info )
 	}
 	CPlayer *pWhoseTurn = GetTBSCurrentPlayer();
 	// determine interrupts strength
-	CPtr<IPlayer> pWhoPlayer = info->events.front().pWho->GetPlayer(); // удобство интерфейса
-	list< CPtr<CUnitServer> > unitsToCancelAction; // удобство интерфейса
+	CPtr<IPlayer> pWhoPlayer = info->events.front().pWho->GetPlayer(); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	list< CPtr<CUnitServer> > unitsToCancelAction; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	bool bCanCancel = ( IsRealTime() || pWhoPlayer.GetPtr() == pWhoseTurn )
-			&& !CDynamicCast<NAI::CAICommander>( pWhoPlayer->GetCommander() ); // удобство интерфейса
+			&& !CDynamicCast<NAI::CAICommander>( pWhoPlayer->GetCommander() ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	for ( list<SInterruptInfo::SNotice>::iterator i = info->events.begin(); i != info->events.end(); )
 	{
 		if ( bCanCancel && !i->bWasShot && !i->bIsMutual && i->pWho->GetPlayer() == pWhoPlayer )
@@ -744,13 +750,13 @@ void CWorld::CheckInterrupt( SInterruptInfo *info )
 	{
 		if ( !unitsToCancelAction.empty() )
 		{
-			// удобство интерфейса
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 			csSystem << CC_RED << "No interrupt, all commands were canceled" << endl;
 			for ( list< CPtr<CUnitServer> >::iterator i = unitsToCancelAction.begin(); i != unitsToCancelAction.end(); ++i )
 				(*i)->OnTBSEvent( TBS_CANCEL_ACTION );
 			//	(*i)->Do( new NWorld::CCmdCancel( *i ) );
 		}
-		// удобство интерфейса об мины
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ
 		vector<CPtr<CPlayer> > players;
 		GetPlayersList( &players );
 		for ( int k = 0; k < players.size(); ++k )
@@ -959,7 +965,7 @@ void CWorld::DistributeClues( const SMapInfo &mapInfo,
 	//
 	vector<SClueSlot> personSlots;
 	vector<SClueSlot> itemSlots;
-	// размещаем person clues
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ person clues
 	for ( vector<SClueSlot>::const_iterator slot = mapInfo.slots.begin();
 		slot != mapInfo.slots.end(); ++slot )
 		if ( slot->bPersSlot )
@@ -978,7 +984,7 @@ void CWorld::DistributeClues( const SMapInfo &mapInfo,
 					itemSlots.push_back( slot );
 				personSlots.erase( personSlots.begin() + n );
 			}
-	// размещаем item clues
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ item clues
 	for ( vector<SClueSlot>::const_iterator slot = mapInfo.slots.begin();
 		slot != mapInfo.slots.end(); ++slot )
 		if ( !slot->bPersSlot )
@@ -1010,7 +1016,7 @@ void CWorld::PlaceItemSlotsToMap( const ClueToSlot &clueToSlot )
 			CPtr<NRPG::IInventoryItem> pItem = NRPG::CreateClueItem( NDb::GetRPGItem( i->first->GetDBClue()->nItemID ) );
 			if ( IsValid( pItem ) )
 			{
-				// помещаем на карту
+				// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 				CQuat rot( ToRadian( i->second.pos.fRotation ), CVec3(0,0,1) );
 				CDFrozenItem *pFrozenItem = AddFrozenItem( i->second.pos.ptPos, rot, pItem, i->second.pos.nFloor );
 				if ( IsValid( pFrozenItem ) )
@@ -1037,7 +1043,7 @@ void CWorld::PlaceItemSlotsToInventory( const ClueToSlot &clueToSlot )
 			CPtr<NRPG::IInventoryItem> pItem = NRPG::CreateItem( NDb::GetRPGItem( i->first->GetDBClue()->nItemID )->pSuccessor );
 			if ( IsValid( pItem ) )
 			{
-				// помещаем в inventory
+				// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ inventory
 				CPtr<NWorld::CUnitServer> pUnitServer = GetUnitServerByPersID( i->second.pPers->nRPGPersID );
 				if ( IsValid( pUnitServer ) )
 				{
@@ -1057,7 +1063,7 @@ void CWorld::AddWaypoint( CMapWaypoint *pWaypoint )
 {
 	string szLowerName = pWaypoint->pName->szName;
 	NStr::ToLower( szLowerName );
-	ASSERT( !IsValid( waypoints[ szLowerName ] ) ); // два waypoint-а с одним именем
+	ASSERT( !IsValid( waypoints[ szLowerName ] ) ); // пїЅпїЅпїЅ waypoint-пїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	if ( !IsValid( waypoints[ szLowerName ] ) )
 	{
 		waypoints[ szLowerName ] = new NAI::CAIRouteWaypoint( GetPathNetwork(), pWaypoint );
@@ -1093,7 +1099,7 @@ void CWorld::CreateAIUnits( const SMapInfo &mapInfo, const ClueToSlot &personClu
 	nAIUnitsCreated = 0;
 	//
 	vector<SMapUnit> unitsToCreate;
-	// создаем список unit-ов которых надо создать
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ unit-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	for ( list<SMapUnit>::const_iterator i = mapInfo.units.begin(); i != mapInfo.units.end(); ++i )
 	{
 		int nPersID;
@@ -1120,7 +1126,7 @@ void CWorld::CreateAIUnits( const SMapInfo &mapInfo, const ClueToSlot &personClu
 			}
 		}
 	}
-	// создаем AI Player-ов
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ AI Player-пїЅпїЅ
 	for ( vector<SMapUnit>::const_iterator i = unitsToCreate.begin(); i != unitsToCreate.end(); ++i )
 	{
 		if ( !IsValid( GetPlayerByID( i->nScenarioPlayer ) ) )
@@ -1132,7 +1138,7 @@ void CWorld::CreateAIUnits( const SMapInfo &mapInfo, const ClueToSlot &personClu
 				UpdateAICommander( pAICommander );
 		}
 	}
-	// создаем AI Unit-ов
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ AI Unit-пїЅпїЅ
 	for ( int nUnitToCreate = 0; nUnitToCreate < unitsToCreate.size(); ++nUnitToCreate )
 	{
 		SMapUnit *i = &unitsToCreate[ nUnitToCreate ];
@@ -1161,7 +1167,7 @@ void CWorld::CreateAIUnits( const SMapInfo &mapInfo, const ClueToSlot &personClu
 		(*pIDToUnit)[ i->nUnitID ] = pUnitServer;
 
 		ASSERT( IsValid( pUnitServer ) );
-		// создаем route-ы
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ route-пїЅ
 		if ( IsValid( pUnitServer ) && !pUnitServer->IsEmptyPK() )
 		{
 			CDynamicCast<NAI::CAICommander> pAICommander( pPlayer->GetCommander() );
@@ -1223,7 +1229,8 @@ void CWorld::CreateObjects( const SMapInfo &mapInfo, CPostWorldCreateInfo *pPost
 	{
 		if ( IsValid( i->pItem ) && IsValid( i->pItem->pSuccessor ) )
 		{
-			if ( CDynamicCast<NDb::CRPGMine> pM( i->pItem->pSuccessor ) )
+			CDynamicCast<NDb::CRPGMine> pM((i->pItem->pSuccessor));
+			if ( pM )
 			{
 				if ( i->bArmed )
 				{
@@ -1335,7 +1342,7 @@ void CWorld::CreateRandom( int nVariantID, const vector<string> &params,
 		PlaceItemSlotsToMap( itemClueToSlot );
 		//CreateFakeTerrainInfo( &terrain );
 		//
-		// после этого момента не ставить объекты, влияющие на проходимость
+		// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		pAIMap->Sync();
 		// deploy units
 		// put some enemies
@@ -1343,7 +1350,7 @@ void CWorld::CreateRandom( int nVariantID, const vector<string> &params,
 		vector<NAI::SPathPlace> empty;
 		pPathNetwork->UpdateColouring( empty );
 		LoadWaypoints( mapInfo.waypoints );
-		// до этого момента не ставить персов
+		// пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 		pDeployedDeadUnitsPlayer = new CPlayer( L"Deployed dead units fake player", pGlobalGame, 0, -1 );
 		pDeployedDeadUnitsPlayer->SetCommander( new NWorld::CCommander );
 		//
@@ -1518,7 +1525,7 @@ IPlayer* CWorld::AddPlayer( const wstring &wsName, NRPG::CGlobalPlayer *pGlobalP
 
 		if ( pGlobalPlayer->deployData.bPassage )
 		{
-			// переход
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 			CPtr<IPassageObject> pPassageObject = 0;
 			for ( list< CPtr<IPassageObject> >::iterator j = passageObjects.begin(); j != passageObjects.end(); ++j )
 			{
@@ -1649,10 +1656,10 @@ void CWorld::MakeAISound( NDb::CAISound *pAISound, CDumbUnitServer *_pWho, int n
 		if ( pTarget != pWho )
 		{
 			float fDistance = fabs( pTarget->GetPosition().GetCP() - pWho->GetPosition().GetCP() ) / FP_GRID_STEP;
-			// а не вышел ли чувак за область постоянной слышимости?
+			// пїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ?
 			if ( fDistance > pTarget->GetUnitRPG()->GetAISoundConstants()->nExitRadius )
 				pTarget->SetAudible( pWho, false );
-			// а не слышим ли мы этот звук?
+			// пїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ?
 			if ( pTarget->CanHearSound( pWho->GetPosition().GetCP(), pAISound, nSoundType, pWho ) )
 			{
 				pTarget->HearSound( stuff, pWho, pWho->GetPosition().pos.p );
@@ -1699,21 +1706,22 @@ void CWorld::StartGame()
 void CWorld::ExecuteCommand( CCommand *_pCmd ) 
 {
 	CObj<CCommand> pHold(_pCmd); 
-	if ( CDynamicCast<CCmdInterfaceEvent> pEvent( _pCmd ) )
+	CDynamicCast<CCmdInterfaceEvent> pEvent((_pCmd));
+	if ( pEvent )
 		OnInterfaceEvent( pEvent->event, pEvent->type );
-	else if ( CDynamicCast<CCmdCallScriptFunction> pCall( _pCmd ) )
+	else if ( CCmdCallScriptFunction* pCall = (CCmdCallScriptFunction*)(CDynamicCast<CCmdCallScriptFunction>(_pCmd)) )
 		NScript::luaCallFunction( pCall->szFuncName, pCall->params );
-	else if ( CDynamicCast<CCmdAddUnit> pAddUnit( _pCmd ) )
+	else if ( CCmdAddUnit* pAddUnit = (CCmdAddUnit*)(CDynamicCast<CCmdAddUnit>(_pCmd)) )
 	{
 		CDynamicCast<CPlayer> pPlayer( pAddUnit->pPlayer );
 		AddUnitInGame( pAddUnit->sPos.p, NRPG::CreateUnit( pAddUnit->pMerc ), pPlayer );
 	}
-	else if ( CDynamicCast<CCmdRemoveUnit> pRemoveUnit( _pCmd ) )
+	else if ( CCmdRemoveUnit* pRemoveUnit = (CCmdRemoveUnit*)(CDynamicCast<CCmdRemoveUnit>(_pCmd)) )
 	{
 		CDynamicCast<CUnitServer> pUnit( pRemoveUnit->pUnit );
 		RemoveUnit( pUnit );
 	}
-	else if ( CDynamicCast<CCmdUnit> pUnitCmd( _pCmd ) )
+	else if ( CCmdUnit* pUnitCmd = (CCmdUnit*)(CDynamicCast<CCmdUnit>(_pCmd)) )
 	{
 		CDynamicCast<CUnitServer> pUS( pUnitCmd->pUnit );
 		ASSERT( pUS );
@@ -1762,7 +1770,7 @@ void CWorld::CheckForAcks()
 		int nPersID = pSeq->pDBAckInfo[i]->nRPGPersID;
 		CDynamicCast<NWorld::CUnit> pUnit( GetUnitServerByPersID( nPersID ) );
 		ASSERT( pUnit );
-		phrases[i] = new CAckEvent( pSeq->nPriority, pUnit.GetPtr(), pSeq->pDBAckInfo[i] );
+		phrases[i] = new CAckEvent( pSeq->nPriority, (NWorld::CUnit*)pUnit, pSeq->pDBAckInfo[i] );
 	}
 	//
 	AddUICommand( new NWorld::CUICmdPlayAck( phrases ) );
@@ -1924,7 +1932,8 @@ void CWorld::UpdateWorld( STime tScene, IPlayer *pPlayer )
 void CWorld::KillObject( CObjectServerBase *pOS )
 {
 	objects.remove( pOS );
-	if ( CDynamicCast<NWorld::IDynamicObject> pDyn(pOS) )
+	CDynamicCast<NWorld::IDynamicObject> pDyn((pOS));
+	if ( pDyn )
 	{
 		CObj<NWorld::IDynamicObject> pObj(pDyn);
 		miscObjects.remove( pObj );
@@ -1983,7 +1992,7 @@ void CWorld::FindCloseGroundItems( CUnit *pU, vector<SItem> *pRes )
 		CVec3 from = (*it)->GetPos();
 		if ( fabs2( from - tracePos ) > sqr(F_UNIT_REACH_DISTANCE) )
 			continue;
-		SItem &item = *pRes->insert( pRes->end() );
+		SItem &item = *pRes->emplace(pRes->end());
 		item.eType = SItem::GROUND;
 		item.pItem = (*it)->GetInvItem();
 		item.pWorldItem = (*it);
@@ -2090,7 +2099,7 @@ bool CWorld::UsePassageObject( CUnitServer *pUS, int nPassageZoneID )
 	//
 	list< CPtr<IPassageObject> > passageObjects;
 	GetPassageObjects( nPassageZoneID, &passageObjects );
-	// проверяем все ли стоят рядом с найденными объектами перехода
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	bool bCanPass = true;
 	hash_map< CPtr<CUnitServer>, CPtr<IPassageObject>, SPtrHash > passagesForUnits;
 	for ( list< CObj<CUnitServer> >::iterator i = units.begin(); i != units.end(); ++i )
@@ -2116,18 +2125,18 @@ bool CWorld::UsePassageObject( CUnitServer *pUS, int nPassageZoneID )
 	//
 	if ( nPassageZoneID <= 0 )
 	{
-		// выходим на chapter map
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ chapter map
 		AddUICommand( new NWorld::CUICmdContinueChapter() );
 		return true;
 	}
-	// ищем в какой template переходим
+	// пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ template пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	vector<int> templatesIDs;
 	pZone->GetTemplatesIDs( &templatesIDs );
 	for ( vector<int>::iterator i = templatesIDs.begin();	i != templatesIDs.end(); ++i )
 	{
 		if ( *i != GetGlobalGame()->nCurrentTemplateID )
 		{
-			// ищем passage objects
+			// пїЅпїЅпїЅпїЅ passage objects
 			SMapInfo info;
 			vector<string> strParams;
 			int nVariantID = pZone->GetVariantIDForTemplate( *i );
@@ -2139,7 +2148,7 @@ bool CWorld::UsePassageObject( CUnitServer *pUS, int nPassageZoneID )
 			{
 				if ( IsValid( (*j).pObject->pPassage ) && (*j).nPassageZoneID == nPassageZoneID )
 				{
-					// заполняем данные о переходе
+					// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 					NRPG::SDeployData &deployData = pGlobalPlayer->deployData;
 					deployData.bPassage = true;
 					deployData.nPassageZoneID = nPassageZoneID;
@@ -2148,7 +2157,7 @@ bool CWorld::UsePassageObject( CUnitServer *pUS, int nPassageZoneID )
 					for ( u = passagesForUnits.begin(); u != passagesForUnits.end(); ++u )
 						deployData.unitsDeployData[ u->first->GetUnitRPG()->GetRPGUnit() ].nPassageObjectID =
 							u->second->GetPassageObjectID();
-					// переходим
+					// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 					AddUICommand( new NWorld::CUICmdLoadTemplate( pZone, *i ) );
 					return true;
 				}
@@ -2310,11 +2319,14 @@ void CWorld::OnAction( bool bStartAction )
 void CWorld::GetPassageObjects( int nPassageZoneID, list< CPtr<IPassageObject> > *pPassageObjects )
 {
 	pPassageObjects->clear();
-	// ищем объекты перехода этой зоны перехода
+	// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	for ( list< CObj<CObjectServerBase> >::iterator i = objects.begin(); i != objects.end(); ++i )
-		if ( CDynamicCast<IPassageObject> pPassage( *i ) )
+	{
+		CDynamicCast<IPassageObject> pPassage((*i));  // silent-storm-port: brace for-body
+		if ( pPassage )
 			if ( pPassage->GetPassageZoneID() == nPassageZoneID )
-				pPassageObjects->push_back( pPassage.GetPtr() );
+				pPassageObjects->push_back( (IPassageObject*)pPassage );
+	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CUnitServer* CWorld::GetDeployedDeadUnit( const NAI::SPathPlace &aiPos, NRPG::CUnit *pRPGUnit )
@@ -2348,7 +2360,8 @@ void CWorld::InitPlayerCorpseCarrying( CPlayer *pPlayer )
 	pPlayer->GetUnits( &units );
 	for ( vector< CPtr<CUnit> >::iterator i = units.begin(); i != units.end(); ++i )
 	{
-		if ( CDynamicCast<CUnitServer> pUS( *i ) )
+		CDynamicCast<CUnitServer> pUS((*i));
+		if ( pUS )
 		{
 			NRPG::SUnitDeployData &deployData = pGlobalPlayer->deployData.unitsDeployData[ pUS->GetUnitRPG()->GetRPGUnit() ];
 			NRPG::CUnit *pCorpse =	deployData.pCorpse;
@@ -2358,8 +2371,8 @@ void CWorld::InitPlayerCorpseCarrying( CPlayer *pPlayer )
 				if ( IsValid( pCorpseUS ) )
 				{
 					CCmd *pTake = new CCmdTakeCorpseOnDeploy( pUS, pCorpseUS, !deployData.bCorpseAlive );
-					pUS->Do( new CCmdSetCommand( pUS.GetPtr(), pTake ) );
-					pUS->Do( new CCmdSetCommand( pUS.GetPtr(), new CCmdContinue() ) );
+					pUS->Do( new CCmdSetCommand( (CUnitServer*)pUS, pTake ) );
+					pUS->Do( new CCmdSetCommand( (CUnitServer*)pUS, new CCmdContinue() ) );
 				}
 			}
 		}
@@ -2511,7 +2524,8 @@ void CWorld::CreateBloodyMess( const CVec3 &_vCenter, const CVec3 &vDirection, C
 			Normalize( &vDir );
 			NDb::CRPGArmor *pArmor = NDb::GetArmor( 1 );
 			CObjectBase *pUserData = p.pSrc->pUserData ? p.pSrc->pUserData : GetTerrainInfo();
-			if ( CDynamicCast<NWorld::IBuilding> pBuilding( p.pSrc->pUserData ) )
+			CDynamicCast<NWorld::IBuilding> pBuilding((p.pSrc->pUserData));
+			if ( pBuilding )
 				pUserData = pBuilding->GetSceneHandle();
 			float fRadius = pArmor->fShotRadius;
 			fRadius *= random.GetFloat( 0.9f, fRadiusKoef + 0.1f );
@@ -2593,7 +2607,8 @@ NDb::EDiplomacyState CWorld::GetDiplomacyState( CUnit *pUnit, IPlayer *pPlayer )
 {
 	if ( !IsValid(pPlayer) )
 		return NDb::DS_ENEMY;
-	if ( CDynamicCast<NRPG::IUnitMission> pUM( pUnit->GetRPG() ) )
+	CDynamicCast<NRPG::IUnitMission> pUM(pUnit->GetRPG());
+	if ( pUM )
 		return pUM->GetDiplomacy().GetDiplomacyState( pPlayer->GetScenarioPlayerID() );
 	else
 		return NDb::DS_ENEMY;
@@ -2610,7 +2625,8 @@ void CWorld::RemoveUnitFromAI( CUnitServer *pUS )
 	GetPlayersList( &players );
 	for ( vector<CPtr<CPlayer> >::const_iterator i = players.begin(); i != players.end(); ++i )
 	{
-		if ( CDynamicCast<NAI::CAICommander> pCommander( (*i)->GetCommander() ) )
+		CDynamicCast<NAI::CAICommander> pCommander(((*i)->GetCommander()));
+		if ( pCommander )
 			pCommander->RemoveUnit( pUS );
 	}
 }
@@ -2630,7 +2646,7 @@ void CWorld::ChangeUnitPlayer( CUnitServer *pUnit, CPlayer *pPlayer )
 	//
 	MakeUnitInactive( pUnit );
 	RemoveUnitFromAI( pUnit );
-	// порядок именно такой, иначе pUnit станет не IsValid
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ pUnit пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ IsValid
 	pPlayer->AddUnit( pUnit );
 	pOldPlayer->RemoveUnit( pUnit );
 	//

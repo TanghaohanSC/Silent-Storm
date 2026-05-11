@@ -53,34 +53,49 @@ EActionType GetActionType( CUnitServer *pUS )
 
 	if ( pItem == 0 )
 		return AT_MELEE;
-	else if ( CDynamicCast<NRPG::IWeaponItem>pWeapon( pItem ) )
-	{
-		if ( pWeapon->GetDBWeapon()->bBazookaLogic )
-			return AT_BAZOOKA;
-		else
-		{
-			if ( pWeapon->GetShootMode() == NDb::SM_Snipe && pUS->IsSniping() )
-				return AT_SNIPE;
-			else
-				return AT_SHOOT;
-		}
-	}
-	else if ( CDynamicCast<NRPG::IFirstAidItem>( pItem ) )
-		return AT_FIRSTAID;
-	else if ( CDynamicCast<NRPG::IGrenadeItem>( pItem ) )
-		return AT_GRENADE;
-	else if ( CDynamicCast<NRPG::IMineItem>( pItem ) )
-		return AT_MINE;
-	else if ( CDynamicCast<NRPG::IToolItem>( pItem ) )
-		return AT_TOOL;
-	else if ( CDynamicCast<NRPG::IKeyItem>( pItem ) )
-		return AT_KEY;
-	else if ( CDynamicCast<NRPG::IMeleeWeaponItem> pMelee(pItem) )
-	{
-		if ( pMelee->GetDBMeleeWeapon()->bThrowing )
-			return AT_THROW;
 
-		return AT_MELEE;
+	// silent-storm-port: bulk CDynamicCast flatten
+	{
+		CDynamicCast<NRPG::IWeaponItem> pWeapon( pItem );
+		if ( pWeapon )
+		{
+			if ( pWeapon->GetDBWeapon()->bBazookaLogic )
+				return AT_BAZOOKA;
+			else
+			{
+				if ( pWeapon->GetShootMode() == NDb::SM_Snipe && pUS->IsSniping() )
+					return AT_SNIPE;
+				else
+					return AT_SHOOT;
+			}
+		}
+		CDynamicCast<NRPG::IFirstAidItem> pFirstAid( pItem );
+		if ( pFirstAid )
+			return AT_FIRSTAID;
+		CDynamicCast<NRPG::IGrenadeItem> pGrenade( pItem );
+		if ( pGrenade )
+			return AT_GRENADE;
+	}
+	{
+		CDynamicCast<NRPG::IMineItem> pMine( pItem );
+		if ( pMine ) return AT_MINE;
+	}
+	{
+		CDynamicCast<NRPG::IToolItem> pTool( pItem );
+		if ( pTool ) return AT_TOOL;
+	}
+	{
+		CDynamicCast<NRPG::IKeyItem> pKey( pItem );
+		if ( pKey ) return AT_KEY;
+	}
+	{
+		CDynamicCast<NRPG::IMeleeWeaponItem> pMelee( pItem );
+		if ( pMelee )
+		{
+			if ( pMelee->GetDBMeleeWeapon()->bThrowing )
+				return AT_THROW;
+			return AT_MELEE;
+		}
 	}
 
 	return AT_NONE;
@@ -223,7 +238,7 @@ static EUnitCommandResult GetActionValidPlaces( CUnitServer *pUS, CCmdHeal *pCmd
 static EUnitCommandResult GetActionValidPlaces( CUnitServer *pUS, CCmdTalk *pCmd, vector<NAI::SPathPlace> *pRes )
 {
 	CDynamicCast<CUnitServer> pTarget( pCmd->pTarget );
-	if ( !IsValid( pTarget ) || pUS == pTarget.GetPtr() )
+	if ( !IsValid( pTarget ) || pUS == (CUnitServer*)pTarget )
 		return UCR_NO_TARGET;
 	//
 	GetHumanReachPlaces( pUS, pTarget->GetPosition().GetEyePosition(), pRes );
@@ -266,15 +281,21 @@ static EUnitCommandResult GetActionValidPlaces( CUnitServer *pUS, CCmdUntrapObje
 {
 	if ( !IsValid( pCmd->pTarget ) )
 		return UCR_NO_TARGET;
-	if ( CDynamicCast<CWindowDoor> pTarget( pCmd->pTarget ) )
 	{
-		CDynamicCast<IGetApproaches> pAppr( pCmd->pTarget );
-		return GetActionValidPlaces( pUS, pAppr, pRes );
+		CDynamicCast<CWindowDoor> pTarget((pCmd->pTarget));  // silent-storm-port: scope each cast
+		if ( pTarget )
+		{
+			CDynamicCast<IGetApproaches> pAppr( pCmd->pTarget );
+			return GetActionValidPlaces( pUS, pAppr, pRes );
+		}
 	}
-	if ( CDynamicCast<CMine> pTarget( pCmd->pTarget ) )
 	{
-		GetMinePlaces( pTarget->GetMinePos(), pUS->GetWorld()->GetPathNetwork(), pRes );
-		return UCR_OK;
+		CDynamicCast<CMine> pTarget((pCmd->pTarget));
+		if ( pTarget )
+		{
+			GetMinePlaces( pTarget->GetMinePos(), pUS->GetWorld()->GetPathNetwork(), pRes );
+			return UCR_OK;
+		}
 	}
 	ASSERT(0);
 	return UCR_GENERAL_FAILURE;
@@ -423,7 +444,8 @@ static CCommandExecute* CreateActionQueue( CUnitServer *pUS, TCommand *pCmd, TEx
 	if ( !pMove )
 		return 0;
 
-	if ( CDynamicCast<CExecQueue> pQueue( pMove ) )
+	CDynamicCast<CExecQueue> pQueue((pMove));
+	if ( pQueue )
 	{
 		pQueue->AddExecutor( pAction );
 		return pMove;
@@ -439,9 +461,10 @@ CCommandExecute* CreateActionExecutor( CUnitServer *pUS, CCmd *pCmd, EUnitComman
 {
 	*pError = UCR_OK;
 
-	if ( CDynamicCast<CCmdPlayAnimation> pAnim( pCmd ) )
+	CDynamicCast<CCmdPlayAnimation> pAnim((pCmd));
+	if ( pAnim )
 		return new CExecPlayAnimation( pUS, pAnim->nDBAnimationID, pAnim->bCircled );
-	else if ( CDynamicCast<CCmdShootTile> pAttackTile( pCmd ) )
+	else if ( CCmdShootTile* pAttackTile = (CCmdShootTile*)(CDynamicCast<CCmdShootTile>(pCmd)) )
 	{
 		EActionType eType = GetActionType( pUS );
 		switch ( eType )
@@ -454,7 +477,7 @@ CCommandExecute* CreateActionExecutor( CUnitServer *pUS, CCmd *pCmd, EUnitComman
 				{
 					NRPG::IUnitMission *pRPG = pUS->GetUnitRPG();
 					ENeedActiveItem eActive = ( pRPG->GetWeaponType() == NDb::WT_DEFAULT ? ITEM_INACTIVE : ITEM_ACTIVE );
-					return CreateActionQueue( pUS, pAttackTile.GetPtr(), new CExecMeleeTile( pUS, pAttackTile->ptTarget ), eActive, pError );
+					return CreateActionQueue( pUS, pAttackTile, new CExecMeleeTile( pUS, pAttackTile->ptTarget ), eActive, pError );
 				}
 			case AT_GRENADE:
 				{
@@ -465,14 +488,14 @@ CCommandExecute* CreateActionExecutor( CUnitServer *pUS, CCmd *pCmd, EUnitComman
 						return 0;
 					}
 
-					return CreateActionQueue( pUS, pAttackTile.GetPtr(), new CExecThrowGrenade( pUS, pAttackTile->ptTarget ), ITEM_ACTIVE, pError );
+					return CreateActionQueue( pUS, pAttackTile, new CExecThrowGrenade( pUS, pAttackTile->ptTarget ), ITEM_ACTIVE, pError );
 				}
 			case AT_SHOOT:
-				return CreateActionQueue( pUS, pAttackTile.GetPtr(), new CExecShootTile( pUS, pAttackTile->ptTarget ), ITEM_ACTIVE, pError );
+				return CreateActionQueue( pUS, pAttackTile, new CExecShootTile( pUS, pAttackTile->ptTarget ), ITEM_ACTIVE, pError );
 			case AT_THROW:
-				return CreateActionQueue( pUS, pAttackTile.GetPtr(), new CExecThrowKnife( pUS, pAttackTile->ptTarget + CVec3(0,0,0.5f) ), ITEM_ACTIVE, pError );
+				return CreateActionQueue( pUS, pAttackTile, new CExecThrowKnife( pUS, pAttackTile->ptTarget + CVec3(0,0,0.5f) ), ITEM_ACTIVE, pError );
 			case AT_BAZOOKA:
-				return CreateActionQueue( pUS, pAttackTile.GetPtr(), new CExecLaunchRocket( pUS, pAttackTile->ptTarget + CVec3(0,0,0.5f) ), ITEM_ACTIVE, pError );
+				return CreateActionQueue( pUS, pAttackTile, new CExecLaunchRocket( pUS, pAttackTile->ptTarget + CVec3(0,0,0.5f) ), ITEM_ACTIVE, pError );
 			case AT_CANNON:
 				return CreateSimpleAction( pUS, new CExecShootTile( pUS, pAttackTile->ptTarget ), pError );
 			case AT_MINE:
@@ -484,26 +507,27 @@ CCommandExecute* CreateActionExecutor( CUnitServer *pUS, CCmd *pCmd, EUnitComman
 				return 0;
 		}
 	}
-	else if ( CDynamicCast<CCmdShootObject> pAttackObject( pCmd ) )
+	else if ( CCmdShootObject* pAttackObject = (CCmdShootObject*)(CDynamicCast<CCmdShootObject>(pCmd)) )
 	{
 		CDynamicCast<NWorld::CUnitServer> pUnitTarget( pAttackObject->pTarget );
-		if ( CDynamicCast<NRPG::IWeaponItem> pWeapon( pUS->GetUnitRPG()->GetInventory()->GetActive() ) )
+		CDynamicCast<NRPG::IWeaponItem> pWeapon((pUS->GetUnitRPG()->GetInventory()->GetActive()));
+		if ( pWeapon )
 		{
 			if ( IsValid( pWeapon ) && pWeapon->GetShootMode() == NDb::SM_Snipe && !pUS->IsSniping() )
-				return CreateActionQueue( pUS, pAttackObject.GetPtr(), new CExecSnipeAim( pUS, pUnitTarget ), ITEM_ACTIVE, pError );
+				return CreateActionQueue( pUS, pAttackObject, new CExecSnipeAim( pUS, pUnitTarget ), ITEM_ACTIVE, pError );
 		}
 
 		EActionType eType = GetActionType( pUS );
 
 		CDynamicCast<NWorld::CWindowDoor> pWDTarget( pAttackObject->pTarget );
-		if ( ( eType == AT_GRENADE ) && ( IsValid( pWDTarget ) || !IsValid( pAttackObject->pTarget ) ) ) //// CRAP!: Для CanDo
+		if ( ( eType == AT_GRENADE ) && ( IsValid( pWDTarget ) || !IsValid( pAttackObject->pTarget ) ) ) //// CRAP!: пїЅпїЅпїЅ CanDo
 		{
 			CDynamicCast<NRPG::IGrenadeItemInfo> pGrenade( pUS->GetRPG()->GetInventoryInfo()->GetActive() );
 			if ( IsValid( pGrenade ) && ( pGrenade->GetMode() == NRPG::GM_SETTRAP ) )
 				return CreateActionQueue( pUS, new CCmdSetGrenadeOnObject( pAttackObject->pTarget ), new CExecSetTrap( pUS, pWDTarget ), ITEM_ACTIVE, pError );
 		}
 
-		if ( IsValid( pUnitTarget ) || !IsValid( pAttackObject->pTarget ) ) //// CRAP!: Для CanDo
+		if ( IsValid( pUnitTarget ) || !IsValid( pAttackObject->pTarget ) ) //// CRAP!: пїЅпїЅпїЅ CanDo
 		{
 			switch ( eType )
 			{
@@ -515,18 +539,18 @@ CCommandExecute* CreateActionExecutor( CUnitServer *pUS, CCmd *pCmd, EUnitComman
 					{
 						NRPG::IUnitMission *pRPG = pUS->GetUnitRPG();
 						ENeedActiveItem eActive = ( pRPG->GetWeaponType() == NDb::WT_DEFAULT ? ITEM_INACTIVE : ITEM_ACTIVE );
-						return CreateActionQueue( pUS, pAttackObject.GetPtr(), new CExecMeleeUnit( pUS, pUnitTarget, pAttackObject->eHL, pAttackObject->nExtraAttackAP ), eActive, pError );
+						return CreateActionQueue( pUS, pAttackObject, new CExecMeleeUnit( pUS, pUnitTarget, pAttackObject->eHL, pAttackObject->nExtraAttackAP ), eActive, pError );
 					}
 				case AT_SHOOT:
 				case AT_SNIPE:
-					return CreateActionQueue( pUS, pAttackObject.GetPtr(), new CExecShootUnit( pUS, pUnitTarget, pAttackObject->eHL, pAttackObject->nExtraAttackAP ), ITEM_ACTIVE, pError );
+					return CreateActionQueue( pUS, pAttackObject, new CExecShootUnit( pUS, pUnitTarget, pAttackObject->eHL, pAttackObject->nExtraAttackAP ), ITEM_ACTIVE, pError );
 				case AT_CANNON:
 					return CreateSimpleAction( pUS, new CExecShootUnit( pUS, pUnitTarget, pAttackObject->eHL, pAttackObject->nExtraAttackAP ), pError );
 			}
 		}
 
-		/// CRAP #1: Некотырые виды оружия атакуют тайл
-		/// CRAP #2: Атака объекта = атака тайла под объектом
+		/// CRAP #1: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+		/// CRAP #2: пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ = пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		if ( !IsValid( pAttackObject->pTarget ) )
 		{
 			EActionType eType = GetActionType( pUS );
@@ -546,7 +570,7 @@ CCommandExecute* CreateActionExecutor( CUnitServer *pUS, CCmd *pCmd, EUnitComman
 		CObj<CCmdShootTile> pShoot( new CCmdShootTile( ptTarget ) );
 		return CreateActionExecutor( pUS, pShoot, pError );
 	}
-	else if ( CDynamicCast<CCmdSetGrenadeOnObject> pSetTrap( pCmd ) )
+	else if ( CCmdSetGrenadeOnObject* pSetTrap = (CCmdSetGrenadeOnObject*)(CDynamicCast<CCmdSetGrenadeOnObject>(pCmd)) )
 	{
 		if ( GetActionType( pUS ) != AT_GRENADE )
 		{
@@ -555,53 +579,55 @@ CCommandExecute* CreateActionExecutor( CUnitServer *pUS, CCmd *pCmd, EUnitComman
 		}
 		CDynamicCast<NWorld::CWindowDoor> pTarget( pSetTrap->pTarget );
 		if ( pSetTrap->pTarget == 0 || pTarget != 0 )
-			return CreateActionQueue( pUS, pSetTrap.GetPtr(), new CExecSetTrap( pUS, pTarget ), ITEM_ACTIVE, pError );
+			return CreateActionQueue( pUS, pSetTrap, new CExecSetTrap( pUS, pTarget ), ITEM_ACTIVE, pError );
 		else
 		{
-			*pError = UCR_INVALID_COMMAND; // позвали поставить не на дверь
+			*pError = UCR_INVALID_COMMAND; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 			return 0;
 		}
 	}
-	else if ( CDynamicCast<CCmdUntrapObject> pDisarm( pCmd ) )
+	else if ( CCmdUntrapObject* pDisarm = (CCmdUntrapObject*)(CDynamicCast<CCmdUntrapObject>(pCmd)) )
 	{
 		if ( !IsValid( pDisarm->pTarget ) )
-			return CreateActionQueue( pUS, pDisarm.GetPtr(), new CExecDisarmTrap( pUS, 0 ), ITEM_ACTIVE, pError );
+			return CreateActionQueue( pUS, pDisarm, new CExecDisarmTrap( pUS, 0 ), ITEM_ACTIVE, pError );
 		else
 		{
-			if ( CDynamicCast<CWindowDoor> pDoor( pDisarm->pTarget ) )
-				return CreateActionQueue( pUS, pDisarm.GetPtr(), new CExecDisarmTrap( pUS, pDoor ), ITEM_ACTIVE, pError );
-			else if ( CDynamicCast<CMine> pMine( pDisarm->pTarget ) )
-				return CreateActionQueue( pUS, pDisarm.GetPtr(), new CExecDisarmMine( pUS, pMine ), ITEM_ACTIVE, pError );
+			CDynamicCast<CWindowDoor> pDoor((pDisarm->pTarget));
+			if ( pDoor )
+				return CreateActionQueue( pUS, pDisarm, new CExecDisarmTrap( pUS, pDoor ), ITEM_ACTIVE, pError );
+			else if ( CMine* pMine = (CMine*)(CDynamicCast<CMine>(pDisarm->pTarget)) )
+				return CreateActionQueue( pUS, pDisarm, new CExecDisarmMine( pUS, pMine ), ITEM_ACTIVE, pError );
 			else
 			{
-				*pError = UCR_INVALID_COMMAND; // обезвредить можно тольки мины и ловушки
+				*pError = UCR_INVALID_COMMAND; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 				return 0;
 			}
 		}
 	}
-	else if ( CDynamicCast<CCmdSetMineOnTile> pSetTrap( pCmd ) )
+	else if ( CCmdSetMineOnTile* pSetTrap = (CCmdSetMineOnTile*)(CDynamicCast<CCmdSetMineOnTile>(pCmd)) )
 	{
 		if ( GetActionType( pUS ) != AT_MINE )
 		{
 			*pError = UCR_INVALID_COMMAND;
 			return 0;
 		}
-		return CreateActionQueue( pUS, pSetTrap.GetPtr(), new CExecSetMine( pUS, pSetTrap ), ITEM_ACTIVE, pError );
+		return CreateActionQueue( pUS, pSetTrap, new CExecSetMine( pUS, pSetTrap ), ITEM_ACTIVE, pError );
 	}
-	else if ( CDynamicCast<CCmdHeal> pHeal( pCmd ) )
+	else if ( CCmdHeal* pHeal = (CCmdHeal*)(CDynamicCast<CCmdHeal>(pCmd)) )
 	{
 		CDynamicCast<NWorld::CUnitServer> pTarget( pHeal->pTarget );
-		return CreateActionQueue( pUS, pHeal.GetPtr(), new CExecHeal( pUS, pTarget ), ITEM_ACTIVE, pError );
+		return CreateActionQueue( pUS, pHeal, new CExecHeal( pUS, pTarget ), ITEM_ACTIVE, pError );
 	}
-	else if ( CDynamicCast<CCmdCannon> pCannonAtk( pCmd ) )
-		return CreateActionQueue( pUS, pCannonAtk.GetPtr(), new CExecCannon( pUS, pCannonAtk->pObject, true ), ITEM_INACTIVE, pError );
-	else if ( CDynamicCast<CCmdExitCannon> pCannonExit( pCmd ) )
+	else if ( CCmdCannon* pCannonAtk = (CCmdCannon*)(CDynamicCast<CCmdCannon>(pCmd)) )
+		return CreateActionQueue( pUS, pCannonAtk, new CExecCannon( pUS, pCannonAtk->pObject, true ), ITEM_INACTIVE, pError );
+	else if ( CCmdExitCannon* pCannonExit = (CCmdExitCannon*)(CDynamicCast<CCmdExitCannon>(pCmd)) )
 		return CreateSimpleAction( pUS, new CExecCannon( pUS, pCannonExit->pCannon, false ), pError );
-	else if ( CDynamicCast<CCmdOpenClose> pOpenClose( pCmd ) )
+	else if ( CCmdOpenClose* pOpenClose = (CCmdOpenClose*)(CDynamicCast<CCmdOpenClose>(pCmd)) )
 	{
-		CCommandExecute* pExec = CreateActionQueue( pUS, pOpenClose.GetPtr(), 
+		CCommandExecute* pExec = CreateActionQueue( pUS, pOpenClose, 
 			new CExecOpenClose( pUS, pOpenClose ), ITEM_NO_MATTER, pError );
-		if ( CDynamicCast<CExecQueue> pQueue( pExec ) )
+		CDynamicCast<CExecQueue> pQueue((pExec));
+		if ( pQueue )
 			pQueue->CheckOpenCloseOnce();
 		else if ( pExec != 0 )
 		{
@@ -609,48 +635,48 @@ CCommandExecute* CreateActionExecutor( CUnitServer *pUS, CCmd *pCmd, EUnitComman
 		}
 		return pExec;
 	}
-	else if ( CDynamicCast<CCmdUsePassage> pUsePassage( pCmd ) )
-		return CreateActionQueue( pUS, pUsePassage.GetPtr(), new CExecUsePassage( pUS, pUsePassage ), ITEM_INACTIVE, pError );
-	else if ( CDynamicCast<CCmdCreateInventoryItem> pCreateItem( pCmd ) )
+	else if ( CCmdUsePassage* pUsePassage = (CCmdUsePassage*)(CDynamicCast<CCmdUsePassage>(pCmd)) )
+		return CreateActionQueue( pUS, pUsePassage, new CExecUsePassage( pUS, pUsePassage ), ITEM_INACTIVE, pError );
+	else if ( CCmdCreateInventoryItem* pCreateItem = (CCmdCreateInventoryItem*)(CDynamicCast<CCmdCreateInventoryItem>(pCmd)) )
 		return CreateSimpleAction( pUS, new CExecCreateInventoryItem( pUS, pCreateItem ), pError );
-	else if ( CDynamicCast<CCmdMoveInventoryItem> pMoveItem( pCmd ) )
+	else if ( CCmdMoveInventoryItem* pMoveItem = (CCmdMoveInventoryItem*)(CDynamicCast<CCmdMoveInventoryItem>(pCmd)) )
 	{
 		if ( pMoveItem->GetSource().eType == SItem::GROUND )
-			return CreateActionQueue( pUS, pMoveItem.GetPtr(), new CExecMoveInventoryItem( pUS, pMoveItem ), ITEM_NO_MATTER, pError );
+			return CreateActionQueue( pUS, pMoveItem, new CExecMoveInventoryItem( pUS, pMoveItem ), ITEM_NO_MATTER, pError );
 		else if ( ( pMoveItem->GetSource().eType == SItem::STORAGE ) || ( pMoveItem->GetTarget().eType == SItem::STORAGE ) )
 			return CreateSimpleAction( pUS, new CExecMoveInventoryItem( pUS, pMoveItem ), pError );
 		else if ( IsValid( pMoveItem->GetSource().pUnit ) && IsValid( pMoveItem->GetTarget().pUnit ) && 
 			( pMoveItem->GetSource().pUnit != pMoveItem->GetTarget().pUnit ) )
 		{
 			CDynamicCast<CUnitServer> pUSSource( pMoveItem->GetSource().pUnit );
-			return CreateActionQueue( pUSSource, pMoveItem.GetPtr(), new CExecMoveInventoryItem( pUSSource, pMoveItem ), 
+			return CreateActionQueue( pUSSource, pMoveItem, new CExecMoveInventoryItem( pUSSource, pMoveItem ), 
 				ITEM_NO_MATTER, pError );
 		}
 
 		return CreateSimpleAction( pUS, new CExecMoveInventoryItem( pUS, pMoveItem ), pError );
 	}
-	else if ( CDynamicCast<CCmdTakeCorpseOnDeploy> pCmdCorpse( pCmd ) )
+	else if ( CCmdTakeCorpseOnDeploy* pCmdCorpse = (CCmdTakeCorpseOnDeploy*)(CDynamicCast<CCmdTakeCorpseOnDeploy>(pCmd)) )
 		return new CExecTakeCorpseOnDeploy( pCmdCorpse->pCarrier, pCmdCorpse->pCorpse, pCmdCorpse->bDead );
-	else if ( CDynamicCast<CCmdTakeCorpse> pCmdCorpse( pCmd ) )
+	else if ( CCmdTakeCorpse* pCmdCorpse = (CCmdTakeCorpse*)(CDynamicCast<CCmdTakeCorpse>(pCmd)) )
 	{
 		CDynamicCast<CUnitServer> pDeadUnit( pCmdCorpse->pCorpse );
 		if ( pDeadUnit->IsEmptyPK() )
-			return CreateActionQueue( pUS, pCmdCorpse.GetPtr(), new CExecPanzerklein( pUS, pCmdCorpse ), ITEM_INACTIVE, pError );
-		return CreateActionQueue( pUS, pCmdCorpse.GetPtr(), new CExecCorpse( pUS, pDeadUnit, true ), ITEM_INACTIVE, pError );
+			return CreateActionQueue( pUS, pCmdCorpse, new CExecPanzerklein( pUS, pCmdCorpse ), ITEM_INACTIVE, pError );
+		return CreateActionQueue( pUS, pCmdCorpse, new CExecCorpse( pUS, pDeadUnit, true ), ITEM_INACTIVE, pError );
 	}
-	else if ( CDynamicCast<CCmdDropCorpse> pCmdCorpse( pCmd ) )
+	else if ( CCmdDropCorpse* pCmdCorpse = (CCmdDropCorpse*)(CDynamicCast<CCmdDropCorpse>(pCmd)) )
 	{
 		CDynamicCast<CUnitServer> pDeadUnit( pCmdCorpse->pCorpse );
 		return CreateSimpleAction( pUS, new CExecCorpse( pUS, pDeadUnit, false ), pError );
 	}
-	else if ( CDynamicCast<CCmdExitPK> pExitPK(pCmd) )
+	else if ( CCmdExitPK* pExitPK = (CCmdExitPK*)(CDynamicCast<CCmdExitPK>(pCmd)) )
 		return CreateSimpleAction( pUS, new CExecPanzerklein( pUS, 0 ), pError );
-	else if ( CDynamicCast<CCmdCollectSnipeAP> pCollectSnipeAP(pCmd) )
+	else if ( CCmdCollectSnipeAP* pCollectSnipeAP = (CCmdCollectSnipeAP*)(CDynamicCast<CCmdCollectSnipeAP>(pCmd)) )
 		return CreateSimpleAction( pUS, new CExecCollectSnipeAP( pUS, pCollectSnipeAP->eAP ), pError );
-	else if ( CDynamicCast<CCmdTalk> pTalk( pCmd ) )
+	else if ( CCmdTalk* pTalk = (CCmdTalk*)(CDynamicCast<CCmdTalk>(pCmd)) )
 	{
 		CDynamicCast<CUnitServer> pTarget( pTalk->pTarget );
-		return CreateActionQueue( pUS, pTalk.GetPtr(), new CExecTalk( pUS, pTarget ), ITEM_NO_MATTER, pError );
+		return CreateActionQueue( pUS, pTalk, new CExecTalk( pUS, pTarget ), ITEM_NO_MATTER, pError );
 	}
 
 	*pError = UCR_INVALID_COMMAND;

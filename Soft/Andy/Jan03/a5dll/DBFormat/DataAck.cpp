@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "DataAck.h"
+#include "DataFormat.h"   // NDb::CString, NDb::CSequence full definitions
+#include "DataSound.h"    // NDb::CSound full definition
 
 namespace NDb
 {

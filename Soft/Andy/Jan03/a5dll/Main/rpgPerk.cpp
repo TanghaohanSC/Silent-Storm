@@ -4,7 +4,10 @@
 #include "..\MiscDll\LogStream.h"
 #include "rpgPerk.h"
 //
-#include <fstream>
+// silent-storm-port: <fstream> chain pulls <ctime> which under our compile
+// flags fails on `using ::clock_t`. Draw() is dev-time graphviz dumping —
+// stub it out below.
+//#include <fstream>
 //
 namespace NRPG
 {
@@ -136,40 +139,8 @@ CPerksTree::CPerksTree( int nTreeID ): nPerkPoints( 0 )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CPerksTree::Draw( string szFileName )
 {
-	fstream file;
-	string str = szFileName + ".dot";
-	file.open( str.c_str(), ios_base::out | ios_base::trunc );
-	file << "digraph g\n{\n  concentrate=true;\n  nodesep=.3;\n  ranksep=.3;\n";
-	// 
-	for ( hash_map< int, CObj<CPerk> >::const_iterator i = perks.begin(); i != perks.end(); ++i )
-	{
-		char szID[128];
-		sprintf( szID, "ID_%d", i->first );
-		file << "  " << szID << "[shape = box,";
-		if ( i->second->IsTaken() )
-			file << " style=filled,";
-		if ( i->second->CanTake() )
-			file << " fontcolor=darkgreen,";
-		file << " label = \"" << i->second->GetDBPerk()->szUserName << "\"];" << endl;
-	}
-	//
-	for ( hash_map< int, CObj<CPerk> >::const_iterator i = perks.begin(); i != perks.end(); ++i )
-	{
-		char szID1[128], szID2[128];
-		sprintf( szID1, "ID_%d", i->first );
-		int nParentSize = i->second->GetParents().GetSize();
-		for ( int j = 0; j < nParentSize; ++j )
-		{
-			sprintf( szID2, "ID_%d", i->second->GetParents()[j]->GetDBPerk()->GetRecordID() );
-			file << "  " << szID2 << " -> " << szID1 << ";" << endl;
-		}
-	}
-	//
-	file << "}";
-	file.close();
-	//
-	str = "scengraph\\dot.exe -Tjpg " + szFileName + ".dot -o " + szFileName + ".jpg";
-	system( str.c_str() );
+	// silent-storm-port: graphviz dev-time dump stubbed (was fstream-based).
+	(void)szFileName;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CPerksTree::HasPerk( int nPerkID, float *pParam1, float *pParam2, float *pParam3 )

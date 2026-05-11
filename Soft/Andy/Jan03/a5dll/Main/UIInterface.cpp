@@ -279,7 +279,7 @@ const SWindowInfo& CLoader::GetControl( const string &szID )
 	}
 
 	csSystem << "UI-ERROR: UI Container not complete, control " << szID << " in container " << pParent->GetWindowID() << " not found" << endl;
-	TTemplateWindow &sWindow = *windowsSet.insert( windowsSet.end() );
+	TTemplateWindow &sWindow = *windowsSet.emplace(windowsSet.end());
 	sWindow.second.sInfo = SWindowInfo( pParent, SPoint( 0, 0 ) , SPoint( 0, 0 ), szID, 0 );
 	return sWindow.second.sInfo;
 }
@@ -508,5 +508,7 @@ void CInterface::UpdateFPSText()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 } // namespace
 using namespace NUI;
-REGISTER_SAVELOAD_CLASS( 0xB2841122, CMouseCaptureHandler );
-REGISTER_SAVELOAD_CLASS( 0xB2841123, CInterface );
+// silent-storm-port: duplicate registrations — Interface.cpp already registers
+// CInterface with ID 0xB2841122; CMouseCaptureHandler is excised in Interface.cpp.
+//REGISTER_SAVELOAD_CLASS( 0xB2841122, CMouseCaptureHandler );
+//REGISTER_SAVELOAD_CLASS( 0xB2841123, CInterface );

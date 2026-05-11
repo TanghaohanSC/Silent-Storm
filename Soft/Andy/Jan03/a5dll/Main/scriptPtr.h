@@ -33,7 +33,8 @@ int luaIsValid( lua_State* pState );
 //
 template < class T > T* luaGetDBPtr( const Script::Object &o )
 {
-	if ( CDynamicCast< CDBPtrWrapper<T> > pWrapper( luaGetPtr( o ) ) )
+	CDynamicCast< CDBPtrWrapper<T> > pWrapper( luaGetPtr( o ) );  // silent-storm-port
+	if ( pWrapper )
 		return pWrapper->pRecord;
 	else
 		return 0;
@@ -51,7 +52,8 @@ template < class T > void luaPushCDBPtr( lua_State* pState, T *pObj )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template < class T > bool luaIsDBPtr( const Script::Object &o )
 {
-	if ( CDynamicCast< CDBPtrWrapper<T> > pDBPtr( luaGetPtr( o ) ) )
+	CDynamicCast< CDBPtrWrapper<T> > pDBPtr( luaGetPtr( o ) );  // silent-storm-port
+	if ( pDBPtr )
 		return true;
 	else
 		return false;

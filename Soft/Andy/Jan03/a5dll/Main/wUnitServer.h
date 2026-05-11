@@ -189,7 +189,12 @@ public:
 	void PostponeCritical( NDb::ECritical critical ) { criticals.push_front( critical ); }
 	void ProcessCriticalImmediately( NDb::ECritical eCA );
 	void SetState( CUnitState *_pState );
-	bool WasInterrupted( CUnitServer *pWho ) const { return find( wasInterruptedList.begin(), wasInterruptedList.end(), pWho ) != wasInterruptedList.end(); }
+	bool WasInterrupted( CUnitServer *pWho ) const {
+		// silent-storm-port: find(container<CPtr<T>>, T*) ambiguous in C++17
+		for ( auto it = wasInterruptedList.begin(); it != wasInterruptedList.end(); ++it )
+			if ( it->GetPtr() == pWho ) return true;
+		return false;
+	}
 	void MarkInterrupted( CUnitServer *pWho ) { ASSERT( !WasInterrupted( pWho ) ); wasInterruptedList.push_back( pWho ); }
 	void UpdateCriticalsState();
 	void DynamicallyLockWay( CPtr<NAI::CPath> pPath );

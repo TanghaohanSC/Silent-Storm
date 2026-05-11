@@ -274,20 +274,20 @@ void CAILogChangeWeapon::GetItemPosition( NRPG::IInventoryItem *pItem, CTPoint<i
 {
 	const vector<NRPG::SBackPackItem> &Items = pAIUnit->GetUnitServer()->GetUnitRPG()->GetInventory()->GetItems();
 	for ( vector<NRPG::SBackPackItem>::const_iterator i = Items.begin(); i != Items.end(); ++i )	
-		if ( (*i).pItem == pItem )
+		if ( (*i).pItem.GetPtr() == pItem )  // silent-storm-port: ambiguous CObj==T* in C++17
 		{
 			*Position = (*i).sPos;
 			return;
 		}
 	//
-	ASSERT( 0 ); // в inventory не оказалось искомого item-а
+	ASSERT( 0 ); // пїЅ inventory пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ item-пїЅ
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CAILogChangeWeapon::GetCommands( list< CPtr<NWorld::CCommand> > *Commands )
 {
 	NWorld::CUnitServer *pUnitServer = pAIUnit->GetUnitServer();
 	NRPG::IInventory *pInventory = pUnitServer->GetUnitRPG()->GetInventory();
-	// убираем оружие в BackPack
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ BackPack
 	if ( IsValid( pOldWeapon ) )
 	{
 		CPtr<NRPG::IInventoryItem> pOldItem = pOldWeapon->GetInventoryItem();
@@ -300,7 +300,7 @@ void CAILogChangeWeapon::GetCommands( list< CPtr<NWorld::CCommand> > *Commands )
 				new NWorld::CCmdMoveInventoryItem( From, To ) ) );
 		}
 	}
-	// перемещаем новое оружие в Slot
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ Slot
 	if ( IsValid( pNewWeapon ) )
 	{
 		CPtr<NRPG::IInventoryItem> pNewItem = pNewWeapon->GetInventoryItem();

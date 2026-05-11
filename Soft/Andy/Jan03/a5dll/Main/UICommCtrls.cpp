@@ -1276,7 +1276,8 @@ void CComboBox::RemoveAllItems()
 bool CComboBox::GetItem( int nID, SInfo *pInfo )
 {
 	CPtr<CWindow> pItem = pList->GetItem( nID );
-	if ( CDynamicCast<CComboBoxItem> pComboBoxItem( pItem ) )
+	CDynamicCast<CComboBoxItem> pComboBoxItem((pItem));
+	if ( pComboBoxItem )
 	{
 		*pInfo = pComboBoxItem->GetInfo();
 		return true;
@@ -1298,7 +1299,8 @@ int CComboBox::GetSelectedItem() const
 void CComboBox::SetSelectedItem( int nID )
 {
 	CPtr<CWindow> pItem = pList->GetItem( nID );
-	if ( CDynamicCast<CComboBoxItem> pComboBoxItem( pItem ) )
+	CDynamicCast<CComboBoxItem> pComboBoxItem((pItem));
+	if ( pComboBoxItem )
 	{
 		if ( pList->GetSelectedItem() != nID )
 			pList->SetSelectedItem( nID );
@@ -1383,7 +1385,7 @@ float CProgressBar::GetValue()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CProgressBar::SetValue( float _fValue )
 {
-	fValue = min( max( _fValue, 0 ), 1 );
+	fValue = min( max( _fValue, 0.0f ), 1.0f );  // silent-storm-port: float literals for type deduction
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CProgressBar::ProcessMessage( const SEvent &sEvent )

@@ -6,8 +6,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // universal bilinear interpolation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-template<class T, class TInterp> 
-inline TInterp::RET GetBilinear( const CArray2D<T> &data, float x, float y, const TInterp &interp )
+template<class T, class TInterp>
+inline typename TInterp::RET GetBilinear( const CArray2D<T> &data, float x, float y, const TInterp &interp )  // silent-storm-port: needs typename
 {
 	x = Clamp( x, 0.0f, data.GetXSize() - 1.01f );
 	y = Clamp( y, 0.0f, data.GetYSize() - 1.01f );

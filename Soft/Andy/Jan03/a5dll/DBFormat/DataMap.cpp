@@ -10,6 +10,11 @@
 #include "DataScenario.h"
 #include "DataSound.h"
 #include "DataText.h"
+#include "DataLight.h"      // NDb::CTAmbientLight full definition
+#include "DataObject.h"     // NDb::CPlacableObject, NDb::CRndContainerModel full definitions
+#include "DataInterface.h"  // NDb::CUITexture full definition
+#include "DataAI.h"         // NDb::CUnitGroup full definition
+#include "DataRPG.h"        // NDb::CUnit, NDb::CExplosion, etc.
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 externA5 CVec3 GetColor( DWORD dwColor );
@@ -24,7 +29,7 @@ inline void DebugStringInt( const char *str, int i )
 template<class T> inline bool PushItem( vector<CPtr<T> > *pItems, T *p )
 {
 	ASSERT( pItems );
-	vector<CPtr<T> >::const_iterator i = find( pItems->begin(), pItems->end(), p );
+	vector<CPtr<T> >::const_iterator i = find( pItems->begin(), pItems->end(), CPtr<T>(p) );
 	if ( i == pItems->end() )
 	{
 		pItems->push_back( p );
@@ -50,7 +55,7 @@ void UnpackVariantFlags( const string &str, vector<SVariantFlags> *pFlags )
 		return;
 	
 	vector<string> sets;
-	// наборы флагов между собой разделяются ';'
+	// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ';'
 	NStr::SplitString( str, sets, ';' );
 	pFlags->resize( sets.size() );
 	for ( int i = 0; i < sets.size(); ++i )
@@ -59,7 +64,7 @@ void UnpackVariantFlags( const string &str, vector<SVariantFlags> *pFlags )
 			continue;
 		vector<int> &flags = (*pFlags)[i].flags;
 		vector<string> attrInds;
-		// идексы флагов разделяются ','
+		// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ','
 		NStr::SplitString( sets[i], attrInds, ',' );
 		for ( int j = 0; j < attrInds.size(); ++j )
 			flags.push_back( atoi( attrInds[j].c_str() ) );
@@ -747,7 +752,7 @@ void MinMaxTiles4Solids( CTemplVariant *pVar, const vector<CPtr<T> > &fragments 
 			pVar->nMaxY = Max( pVar->nMaxY, (int)tiles[k].y );
 		}
 		pVar->nMinFloor = Min( pVar->nMinFloor, frag.nFloor );
-		// солидный объект может занимать на этаж больше чем указана его высота, поэтому не отнимаем 1
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1
 		pVar->nMaxFloor = Max( pVar->nMaxFloor, frag.nFloor + frag.pModel->nHeight );
 	}
 }
@@ -767,7 +772,8 @@ void AssignItems( L *p = 0 )
 			SItemAssign item;
 			item.nQuantity = pW->nQuantity;
 			item.pItem = pW->pItem;
-			if ( CDynamicCast<CRPGClip4Pers> pClip4Pers( pW ) )
+			CDynamicCast<CRPGClip4Pers> pClip4Pers( pW );
+			if ( pClip4Pers )
 				item.pAmmo = pClip4Pers->pAmmo;
 			pW->pPers->items.push_back(item);
 		}

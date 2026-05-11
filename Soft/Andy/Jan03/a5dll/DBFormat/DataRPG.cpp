@@ -8,6 +8,8 @@
 #include "..\Misc\RandomGen.h"
 #include "..\Main\AIPosition.h"
 #include "DataPerk.h"
+#include "DataInterface.h"  // NDb::CUITexture, NDb::CUIContainer full definitions
+#include "DataAck.h"        // NDb::CDBDialogPers full definition
 
 namespace NDb
 {
@@ -387,7 +389,7 @@ void CRPGWeapon::Import()
 	NDatabase::ImportField( "Targeting", &nTargetingAP );
 	NDatabase::ImportField( "Recoil", &nRecoil );
 	NDatabase::ImportField( "RoF", &nRoF );
-	NDatabase::ImportField( "DamageMîd", &nDamageMod );
+	NDatabase::ImportField( "DamageMï¿½d", &nDamageMod );
 	NDatabase::ImportField( "WeaponTypeID", &pWeaponType );
 	NDatabase::ImportField( "AmmoTypeID", &pAmmo );
 	NDatabase::ImportField( "ItemID", &pItem );
@@ -1056,7 +1058,7 @@ void CSide::Import()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 using namespace NDb;
-// Format 0x[×åëîâåê]DDMYHHN
+// Format 0x[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]DDMYHHN
 REGISTER_SAVELOAD_CLASS( 0xE0502151, CRPGArmor )
 REGISTER_SAVELOAD_CLASS( 0xE0502152, CRPGAmmo )
 REGISTER_SAVELOAD_CLASS( 0xE0502130, CRPGBaseValue )

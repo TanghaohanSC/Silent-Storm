@@ -47,30 +47,32 @@ const char* GetBoneName( EUnitItemType type, NRPG::IInventoryItem *pItem, bool b
 	const char *pszBoneName = 0;
 	switch ( type )
 	{
-		case UIT_WEAPON_HEAVY:
-			if ( CDynamicCast<NRPG::IWeaponItemInfo> pWeapon(pItem) )
-			{
-				NDb::CAnimWeaponType *pWType = pWeapon->GetDBWeapon()->pAnimWeaponType;
-				ASSERT( pWType );
-				if ( !pWType )
-					return "";
-				switch ( pWType->type )
+		case UIT_WEAPON_HEAVY: {  // silent-storm-port: brace block вЂ” decl in case
+				CDynamicCast<NRPG::IWeaponItemInfo> pWeapon((pItem));
+				if ( pWeapon )
 				{
-					case NDb::WT_RIFLE:
-						pszBoneName = "Rifle";
-						break;
-					case NDb::WT_SUB_MACHINE_GUN:
-						pszBoneName = "SubMachineGun";
-						break;
-					case NDb::WT_MACHINE_GUN:
-						pszBoneName = "MachineGun";
-						break;
-					case NDb::WT_RLAUNCHER:
-						pszBoneName = "RocketLauncher";
-						break;
-					default:
-						ASSERT( 0 );
+					NDb::CAnimWeaponType *pWType = pWeapon->GetDBWeapon()->pAnimWeaponType;
+					ASSERT( pWType );
+					if ( !pWType )
 						return "";
+					switch ( pWType->type )
+					{
+						case NDb::WT_RIFLE:
+							pszBoneName = "Rifle";
+							break;
+						case NDb::WT_SUB_MACHINE_GUN:
+							pszBoneName = "SubMachineGun";
+							break;
+						case NDb::WT_MACHINE_GUN:
+							pszBoneName = "MachineGun";
+							break;
+						case NDb::WT_RLAUNCHER:
+							pszBoneName = "RocketLauncher";
+							break;
+						default:
+							ASSERT( 0 );
+							return "";
+					}
 				}
 			}
 			break;
@@ -152,7 +154,7 @@ void GetItemsBindPlaces( vector<IRenderVisitor::SBoundMesh> *pRes, NRPG::IUnitMi
 		AttachItem( pRes, &rnd, UIT_PK_LEFT_HAND, pLeftHandItem->pModel, bIsPK );
 	}
 	bool bHeavy = false;
-	hash_map< int, int > slotItems; // номер слота либо -1 для активного оружия
+	hash_map< int, int > slotItems; // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ -1 пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	NRPG::IInventoryItem *pActiveIItem = pInventory->GetActive();
 	NDb::CRPGItem *pActiveItem = 0;
 	if ( pActiveIItem )

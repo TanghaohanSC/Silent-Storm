@@ -132,7 +132,7 @@ void DumpMemoryStats()
 		{
 			const char *pszFileName = 0;
 			int nLine;
-			GetSourceLine( k->first, pszFileName, nLine );
+			GetSourceLine( k->first, &pszFileName, &nLine );  // silent-storm-port: args 2,3 are out-pointers
 			if ( pszFileName )
 				sprintf( szBuf, "%s(%d): max block = %d, blocks = %d, total = %d\n", 
 					pszFileName, nLine, k->second.nMax, k->second.nNumber, k->second.nTotal );

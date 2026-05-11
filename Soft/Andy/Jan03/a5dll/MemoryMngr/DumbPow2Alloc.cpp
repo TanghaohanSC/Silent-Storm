@@ -1,17 +1,19 @@
 #include "StdAfx.h"
 #include "..\Misc\Tools.h"
+#include <cstdlib>
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-__declspec(dllimport) void* FastDumbAlloc( int _nSize );
-__declspec(dllimport) void FastDumbFree( void *pData );
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// silent-storm-port: original imported FastDumbAlloc/FastDumbFree from
+// MemoryMngrDll. We skip that subproject (proprietary fast alloc); fall back
+// to the C runtime allocator. This also matches the contract for replaceable
+// operator new — it's a single-point override at link time.
 void* __cdecl operator new( size_t n )
 {
-	return FastDumbAlloc( n );
+	return std::malloc( n );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void __cdecl operator delete( void *p )
 {
-	FastDumbFree(p);
+	std::free(p);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void *__cdecl operator new[](size_t count) //_THROW1(std::bad_alloc)

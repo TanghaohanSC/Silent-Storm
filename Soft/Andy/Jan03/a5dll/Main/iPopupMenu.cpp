@@ -220,7 +220,7 @@ CPopupMenu::CPopupMenu( IWindow *pContainer ):
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CPopupMenu::AddItem( const string &szID, const wstring &wsText, NDb::CUITexture *pIcon )
 {
-	SItem &sItem = *itemsSet.insert( itemsSet.end() );
+	SItem &sItem = *itemsSet.emplace(itemsSet.end());
 
 	bUpdated = true;
 	sItem.szID = szID;
@@ -233,7 +233,7 @@ void CPopupMenu::AddItem( const string &szID, const wstring &wsText, NDb::CUITex
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CPopupMenu::AddSeparator()
 {
-	SItem &sItem = *itemsSet.insert( itemsSet.end() );
+	SItem &sItem = *itemsSet.emplace(itemsSet.end());
 
 	bUpdated = true;
 	sItem.bSeparator = true;

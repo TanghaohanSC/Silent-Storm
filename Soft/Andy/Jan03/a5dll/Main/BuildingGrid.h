@@ -29,7 +29,7 @@ struct SRoomMatch
 	SRoomMatch( int _nFloor, int _nInt, int _nGlob )
 		: nFloor(_nFloor), nInternalRoom(_nInt), nGlobalRoom(_nGlob) {}
 };
-const ZSHIFT = 16;
+const int ZSHIFT = 16;  // silent-storm-port: implicit int forbidden in C++17+
 inline int GetPieceHash( const SPoint3 &p ) 
 {
 	const int x = p.x + 4;
@@ -67,7 +67,7 @@ class CBuildingGrid : public CVersioningBase
 	bool bStabilityUpdate;
 	int nBaseFloor;
 	
-	//вычисляемые значения /ComputeAuxValues()/
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ /ComputeAuxValues()/
 	SPlane6 box;
 	int nCutFloor; // for WYSIWYG
 	hash_map<int, bool> visibleLayers;
@@ -107,12 +107,12 @@ public:
 	int  GetBaseFloor() const { return nBaseFloor; }
 	void SetCutFloor( int nFloor );
 	int  GetCutFloor() const { return nCutFloor; }
-	// визуализация здания по слоям (MapEditor)
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (MapEditor)
 	void SetVisibleLayers( const vector<int> &layers );
 	void SetOnlyCutFloorVisible( bool bVis );
 	bool IsLayerVisible( int nLayerID ) const;
 	bool IsOnlyCutFloorVisible() const;
-	// куски зданий
+	// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	void UpdatePart( const SPoint3 &pt );
 	void GetUpdatedParts( vector<SPart> *pParts );
 

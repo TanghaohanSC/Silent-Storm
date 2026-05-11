@@ -306,10 +306,11 @@ bool CUICmdExecShowTeamMng::Update( const STime &sTime )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CUICmdExec* CreateExecutor( NWorld::CUICmd *pCmd, IMission *pMission )
 {
-	if ( CDynamicCast<NWorld::CUICmdTurn> pTurn( pCmd ) )
+	CDynamicCast<NWorld::CUICmdTurn> pTurn((pCmd));
+	if ( pTurn )
 	{
 	}
-	else if ( CDynamicCast<NWorld::CUICmdUnit> pUnit( pCmd ) )
+	else if ( NWorld::CUICmdUnit* pUnit = (NWorld::CUICmdUnit*)(CDynamicCast<NWorld::CUICmdUnit>(pCmd)) )
 	{
 		NWorld::CUnit *pWUnit = pUnit->pUnit;
 		if ( !bCameraFollow )
@@ -328,15 +329,15 @@ CUICmdExec* CreateExecutor( NWorld::CUICmd *pCmd, IMission *pMission )
 		pContainer->Add( new CUICmdRestoreCameraExec( pUnit, pMission ) );
 		return pContainer;
 	}
-	else if ( CDynamicCast<NWorld::CUICmdMoveCamera> pCamera( pCmd ) )
+	else if ( NWorld::CUICmdMoveCamera* pCamera = (NWorld::CUICmdMoveCamera*)(CDynamicCast<NWorld::CUICmdMoveCamera>(pCmd)) )
 		return new CUICmdMoveCameraExec( pCmd, pMission, pCamera->pos, pCamera->transitionTime );
-	else if ( CDynamicCast<NWorld::CUICmdContinueChapter> pContinueChapter( pCmd ) )
+	else if ( NWorld::CUICmdContinueChapter* pContinueChapter = (NWorld::CUICmdContinueChapter*)(CDynamicCast<NWorld::CUICmdContinueChapter>(pCmd)) )
 		return new CUICmdExecContinueChapter( pCmd, pMission );
-	else if ( CDynamicCast<NWorld::CUICmdLoadTemplate> pLoadTemplate( pCmd ) )
+	else if ( NWorld::CUICmdLoadTemplate* pLoadTemplate = (NWorld::CUICmdLoadTemplate*)(CDynamicCast<NWorld::CUICmdLoadTemplate>(pCmd)) )
 		return new CUICmdExecLoadTemplate( pCmd, pMission, pLoadTemplate->pZone, pLoadTemplate->nTemplateID );
-	else if ( CDynamicCast<NWorld::CUICmdShowStore> pShowStore( pCmd ) )
+	else if ( NWorld::CUICmdShowStore* pShowStore = (NWorld::CUICmdShowStore*)(CDynamicCast<NWorld::CUICmdShowStore>(pCmd)) )
 		return new CUICmdExecShowStore( pCmd, pMission );
-	else if ( CDynamicCast<NWorld::CUICmdShowTeamMng> pShowTeamMng( pCmd ) )
+	else if ( NWorld::CUICmdShowTeamMng* pShowTeamMng = (NWorld::CUICmdShowTeamMng*)(CDynamicCast<NWorld::CUICmdShowTeamMng>(pCmd)) )
 		return new CUICmdExecShowTeamMng( pCmd, pMission );
 	//
 	return 0;

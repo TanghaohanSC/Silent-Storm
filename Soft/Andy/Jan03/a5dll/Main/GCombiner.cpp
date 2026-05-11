@@ -42,7 +42,7 @@ void IPart::ResetCachedTransform()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void IPart::SetCombiner( CPerMaterialCombiner *_pCombiner, bool bForceUpdate, bool bAnimated )
 {
-	if ( pCombiner == _pCombiner )
+	if ( pCombiner.GetPtr() == _pCombiner )  // silent-storm-port: ambiguous CPtr==T*
 	{
 		if ( IsValid( pCombiner ) )
 		{
@@ -829,7 +829,7 @@ struct SGenericPosTransformer
 template<class T>
 struct SPartTransformer : public T
 {
-	int DoTransform( IPart *p, T::TRes *pRes, const vector<CVec3> &transformed )
+	int DoTransform( IPart *p, typename T::TRes *pRes, const vector<CVec3> &transformed )  // silent-storm-port: needs typename
 	{
 		CObjectInfo *pObjInfo = p->GetObjectInfo();
 		if ( !pObjInfo )
@@ -1115,7 +1115,7 @@ void CVBCombiner::Recalc()
 
 	float fLMSize1 = 1.0f / 1024;//NGfx::GetLMTexResolution();
 	NGfx::CBufferLock<SGfxVertex> geom( &pValue, nLMs * 4, bufUsage );
-	// Создаем общий вертекс буфер, в котором слиты все кусочки
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	int iVert = 0;
 	SPartTransformer<SGenericTransformer> trans;
 	for ( i = parts.begin(); i != parts.end(); ++i )

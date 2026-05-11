@@ -166,7 +166,8 @@ void CExecQueue::GetSearchFromPosition( NAI::SPathPlace *pRes )
 	if ( !execList.empty() )
 	{
 		CCommandExecute *pFront = execList.front();
-		if ( CDynamicCast<IExecMove> pMove( pFront ) )
+		CDynamicCast<IExecMove> pMove((pFront));
+		if ( pMove )
 		{
 			pMove->GetSearchFromPosition( pRes );
 			return;
@@ -183,7 +184,8 @@ void CExecQueue::GetDesiredPlace( NAI::SPathPlace *pRes, NAI::EFindPathParams *p
 	list<CObj<CCommandExecute> >::iterator i;
 	for ( i = execList.begin(); i != execList.end(); ++i )
 	{
-		if ( CDynamicCast<IExecMove> pMove( *i ) )
+		CDynamicCast<IExecMove> pMove((*i));
+		if ( pMove )
 			pMove->GetDesiredPlace( pRes, pParams );
 	}
 }
@@ -193,7 +195,8 @@ void CExecQueue::FullCancel()
 	if ( !execList.empty() )
 	{
 		CPtr<CCommandExecute> pFront = execList.front();
-		if ( CDynamicCast<IExecMove> pMove( pFront ) )
+		CDynamicCast<IExecMove> pMove((pFront));
+		if ( pMove )
 			pMove->FullCancel();
 	}
 }
@@ -202,7 +205,8 @@ void CExecQueue::GetPathPoints( list<SPathPoint> *pRes )
 {
 	for ( list<CObj<CCommandExecute> >::iterator i = execList.begin(); i != execList.end(); ++i )
 	{
-		if ( CDynamicCast<IExecMove> pMove( *i ) )
+		CDynamicCast<IExecMove> pMove((*i));
+		if ( pMove )
 			pMove->GetPathPoints( pRes );
 	}
 }
@@ -222,7 +226,8 @@ void CExecQueue::SetNewPath( NAI::CPath *pPath, NAI::EFindPathParams _eParams, E
 	NAI::EFindPathParams params;
 	for ( i = oldExecList.begin(); i != oldExecList.end(); ++i )
 	{
-		if ( CDynamicCast<IExecMove> pMove( *i ) )
+		CDynamicCast<IExecMove> pMove((*i));
+		if ( pMove )
 		{
 			pMove->GetDesiredPlace( &p, &params );
 			if ( p == pPath->points.back() && _eParams == params )
@@ -335,7 +340,7 @@ void CExecQueue::AddPath( NAI::CPath *pPath, NAI::EFindPathParams _eParams, ENee
 			{
 				pOldFront->SetNewPath( pSimplePath, _eParams, ITEM_NO_MATTER );
 				CDynamicCast<CCommandExecute> pPush( pOldFront );
-				execList.push_back( pPush.GetPtr() );
+				execList.push_back( (CCommandExecute*)pPush );
 			}
 			bFirstPath = false;
 	
@@ -370,7 +375,7 @@ void CExecQueue::AddPath( NAI::CPath *pPath, NAI::EFindPathParams _eParams, ENee
 	{
 		pOldFront->SetNewPath( pSimplePath, _eParams, eActive );
 		CDynamicCast<CCommandExecute> pPush( pOldFront );
-		execList.push_back( pPush.GetPtr() );
+		execList.push_back( (CCommandExecute*)pPush );
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -379,7 +384,8 @@ void CExecQueue::CheckOpenCloseOnce()
 	if ( execList.empty() )
 		return;
 	CCommandExecute *pExec = execList.back();
-	if ( CDynamicCast<CExecOpenClose> pOpen( pExec ) )
+	CDynamicCast<CExecOpenClose> pOpen((pExec));
+	if ( pOpen )
 	{
 		bool bOpen; 
 		IObject *pObj; 

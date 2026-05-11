@@ -194,7 +194,7 @@ bool Script::CheckArgs( const char *szArgList, string sFuncName, vector<SLuaPara
 		}
 		else if ( szDefaultValue != "" )
 		{
-			// параметры по умолчанию
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 			switch( cTypeID )
 			{
 				case 'n':
@@ -367,8 +367,6 @@ string Script::GetObjectAsText( const char* name, Script::Object value, unsigned
 	Script& script = *this;
 	string strRet;
 	char buff[1024];
-	using Script::Object;
-
 	// Indent the line the number of spaces for the current indentation level.
 	const unsigned int INDENT_SIZE = 2;
 	const unsigned int indentSpaces = indentLevel * INDENT_SIZE;
@@ -605,13 +603,13 @@ int Script::operator&( CStructureSaver &f )
 		f.Add( 2, &m_ownState );
 		ASSERT( m_ownState );
 		m_state = lua_open(0);
-		f.Add( 3, m_state ); // все правильно, амперсенд не нужен
+		f.Add( 3, m_state ); // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 	}
 	else
 	{
-		ASSERT( m_ownState ); // не умеем сериалайзить, если стейт не свой
+		ASSERT( m_ownState ); // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ
 		f.Add( 2, &m_ownState );
-		f.Add( 3, m_state ); // все правильно, амперсенд не нужен
+		f.Add( 3, m_state ); // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 	}
 	return 0; 
 }

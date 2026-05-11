@@ -340,8 +340,8 @@ class CAckEvent: public CObjectBase
 	OBJECT_BASIC_METHODS(CAckEvent);
 public:
 	ZDATA
-	int nPriority; // приоритет
-	CPtr<NWorld::CUnit> pUnit; // кто выполняет
+	int nPriority; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	CPtr<NWorld::CUnit> pUnit; // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	CDBPtr<NDb::CDBAckInfo> pAckInfo; // ack
 	ZEND int operator&( CStructureSaver &f ) { f.Add(2,&nPriority); f.Add(3,&pUnit); f.Add(4,&pAckInfo); return 0; }
 
@@ -453,7 +453,11 @@ public:
 	{
 		CUnitSet u;
 		GetUnits( &u );
-		return find( u.begin(), u.end(), pUnit ) != u.end();
+		// silent-storm-port: explicit lambda вЂ” find(container<CPtr<T>>, T*) is
+		// ambiguous in C++17 (CPtr::operator==(T*) vs operator T*()).
+		for ( CUnitSet::iterator it = u.begin(); it != u.end(); ++it )
+			if ( it->GetPtr() == pUnit ) return true;
+		return false;
 	}
 	virtual int GetScenarioPlayerID() const = 0;
 };

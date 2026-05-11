@@ -150,7 +150,8 @@ BEGIN_SCRIPT_COMMAND( HasInventoryItem, "n" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitSetXPLevel, "un" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		int nLevel = luaParams[ 1 ].f;
 		pUS->GetUnitRPG()->GetRPGUnit()->SetXPLevel( nLevel );
@@ -227,7 +228,8 @@ BEGIN_SCRIPT_COMMAND( UnitShoot, "uun" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitSetShootMode, "un" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		NDb::EShootMode mode = ( NDb::EShootMode )luaParams[ 1 ].n;
 		pUS->Do( new NWorld::CCmdSetCommand( pUS, new NWorld::CCmdShootMode( mode ) ) );
@@ -237,7 +239,8 @@ BEGIN_SCRIPT_COMMAND( UnitSetShootMode, "un" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitSetWishPose, "un" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		NAI::EPose pose = ( NAI::EPose )luaParams[ 1 ].n;
 		pUS->Do( new NWorld::CCmdSetCommand( pUS, new NWorld::CCmdWishPose( pose ) ) );
@@ -247,7 +250,8 @@ BEGIN_SCRIPT_COMMAND( UnitSetWishPose, "un" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitSetPose, "un" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		NAI::EPose pose = ( NAI::EPose )luaParams[ 1 ].n;
 		NAI::SUnitPosition pos = pUS->GetPosition();
@@ -259,7 +263,8 @@ BEGIN_SCRIPT_COMMAND( UnitSetPose, "un" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitSetDirection, "un" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		NAI::EDirection dir = ( NAI::EDirection )luaParams[ 1 ].n;
 		NAI::SPosition pos = pUS->GetPosition().pos;
@@ -283,7 +288,8 @@ BEGIN_SCRIPT_COMMAND( UnitIsDead, "u" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitIsUnconscious, "u" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		if ( pUS->IsUnconscious() )
 		{
@@ -298,7 +304,8 @@ END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitGetVisible, "u" )
 	CObj<NWorld::CUnitGroup> pGroup = pScript->pWorld->CreateUnitGroup();
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		for ( list< CPtr<NWorld::CUnitServer> >::const_iterator 
 			i = pUS->GetTBSVisible().begin(); i != pUS->GetTBSVisible().end(); ++i )
@@ -325,7 +332,8 @@ BEGIN_SCRIPT_COMMAND( UnitIsSeeUnit, "uu" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitReload, "u" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		pUS->Do( new NWorld::CCmdSetCommand( pUS, new NWorld::CCmdReload() ) );
 		pUS->Do( new NWorld::CCmdSetCommand( pUS, new NWorld::CCmdContinue() ) );
@@ -334,7 +342,8 @@ BEGIN_SCRIPT_COMMAND( UnitReload, "u" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitCheat, "unb" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		int nCheat = luaParams[ 1 ].n;
 		bool bEnable = luaParams[ 2 ].b;
@@ -342,7 +351,8 @@ BEGIN_SCRIPT_COMMAND( UnitCheat, "unb" )
 		//
 		if ( nCheat == NRPG::CHEAT_NOAI )
 		{
-			if ( CDynamicCast<NAI::CAICommander> pAICommander( pUS->GetPlayer()->GetCommander() ) )
+			CDynamicCast<NAI::CAICommander> pAICommander((pUS->GetPlayer()->GetCommander()));
+			if ( pAICommander )
 			{
 				CPtr<NAI::IAIUnit> pAIUnit = pAICommander->GetAIUnit( pUS );
 				ASSERT( IsValid( pAIUnit ) );
@@ -360,7 +370,8 @@ BEGIN_SCRIPT_COMMAND( UnitCheat, "unb" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitKill, "u" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		NRPG::SCritical rpgCritical( NDb::CL_HEAD, NDb::C_DEATH );
 		pUS->GetUnitRPG()->ApplyCritical( rpgCritical );
@@ -370,7 +381,8 @@ BEGIN_SCRIPT_COMMAND( UnitKill, "u" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitPlayAnimation, "unb" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		int nDBAnimationID = luaParams[ 1 ].n;
 		bool bCircled = luaParams[ 2 ].b;
@@ -381,7 +393,8 @@ BEGIN_SCRIPT_COMMAND( UnitPlayAnimation, "unb" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitHide, "u" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		pUS->Do( new NWorld::CCmdSetCommand( pUS, new NWorld::CCmdHide() ) );
 		pUS->Do( new NWorld::CCmdSetCommand( pUS, new NWorld::CCmdContinue() ) );
@@ -397,19 +410,22 @@ BEGIN_SCRIPT_COMMAND( UnitDrawPerksTree, "u" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitTakePerk, "un" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 		pUS->GetUnitRPG()->GetRPGUnit()->GetPerksTree()->TakePerk( luaParams[ 1 ].n );
 	return 0;
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitCancelAction, "u" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 		pUS->Do( new NWorld::CCmdCancel() );
 	return 0;
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitRemove, "u" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		// если это clue, то он считается уничтоженным
 		CPtr<NScenario::CScenarioTracker> pTracker = pScript->pWorld->GetGlobalGame()->pScenarioTracker;
@@ -427,7 +443,8 @@ BEGIN_SCRIPT_COMMAND( UnitRemove, "u" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitGetName, "u" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		string szName;
 		if ( pScript->pWorld->GetUnitName( pUS, &szName ) )
@@ -441,7 +458,8 @@ BEGIN_SCRIPT_COMMAND( UnitGetName, "u" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitSetPlayer, "un" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		CPtr<NWorld::CPlayer> pPlayer = pScript->pWorld->GetPlayerByID( luaParams[ 1 ].n );
 		if ( IsValid( pPlayer ) )
@@ -453,7 +471,8 @@ BEGIN_SCRIPT_COMMAND( UnitSetPlayer, "un" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitSetDialog, "us" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		pUS->SetDialog( luaParams[ 1 ].s );
 		pUS->SetCanTalk( true );
@@ -462,7 +481,8 @@ BEGIN_SCRIPT_COMMAND( UnitSetDialog, "us" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitSetCanTalk, "ub[true]" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 		pUS->SetCanTalk( luaParams[ 1 ].b );
 	return 0;
 END_SCRIPT_COMMAND
@@ -489,7 +509,8 @@ BEGIN_SCRIPT_COMMAND( UnitTakeCorpse, "uu" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitDropCorpse, "u" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		pUS->Do( new NWorld::CCmdSetCommand( pUS, new NWorld::CCmdDropCorpse() ) );
 		pUS->Do( new NWorld::CCmdSetCommand( pUS, new NWorld::CCmdContinue() ) );
@@ -498,13 +519,15 @@ BEGIN_SCRIPT_COMMAND( UnitDropCorpse, "u" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitMakeUnconscious, "u" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 		pUS->MakeUnconscious( VNULL3, true );
 	return 0;
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitActivateWeapon, "ub[true]" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		NWorld::ENeedActiveItem needActiveItem = luaParams[ 1 ].b ? NWorld::ITEM_ACTIVE : NWorld::ITEM_INACTIVE;
 		pUS->Do( new NWorld::CCmdSetCommand( pUS, 
@@ -515,7 +538,8 @@ BEGIN_SCRIPT_COMMAND( UnitActivateWeapon, "ub[true]" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitPlaceInPocket, "u" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		if ( !pScript->pWorld->IsUnitInPocket( pUS ) )
 		{
@@ -527,7 +551,8 @@ BEGIN_SCRIPT_COMMAND( UnitPlaceInPocket, "u" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitRestoreFromPocket, "u" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
 		if ( pScript->pWorld->IsUnitInPocket( pUS ) )
 		{
@@ -539,9 +564,11 @@ BEGIN_SCRIPT_COMMAND( UnitRestoreFromPocket, "u" )
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitGetRoute, "u" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
-		if ( CDynamicCast<NAI::CAICommander> pCommander( pUS->GetPlayer()->GetCommander() ) )
+		CDynamicCast<NAI::CAICommander> pCommander((pUS->GetPlayer()->GetCommander()));
+		if ( pCommander )
 		{
 			CPtr<NAI::IAIUnit> pUnit( pCommander->GetAIUnit( pUS ) );
 			if ( IsValid( pUnit ) )
@@ -557,16 +584,19 @@ END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( RouteIsFinished, "u" )
 	bool bFinished = true;
-	if ( CDynamicCast<NAI::CTask> pTask( luaParams[ 0 ].p ) )
+	CDynamicCast<NAI::CTask> pTask((luaParams[ 0 ].p));
+	if ( pTask )
 		bFinished = pTask->IsEndOfTask();
 	luaPushBool( pState, bFinished );
 	return 1;
 END_SCRIPT_COMMAND
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN_SCRIPT_COMMAND( UnitAI, "u" )
-	if ( CDynamicCast<NWorld::CUnitServer> pUS( luaParams[ 0 ].p ) )
+	CDynamicCast<NWorld::CUnitServer> pUS((luaParams[ 0 ].p));
+	if ( pUS )
 	{
-		if ( CDynamicCast<NAI::CAICommander> pCommander( pUS->GetPlayer()->GetCommander() ) )
+		CDynamicCast<NAI::CAICommander> pCommander((pUS->GetPlayer()->GetCommander()));
+		if ( pCommander )
 		{
 			CPtr<NAI::IAIUnit> pUnit( pCommander->GetAIUnit( pUS ) );
 			if ( IsValid( pUnit ) )

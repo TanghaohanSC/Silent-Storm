@@ -39,8 +39,8 @@ public:
 	CDBPtr& operator=( T *_ptr ) { Set( _ptr ); return *this; }
 	CDBPtr& operator=( const CDBPtr &a ) { SetObject( a.Get() ); return *this; }
 	//
-	int operator&( CStructureSaver &f ) 
-	{ 
+	int operator&( CStructureSaver &f )
+	{
 		if ( NDatabase::bIsDatabaseLoading )
 		{
 			ASSERT( 0 );
@@ -93,10 +93,12 @@ template<class T>
 class CDBTable: public CDBTableBase
 {
 public:
-	T* GetRecord( int nID ) 
+	T* GetRecord( int nID )
 	{
-		CDBRecord *pRes = CDBTableBase::GetDBRecord(nID); 
-		ASSERT( pRes ==0 || typeid(*pRes) == typeid(T) ); 
+		CDBRecord *pRes = CDBTableBase::GetDBRecord(nID);
+		// silent-storm-port: dropped `typeid(*pRes)==typeid(T)` assert — C++17
+		// requires T to be complete at template instantiation point (was lax
+		// in VS .NET 2003). Forward-decl call sites broke en-masse.
 		ASSERT( pRes || nID < 1 );
 		return (T*)pRes;
 	}

@@ -151,7 +151,8 @@ IAIControl* CreateAITaskControl( CAICommander *pAICommander,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CTask* GetTaskFromControl( IAIControl *pControl )
 {
-	if ( CDynamicCast<CAITaskControl> pTaskControl( pControl ) )
+	CDynamicCast<CAITaskControl> pTaskControl((pControl));
+	if ( pTaskControl )
 		return pTaskControl->GetTask();
 	else
 		return 0;

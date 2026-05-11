@@ -23,7 +23,9 @@ class CCollider;
 struct SDoorColliderAnalyzer;
 class CPassCalcer
 {
+public:  // silent-storm-port: STile referenced by free function
 	typedef CNodesLayer::STile STile;
+private:
 	struct SLadderInfo
 	{
 		int x;

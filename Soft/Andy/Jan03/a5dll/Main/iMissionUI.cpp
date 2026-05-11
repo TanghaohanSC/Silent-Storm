@@ -80,7 +80,7 @@ inline wstring ConvertLineBreaks( const wstring &szStr )
 				if ( i != szStr.end() && *i == L'\n' )
 					++i;
 				continue;
-			case 133: // symbol L'…'
+			case 133: // symbol L'ï¿½'
 				szRet += L"...";
 				break;
 			default:
@@ -862,8 +862,8 @@ void CMissionUI::UpdateEnemies()
 		}
 
 		const NUI::SPoint &sSize = pIcon->GetSize();
-		vScreenPos.x = max( min( vScreenPos.x, sViewRect.x2 ), sViewRect.x1 );
-		vScreenPos.y = max( min( vScreenPos.y, sViewRect.y2 ), sViewRect.y1 );
+		vScreenPos.x = max( min( vScreenPos.x, (float)sViewRect.x2 ), (float)sViewRect.x1 );  // silent-storm-port: explicit casts for min/max
+		vScreenPos.y = max( min( vScreenPos.y, (float)sViewRect.y2 ), (float)sViewRect.y1 );
 
 		pIcon->Set( pEnemy, bVisible, fAngle );
 		pIcon->SetPosition( SPoint( vScreenPos.x, vScreenPos.y ) );

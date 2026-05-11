@@ -284,7 +284,8 @@ static void CommandSetDifficulty( const string &szID, const vector<wstring> &par
 		return;
 	//
 	CObjectBase *pObject = (CObjectBase *)pContext;
-	if ( CDynamicCast<CGlobalMap> pMap( pObject) )
+	CDynamicCast<CGlobalMap> pMap((pObject));
+	if ( pMap )
 		pMap->GetGlobalGame()->ChangeDifficulty( wcstol( paramsSet[ 0 ].c_str(), 0, 10 ) );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

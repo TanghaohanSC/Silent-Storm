@@ -138,7 +138,7 @@ void PlayDialogAsAcks( CWorld *pWorld, int nDialogID )
 	vector< CPtr<NWorld::CAckEvent> > phrases;
 	vector< CObj<NWorld::CUnit> > units;
 	MakeDialogData( pWorld, nDialogID, &phrases, &units );
-	phrases.resize( min( NDb::N_ACKINFO_MAX_COUNT, phrases.size() ) );
+	phrases.resize( min( (size_t)NDb::N_ACKINFO_MAX_COUNT, phrases.size() ) );  // silent-storm-port
 	pWorld->AddUICommand( new NWorld::CUICmdPlayAck( phrases ) );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

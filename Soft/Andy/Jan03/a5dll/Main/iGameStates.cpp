@@ -234,7 +234,8 @@ bool CStateTeam::Initialize( IMission *pMission )
 	CObjectBase* pObject = GetMission()->GetStateTarget();
 	if ( !IsValid( pObject ) )
 		return false;
-	if ( CDynamicCast<NWorld::CUnit> pUnit( pObject ) )
+	CDynamicCast<NWorld::CUnit> pUnit((pObject));
+	if ( pUnit )
 	{
 		if ( pUnit->GetPlayer() != GetMission()->GetActivePlayer()->GetPlayer() )
 			return false;
@@ -279,7 +280,8 @@ bool CStateTeam::OnLButtonUp( int nX, int nY )
 	if ( !IsValid( pObject ) )
 		return false;
 
-	if ( CDynamicCast<NWorld::CUnit> pUnit( pObject ) )
+	CDynamicCast<NWorld::CUnit> pUnit((pObject));
+	if ( pUnit )
 		GetMission()->Select( pUnit, bModifier );
 
 	return true;
@@ -689,9 +691,11 @@ void CStateAttack::UpdateCursorInfo()
 			NAI::SPosition pos;
 			bool bTraceOk = GetMission()->GetTracePosition( &pos );
 
-			if ( CDynamicCast<NWorld::CUnit> pUnit( pTraceObject ) )
+			CDynamicCast<NWorld::CUnit> pUnit((pTraceObject));
+			if ( pUnit )
 			{
-				if ( CDynamicCast<NRPG::IWeaponItemInfo> pWeapon( (*iTemp)->GetUnit()->GetRPG()->GetInventoryInfo()->GetActive() ) )
+				CDynamicCast<NRPG::IWeaponItemInfo> pWeapon(((*iTemp)->GetUnit()->GetRPG()->GetInventoryInfo()->GetActive()));
+				if ( pWeapon )
 				{
 					if ( !pWeapon->GetDBWeapon()->bBazookaLogic )
 						nToHit = pWorld->GetGame()->GetCompositeToHit( (*iTemp)->GetUnit(), pUnit, eHitLocation, pWorld->IsFirstTurn() );
@@ -701,12 +705,12 @@ void CStateAttack::UpdateCursorInfo()
 							nToHit = pWorld->GetGame()->GetBazookaToHit( (*iTemp)->GetUnit(), pos.GetCP(),	NAI::THL_MIDDLE, pWorld->IsFirstTurn() );
 					}
 				}
-				else if ( CDynamicCast<NRPG::IGrenadeItemInfo> pGrenade( (*iTemp)->GetUnit()->GetRPG()->GetInventoryInfo()->GetActive() ) )
+				else if ( NRPG::IGrenadeItemInfo* pGrenade = (NRPG::IGrenadeItemInfo*)(CDynamicCast<NRPG::IGrenadeItemInfo>( (*iTemp)->GetUnit()->GetRPG()->GetInventoryInfo()->GetActive() )) )
 				{
 					if ( bTraceOk )
 						nToHit = pWorld->GetGame()->GetGrenadeCompositeToHit( (*iTemp)->GetUnit(), pos.GetCP(), pWorld->IsFirstTurn(), pGrenade->GetDBGrenade() );
 				}
-				else if ( CDynamicCast<NRPG::IMeleeWeaponItem> pMelee( (*iTemp)->GetUnit()->GetRPG()->GetInventoryInfo()->GetActive() ) )
+				else if ( NRPG::IMeleeWeaponItem* pMelee = (NRPG::IMeleeWeaponItem*)(CDynamicCast<NRPG::IMeleeWeaponItem>( (*iTemp)->GetUnit()->GetRPG()->GetInventoryInfo()->GetActive() )) )
 				{
 					//if ( pMelee->GetDBMeleeWeapon()->bThrowing )
 					nToHit = pWorld->GetGame()->GetCompositeToHit( (*iTemp)->GetUnit(), pUnit, eHitLocation, pWorld->IsFirstTurn() );	
@@ -714,9 +718,10 @@ void CStateAttack::UpdateCursorInfo()
 			}
 			else if ( bTraceOk )
 			{
-				if ( CDynamicCast<NRPG::IGrenadeItemInfo> pGrenade( (*iTemp)->GetUnit()->GetRPG()->GetInventoryInfo()->GetActive() ) )
+				CDynamicCast<NRPG::IGrenadeItemInfo> pGrenade(((*iTemp)->GetUnit()->GetRPG()->GetInventoryInfo()->GetActive()));
+				if ( pGrenade )
 					nToHit = pWorld->GetGame()->GetGrenadeCompositeToHit( (*iTemp)->GetUnit(), pos.GetCP(), pWorld->IsFirstTurn(), pGrenade->GetDBGrenade() );
-				else	if ( CDynamicCast<NRPG::IWeaponItemInfo> pWeapon( (*iTemp)->GetUnit()->GetRPG()->GetInventoryInfo()->GetActive() ) )
+				else if ( NRPG::IWeaponItemInfo* pWeapon = (NRPG::IWeaponItemInfo*)(CDynamicCast<NRPG::IWeaponItemInfo>( (*iTemp)->GetUnit()->GetRPG()->GetInventoryInfo()->GetActive() )) )
 				{
 					if ( !pWeapon->GetDBWeapon()->bBazookaLogic )
 						nToHit = pWorld->GetGame()->GetTileCompositeToHit( (*iTemp)->GetUnit(), pos.GetCP(), NAI::THL_MIDDLE, pWorld->IsFirstTurn() );
@@ -724,7 +729,7 @@ void CStateAttack::UpdateCursorInfo()
 						nToHit = pWorld->GetGame()->GetBazookaToHit( (*iTemp)->GetUnit(), pos.GetCP(),
 							NAI::THL_MIDDLE, pWorld->IsFirstTurn() );
 				}
-				else if ( CDynamicCast<NRPG::IMeleeWeaponItem> pMelee( (*iTemp)->GetUnit()->GetRPG()->GetInventoryInfo()->GetActive() ) )
+				else if ( NRPG::IMeleeWeaponItem* pMelee = (NRPG::IMeleeWeaponItem*)(CDynamicCast<NRPG::IMeleeWeaponItem>( (*iTemp)->GetUnit()->GetRPG()->GetInventoryInfo()->GetActive() )) )
 				{
 					if ( pMelee->GetDBMeleeWeapon()->bThrowing )
 						nToHit = pWorld->GetGame()->GetTileCompositeToHit( (*iTemp)->GetUnit(), pos.GetCP(), NAI::THL_MIDDLE, pWorld->IsFirstTurn() );	
@@ -815,21 +820,31 @@ bool CStateUse::Initialize( IMission *pMission )
 
 	bool bRet = false;
 	CVec4 vHilightColor( V_SELECTIONCOLOR_OBJECT );
-	if ( CDynamicCast<NWorld::CUnit> pDeadUnit( pObject ) )
+	CDynamicCast<NWorld::CUnit> pDeadUnit((pObject));
+	if ( pDeadUnit )
 	{
 		bRet = pDeadUnit->IsDead() || pDeadUnit->IsUnconscious();
 		vHilightColor = V_SELECTIONCOLOR_CORPSE;
 	}
-	else if ( CDynamicCast<NWorld::IObject> pTempObject( pObject ) )
+	else
 	{
-		vHilightColor = V_SELECTIONCOLOR_OBJECT;
+		// silent-storm-port: bulk CDynamicCast cleanup — flatten else-if chains
+		CDynamicCast<NWorld::IObject> pTempObject((pObject));
+		if ( pTempObject )
+		{
+			NWorld::IObject* pTempObjectRaw = pTempObject;
+			vHilightColor = V_SELECTIONCOLOR_OBJECT;
 
-		if ( CDynamicCast<NWorld::ICannon> pCannon( pTempObject.GetPtr() ) )
-			bRet = !pCannon->IsBroken();
-		else if ( CDynamicCast<NWorld::IWindowDoor> pWindowDoor( pTempObject.GetPtr() ) )
-			bRet = !pWindowDoor->IsBroken();
-		else if ( CDynamicCast<NWorld::IPassageObject> pPassage( pTempObject.GetPtr() ) )
-			bRet = !pPassage->IsBroken();
+			CDynamicCast<NWorld::ICannon> pCannon(pTempObjectRaw);
+			CDynamicCast<NWorld::IWindowDoor> pWindowDoor(pTempObjectRaw);
+			CDynamicCast<NWorld::IPassageObject> pPassage(pTempObjectRaw);
+			if ( pCannon )
+				bRet = !pCannon->IsBroken();
+			else if ( pWindowDoor )
+				bRet = !pWindowDoor->IsBroken();
+			else if ( pPassage )
+				bRet = !pPassage->IsBroken();
+		}
 	}
 
 	if ( !bRet )
@@ -896,7 +911,8 @@ NWorld::CCmd* CStateUse::GetTargetCmd()
 	if ( !IsValid( pObject ) )
 		return 0;
 
-	if ( CDynamicCast<NWorld::CUnit> pDeadUnit( pObject ) )
+	CDynamicCast<NWorld::CUnit> pDeadUnit((pObject));
+	if ( pDeadUnit )
 	{
 		if ( pDeadUnit->IsDead() || pDeadUnit->IsUnconscious() )
 		{
@@ -906,27 +922,35 @@ NWorld::CCmd* CStateUse::GetTargetCmd()
 				return new NWorld::CCmdDropCorpse( pDeadUnit );
 		}
 	}
-	else if ( CDynamicCast<NWorld::IObject> pTempObject( pObject ) )
+	else
 	{
-		if ( CDynamicCast<NWorld::ICannon> pCannon( pTempObject.GetPtr() ) )
+		CDynamicCast<NWorld::IObject> pTempObject((pObject));
+		if ( pTempObject )
 		{
-			if ( !pCannon->IsBroken() )
+			NWorld::IObject* pTempObjectRaw = pTempObject;
+			CDynamicCast<NWorld::ICannon> pCannon(pTempObjectRaw);
+			CDynamicCast<NWorld::IWindowDoor> pWindowDoor(pTempObjectRaw);
+			CDynamicCast<NWorld::IPassageObject> pPassage(pTempObjectRaw);
+			if ( pCannon )
 			{
-				if ( !pCannon->IsOccupied() )
-					return new NWorld::CCmdCannon( pTempObject );
-				else
-					return new NWorld::CCmdExitCannon;
+				if ( !pCannon->IsBroken() )
+				{
+					if ( !pCannon->IsOccupied() )
+						return new NWorld::CCmdCannon( pTempObjectRaw );
+					else
+						return new NWorld::CCmdExitCannon;
+				}
 			}
-		}
-		else if ( CDynamicCast<NWorld::IWindowDoor> pWindowDoor( pTempObject.GetPtr() ) )
-		{
-			if ( !pWindowDoor->IsBroken() )
-				return new NWorld::CCmdOpenClose( pTempObject, !pWindowDoor->IsOpen() );
-		}
-		else if ( CDynamicCast<NWorld::IPassageObject> pPassage( pTempObject.GetPtr() ) )
-		{
-			if ( !pPassage->IsBroken() )
-				return new NWorld::CCmdUsePassage( pPassage );
+			else if ( pWindowDoor )
+			{
+				if ( !pWindowDoor->IsBroken() )
+					return new NWorld::CCmdOpenClose( pTempObjectRaw, !pWindowDoor->IsOpen() );
+			}
+			else if ( pPassage )
+			{
+				if ( !pPassage->IsBroken() )
+					return new NWorld::CCmdUsePassage( pPassage );
+			}
 		}
 	}
 
@@ -947,7 +971,8 @@ bool CStatePickItem::Initialize( IMission *pMission )
 	if ( !IsValid( pObject ) )
 		return false;
 
-	if ( CDynamicCast<NWorld::IItem> pItem( pObject ) )
+	CDynamicCast<NWorld::IItem> pItem((pObject));
+	if ( pItem )
 	{
 		if ( !IsValid( pItem->GetInvItem() ) )
 			return false;
@@ -1003,7 +1028,8 @@ NWorld::CCmd* CStatePickItem::GetTargetCmd()
 		return 0;
 
 	CPtr<CObjectBase> pObject = GetMission()->GetStateTarget();
-	if ( CDynamicCast<NWorld::IItem> pTempItem( pObject ) )
+	CDynamicCast<NWorld::IItem> pTempItem((pObject));
+	if ( pTempItem )
 	{
 		NWorld::SItem sSource;
 		sSource.eType = NWorld::SItem::GROUND;
@@ -1097,7 +1123,8 @@ bool CStateDragItem::OnLButtonDown( int nX, int nY )
 		return false;
 
 	CObjectBase* pTargetObject = GetMission()->GetStateTarget();
-	if ( CDynamicCast<NWorld::CUnit> pUnit( pTargetObject ) )
+	CDynamicCast<NWorld::CUnit> pUnit((pTargetObject));
+	if ( pUnit )
 	{
 		if ( pUnit->GetPlayer() != GetMission()->GetActivePlayer()->GetPlayer() )
 			return false;
@@ -1318,7 +1345,8 @@ NWorld::CCmd* CStateUnloadItem::GetTargetCmd()
 	if ( !IsValid( pObject ) )
 		return 0;
 
-	if ( CDynamicCast<NRPG::IWeaponItemInfo> pItem( pObject ) )
+	CDynamicCast<NRPG::IWeaponItemInfo> pItem((pObject));
+	if ( pItem )
 		return new NWorld::CCmdUnloadWeapon( pItem );
 
 	return 0;

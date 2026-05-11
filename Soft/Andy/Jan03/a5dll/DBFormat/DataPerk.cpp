@@ -2,6 +2,7 @@
 //
 #include "DataFormat.h"
 #include "DataPerk.h"
+#include "DataInterface.h"  // NDb::CUITexture full definition needed for GetTable<CUITexture>()
 //
 namespace NDb
 {

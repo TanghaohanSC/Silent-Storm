@@ -299,7 +299,8 @@ void CVoxelExpl::ApplyWaveDamage()
 			CDynamicCast<NWorld::CUnitServer> pUS( o.pUserData );
 			if ( !pUS && IsValid( o.pUserData ) )
 			{
-				if ( CDynamicCast<NWorld::IBuilding> pB( o.pUserData ) )
+				CDynamicCast<NWorld::IBuilding> pB((o.pUserData));
+				if ( pB )
 					pTracker->drawDecals[ pB->GetSceneHandle() ];
 				else
 					pTracker->drawDecals[ o.pUserData ];
@@ -307,7 +308,8 @@ void CVoxelExpl::ApplyWaveDamage()
 		}
 		if ( !o.bTerrain && di.nVolume > 0 && IsValid( o.pUserData ) )
 		{
-			if ( CDynamicCast<NRPG::IAttackable> pAtt( o.pUserData ) )
+			CDynamicCast<NRPG::IAttackable> pAtt((o.pUserData));
+			if ( pAtt )
 			{
 				float fCoeff = ( F_WAVE_ATTENUATION_COEFF - 1 ) / float( nMaxVolume ) * float( di.nVolume ) + 1;
 				float fDamageMin = pGrenade->fWaveDmgMin;// * fCoeff;
@@ -318,15 +320,16 @@ void CVoxelExpl::ApplyWaveDamage()
 				{
 					userIDs.push_back( o.nUserID );
 					//
-					if ( CDynamicCast<NWorld::CUnitServer> pUS( o.pUserData ) )
+					CDynamicCast<NWorld::CUnitServer> pUS((o.pUserData));
+					if ( pUS )
 					{
 						// повреждения по Unit-ам
 						if ( fDamageMax > 0 && !pUS->GetUnitRPG()->IsDead() && IsValid( pTracker ) )
 						{
-							if ( find( pTracker->damagedUnits.begin(), pTracker->damagedUnits.end(), pUS.GetPtr() ) ==
+							if ( find( pTracker->damagedUnits.begin(), pTracker->damagedUnits.end(), (NWorld::CUnitServer*)pUS ) ==
 								pTracker->damagedUnits.end() )
 							{
-								pTracker->damagedUnits.push_back( pUS.GetPtr() );
+								pTracker->damagedUnits.push_back( (NWorld::CUnitServer*)pUS );
 								NRPG::IUnitMission* pRPG = 0;
 								if ( IsValid( pThrower ) )
 									pRPG = pThrower->GetUnitRPG();

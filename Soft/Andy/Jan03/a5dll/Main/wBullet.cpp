@@ -141,7 +141,8 @@ bool CBulletServer::Segment()
 		CObjectBase *pCatcher = trailpointsSet[nTemp].pAttackTarget;
 		CVec3 vPlace = sCurrent.vPosition;
 		CVec3 vNormal = sCurrent.vNormal;
-		if ( CDynamicCast<NRPG::IAttackable> pAttackCatcher( pCatcher ) )
+		CDynamicCast<NRPG::IAttackable> pAttackCatcher((pCatcher));
+		if ( pAttackCatcher )
 		{
 			if ( IsValid( pCatcher ) )
 			{
@@ -149,13 +150,14 @@ bool CBulletServer::Segment()
 		
 				if ( IsValid( pCatcher ) )
 				{
-					if ( CDynamicCast<NWorld::CUnitServer> pUS( pCatcher ) )
+					CDynamicCast<NWorld::CUnitServer> pUS((pCatcher));
+					if ( pUS )
 					{
 						pUS->GetUnitRPG()->BulletHit();
 						CPtr<NWorld::CUnitServer> pTarget = pWorld->GetUnitServer( trailpointsSet[nTemp].sAttack.pTarget );
 						if ( IsValid( pShooter ) )
 						{
-							if ( pTarget.GetPtr() == pUS.GetPtr() )
+							if ( pTarget.GetPtr() == (NWorld::CUnitServer*)pUS )
 								pWorld->GetGlobalAck()->OnDoDamage( pShooter, pUS );
 							else
 								pWorld->GetGlobalAck()->OnDoAccidentalDamage( pShooter, pUS );
@@ -163,7 +165,8 @@ bool CBulletServer::Segment()
 					}
 					if ( pArmor->pShotMaterial )
 					{
-						if ( CDynamicCast<NWorld::IBuilding> pBuilding( pCatcher ) )
+						CDynamicCast<NWorld::IBuilding> pBuilding((pCatcher));
+						if ( pBuilding )
 							new CDecal( pWorld, vPlace, vNormal, pArmor->fShotRadius, pArmor->pShotMaterial->GetMaterial(&rnd), pBuilding->GetSceneHandle() );
 						else
 							new CDecal( pWorld, vPlace, vNormal, pArmor->fShotRadius, pArmor->pShotMaterial->GetMaterial(&rnd), pCatcher );

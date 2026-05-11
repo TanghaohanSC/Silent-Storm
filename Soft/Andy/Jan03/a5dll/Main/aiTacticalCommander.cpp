@@ -174,9 +174,11 @@ NWorld::CCommand* CAITacticalCommander::GetCommand()
 			commands.pop_front();
 		}
 		//
-		if ( CDynamicCast<NWorld::CCmdUnit> pCmdUnit( pRes ) )
+		CDynamicCast<NWorld::CCmdUnit> pCmdUnit((pRes));
+		if ( pCmdUnit )
 		{
-			if ( CDynamicCast<NWorld::CUnitServer> pUnitServer( pCmdUnit->pUnit ) )	
+			CDynamicCast<NWorld::CUnitServer> pUnitServer((pCmdUnit->pUnit));
+			if ( pUnitServer )	
 			{
 				pLastCommandedUnit = pUnitServer;
 			}

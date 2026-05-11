@@ -308,7 +308,7 @@ void CStructureSaver::StoreObject( CObjectBase *pObject )
 	if ( pObject != 0 && storedObjects.find( pObject ) == storedObjects.end() )
 	{
 		toStore.push_back( pObject );
-		storedObjects[pObject] = true; // важно присвоить хоть что-нибудь
+		storedObjects[pObject] = true; // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅ
 	}
 	RawData( &pObject, 4 );
 }
@@ -332,7 +332,7 @@ CObjectBase* CStructureSaver::LoadObject()
 bool CStructureSaver::StartChunk( const chunk_id idChunk, int nChunkNumber )
 {
 	CChunkLevel &last = chunks.back();
-	chunks.push_back();
+	chunks.emplace_back();  // silent-storm-port: was chunks.push_back() вЂ” modern std::list requires arg or use emplace_back
 	if ( IsReading() ) 
 	{
 		bool bRes = GetShortChunk( last, idChunk, chunks.back(), nChunkNumber );
@@ -385,7 +385,7 @@ void CStructureSaver::Start( bool bRead )
 	chunks.clear();
 	obj.Clear();
 	data.Clear();
-	chunks.push_back();
+	chunks.emplace_back();  // silent-storm-port: modern std::list вЂ” was push_back()
 	bIsReading = bRead;
 	if ( bRead )
 	{

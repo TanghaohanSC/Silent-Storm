@@ -177,6 +177,7 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class CWorld: public IWorld, public CTBSWorld<CUnitServer, CPlayer, CCommander>, public CDebrisController
 {
+public:  // silent-storm-port: SWorldDeploySpot used by free fn
 	struct SWorldDeploySpot
 	{
 		NAI::SPathPlace p;
@@ -184,6 +185,7 @@ class CWorld: public IWorld, public CTBSWorld<CUnitServer, CPlayer, CCommander>,
 		SWorldDeploySpot() {}
 		SWorldDeploySpot( const NAI::SPathPlace &_p, int _nID, int _nPlayer ) : p(_p), nID(_nID), nPlayer(_nPlayer) {}
 	};
+private:  // silent-storm-port: restore default class access after public SWorldDeploySpot
 	struct SUnitPtrHolder
 	{
 		ZDATA

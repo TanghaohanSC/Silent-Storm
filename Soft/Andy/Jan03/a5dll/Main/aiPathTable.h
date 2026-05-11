@@ -9,6 +9,7 @@ namespace NAI
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class CPathPlaceTable
 {
+public:  // silent-storm-port: derived class accesses SMove
 	typedef SMoveInfo<SPathPlace, WORD> SMove;
 	typedef hash_map<SPathPlace, SMove, SPathPlaceHash> CMovesHash;
 public:
