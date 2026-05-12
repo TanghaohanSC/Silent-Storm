@@ -77,6 +77,16 @@ void CRenderBaseInterface::Initialize( int nTemplateID )
 	pWorld->RunPostInit( pPostInfo );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+void CRenderBaseInterface::InitializeUIOnly()
+{
+	// silent-storm-port r34: light-weight init for main menu / save-load /
+	// options screens that don't need a 3D world or scene. Only the cursor
+	// and UI container are required so that pInterface->AddChild(...) and
+	// LoadTemplate(GetInterface(), ...) work.
+	pCursor = NUI::ICursor::Create();
+	pInterface = new NUI::CInterface( pCursor );
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CRenderBaseInterface::Command( NWorld::CCommand *pCmd )
 {
 	ASSERT( pCmd );

@@ -234,38 +234,27 @@ static void ss_mm_trace(const char* s) {
 void CMainMenuInterface::Initialize()
 {
 	ss_mm_trace("MMI::Init.0 entry");
-	// silent-storm-port r27: skip CRenderBaseInterface::Initialize entirely.
-	// It creates Player/Commander/Camera/AmbientLight from DB records whose
-	// CObj/CPtr fields haven't been filled — every access cascades null
-	// derefs. Main menu only needs UI overlay; we have the fallback dbg-text
-	// path (m_bHaveDataMenu=false) for that. Bypass parent::Initialize and
-	// jump straight to the fallback flow below.
-	ss_mm_trace("MMI::Init.1 (parent Init SKIPPED)");
-	m_bHaveDataMenu = false;
-	return;
+	// silent-storm-port r34: with r32 schema fill the DB is now fully
+	// materialized — try the data-driven UIContainer path inside a thin
+	// init that skips world/scene creation. If GetUIContainer(347)
+	// still returns null (Hammer&Sickle DB lacks Jan03 menu records),
+	// fall back to the dbg-text overlay from r8.
+	InitializeUIOnly();
+	ss_mm_trace("MMI::Init.1 InitializeUIOnly ok");
 
-	// silent-storm-port Phase 1.5 r7: the shipped Complete/game.db (Hammer&Sickle
-	// release database, used as the closest-shipping data set) does not contain
-	// DBCamera ID=26 or UIContainer ID=347 that the Jan03 source drop expects.
-	// Guard each lookup so the main-menu state can boot — without these guards
-	// the bare pointer deref crashes immediately inside Initialize.
-	CPtr<NDb::CDBCamera> pDBCamera = NDb::GetDBCamera( N_MAINMENU_CAMERA );
-	if ( pDBCamera )
+	NDb::CUIContainer *pContainer = NDb::GetUIContainer( 347 );
+	ss_mm_trace(pContainer ? "MMI::Init.2 UIContainer 347 FOUND" : "MMI::Init.2 UIContainer 347 MISSING");
+
+	if ( pContainer )
 	{
-		ICamera::SCameraPos sCameraPos( pDBCamera->vAnchor, pDBCamera->fDistance, pDBCamera->fPitch, pDBCamera->fYaw, pDBCamera->fRoll, pDBCamera->fFOV );
-		GetCamera()->SetPlacement( sCameraPos );
+		pMainMenuUI = new NUI::CMainMenuUI( NUI::SWindowInfo( GetInterface(), NUI::SPoint( 0, 0 ), NUI::SPoint( 1024, 768 ), "mainmenuUI" ) );
+		ss_mm_trace("MMI::Init.3 CMainMenuUI created");
+		NUI::LoadTemplate( pMainMenuUI, pContainer );
+		ss_mm_trace("MMI::Init.4 LoadTemplate ok");
+		pMainMenuUI->ShowWindow( NUI::SWTYPE_SHOW );
+		ss_mm_trace("MMI::Init.5 ShowWindow ok");
 	}
 
-	pMainMenuUI = new NUI::CMainMenuUI( NUI::SWindowInfo( GetInterface(), NUI::SPoint( 0, 0 ), NUI::SPoint( 1024, 768 ), "mainmenuUI" ) );
-	NDb::CUIContainer *pContainer = NDb::GetUIContainer( 347 );
-	if ( pContainer )
-		NUI::LoadTemplate( pMainMenuUI, pContainer );
-	pMainMenuUI->ShowWindow( NUI::SWTYPE_SHOW );
-
-	// If the data-driven main menu didn't materialize (no UIContainer record
-	// in this build's DB), render a fallback visible menu so the user can
-	// see we reached the main-menu state and re-trigger via the keybinds
-	// (campaign/load/options/credits/quit).
 	m_bHaveDataMenu = ( pContainer != 0 );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -306,7 +295,18 @@ bool CMainMenuInterface::ProcessEvent( const NInput::SEvent &sEvent )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CMainMenuInterface::Step()
 {
+	static int _sCount = 0;
+	bool _bTrace = (_sCount++ < 3);
+	if (_bTrace) ss_mm_trace("MMI::Step.0 entry");
 	CRenderBaseInterface::Step();
+	if (_bTrace) ss_mm_trace("MMI::Step.1 parent Step ok");
+	// silent-storm-port r34: even when m_bHaveDataMenu is true, we have no
+	// 3D camera/render pipeline (only ran InitializeUIOnly). The data-driven
+	// CMainMenuUI exists but never reaches the screen — show fallback so
+	// user has visible feedback of the main-menu state until we wire up
+	// 2D UI rendering through bgfx.
+	if ( !GetCamera() )
+		ss_r8_render_fallback_menu();
 
 	// silent-storm-port Phase 1.5 r8: when the data-driven UIContainer is
 	// missing, paint a fallback debug-text menu every frame so the user
@@ -314,8 +314,10 @@ void CMainMenuInterface::Step()
 	if ( !m_bHaveDataMenu )
 		ss_r8_render_fallback_menu();
 
+	if (_bTrace) ss_mm_trace("MMI::Step.2 CanRender check");
 	if ( CanRender() )
 	{
+		if (_bTrace) ss_mm_trace("MMI::Step.3 CanRender ok");
 		// Without UIContainer 347 there's no "clientview" child window, so
 		// the original screen-rect computation derefs a null pointer.
 		// Skip the camera-rect setup when running in fallback mode — the
@@ -323,9 +325,21 @@ void CMainMenuInterface::Step()
 		if ( !m_bHaveDataMenu )
 			return;
 
+		// silent-storm-port r34: pCamera and pRender are null when we
+		// only ran InitializeUIOnly() — skip the 3D scene wiring. The
+		// UIContainer-driven main menu UI is drawn by pInterface->Draw()
+		// during CRenderBaseInterface::Step().
+		if ( !GetCamera() )
+		{
+			if (_bTrace) ss_mm_trace("MMI::Step.4 no camera, returning");
+			return;
+		}
+
 		NUI::SRect sScrWindow;
 		NUI::SPoint sScrPosition;
 		NUI::CWindow *pClientWindow = NUI::GetUIWindow<NUI::CWindow>( pMainMenuUI, "clientview" );
+		if ( !pClientWindow )
+			return;
 		const NUI::SPoint &sScrSize = pClientWindow->GetSize();
 		pClientWindow->ClientToScreen( &sScrPosition, &sScrWindow );
 

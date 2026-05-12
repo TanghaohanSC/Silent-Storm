@@ -40,6 +40,11 @@ public:
 
 	void Initialize( int nTemplate );
 
+	// silent-storm-port r34: light-weight init for menus that don't need a
+	// world/scene — creates only pCursor + pInterface so LoadTemplate and
+	// GetInterface() work. Skips world/render/scene/camera setup.
+	void InitializeUIOnly();
+
 	void Command( NWorld::CCommand *pCmd );
 
 	void SetLightMode( int _nLightMode );
