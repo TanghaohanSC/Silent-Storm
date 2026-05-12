@@ -214,21 +214,32 @@ CHeroMenuInterface::CHeroMenuInterface():
 {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+static void ss_hm_trace(const char* s) {
+	FILE* fp = NULL; fopen_s(&fp, "silent_storm_step_trace.log", "a");
+	if (fp) { fprintf(fp, "[HM] %s\n", s); fclose(fp); }
+}
 void CHeroMenuInterface::Initialize( NDb::CSide *_pSide )
 {
+	ss_hm_trace("HMI::Init.0 entry");
 	pSide = _pSide;
 
-	CRenderBaseInterface::Initialize( pSide->nHeroSelectTemplate );
+	// silent-storm-port r37: skip CreateWorld (CRenderBaseInterface::Initialize)
+	// the same way MainMenu/SideMenu do. The DB cameras / scene records are
+	// not yet wired enough for a full Initialize; defer to UI-only.
+	InitializeUIOnly();
+	ss_hm_trace("HMI::Init.1 InitializeUIOnly ok");
 
-	CPtr<NDb::CDBCamera> pDBCamera = NDb::GetDBCamera( N_HEROMENU_CAMERA );
-	ICamera::SCameraPos sCameraPos( pDBCamera->vAnchor, pDBCamera->fDistance, pDBCamera->fPitch, pDBCamera->fYaw, pDBCamera->fRoll, pDBCamera->fFOV );
-	GetCamera()->SetPlacement( sCameraPos );
-
-	pGlobalPlayer = NRPG::CreateGlobalPlayer();
-
-	pHeroMenuUI = new NUI::CHeroMenuUI( NUI::SWindowInfo( GetInterface(), NUI::SPoint( 0, 0 ), NUI::SPoint( 1024, 768 ), "heromenuUI" ), this, pSide );
-	NUI::LoadTemplate( pHeroMenuUI, NDb::GetUIContainer( 354 ) );
-	pHeroMenuUI->ShowWindow( NUI::SWTYPE_SHOW );
+	NDb::CUIContainer *pContainer = NDb::GetUIContainer( 354 );
+	ss_hm_trace(pContainer ? "HMI::Init.2 UIContainer 354 FOUND" : "HMI::Init.2 UIContainer 354 MISSING");
+	if ( pContainer && pSide )
+	{
+		pHeroMenuUI = new NUI::CHeroMenuUI( NUI::SWindowInfo( GetInterface(), NUI::SPoint( 0, 0 ), NUI::SPoint( 1024, 768 ), "heromenuUI" ), this, pSide );
+		ss_hm_trace("HMI::Init.3 CHeroMenuUI created");
+		NUI::LoadTemplate( pHeroMenuUI, pContainer );
+		ss_hm_trace("HMI::Init.4 LoadTemplate ok");
+		pHeroMenuUI->ShowWindow( NUI::SWTYPE_SHOW );
+		ss_hm_trace("HMI::Init.5 ShowWindow ok");
+	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CHeroMenuInterface::ProcessEvent( const NInput::SEvent &sEvent )
@@ -264,11 +275,18 @@ void CHeroMenuInterface::Step()
 {
 	CRenderBaseInterface::Step();
 
+	// silent-storm-port r37: GetCamera() null when InitializeUIOnly path
+	// used. Skip 3D scene wiring like SideMenu does.
+	if ( !GetCamera() )
+		return;
+
 	if ( CanRender() )
 	{
 		NUI::SRect sScrWindow;
 		NUI::SPoint sScrPosition;
 		NUI::CWindow *pClientWindow = NUI::GetUIWindow<NUI::CWindow>( pHeroMenuUI, "clientview" );
+		if ( !pClientWindow )
+			return;
 		const NUI::SPoint &sScrSize = pClientWindow->GetSize();
 		pClientWindow->ClientToScreen( &sScrPosition, &sScrWindow );
 

@@ -257,7 +257,31 @@ bool CSideMenuInterface::ProcessEvent( const NInput::SEvent &sEvent )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CSideMenuInterface::Step()
 {
+	static int _sCount = 0;
+	++_sCount;
 	CRenderBaseInterface::Step();
+
+	// silent-storm-port r37: smoke-test SideMenu -> HeroMenu (AXIS). The
+	// real UI control flow is bindNext.ProcessEvent on ENTER, but for
+	// headless runs we time it out so the trace exercises the entire
+	// chain to mission-launch without keyboard input. Single-shot.
+	{
+		static bool s_autoFired = false;
+		if ( !s_autoFired && _sCount > 180 )  // ~3s after SideMenu init
+		{
+			s_autoFired = true;
+			ss_sm_trace("SMI::Step.AUTO firing CICHeroMenu(AXIS)");
+			NDb::CSide *pSide = NDb::GetDBSide( N_SIDE_AXIS );
+			if ( pSide )
+			{
+				NMainLoop::Command( new NGame::CICHeroMenu( pSide ) );
+			}
+			else
+			{
+				ss_sm_trace("SMI::Step.AUTO pSide NULL -- skipping");
+			}
+		}
+	}
 
 	// silent-storm-port r35: GetCamera() and pSideMenuUI are null/empty when
 	// we used InitializeUIOnly — skip 3D scene + screen-rect wiring.
