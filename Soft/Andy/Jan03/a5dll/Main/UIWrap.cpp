@@ -81,10 +81,12 @@ void CTextDraw::SetText( const wstring &_wsText )
 	pTextString->Set( wsText );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// silent-storm-port Phase 1.5 r3 — debug-text relay into bgfx dbgText overlay.
-// Defined in port/src/renderer/bgfx_init.cpp.  ABI is extern-C / POD-only so
-// STLport-compiled callers can use it without a C++ header dep.
+// silent-storm-port Phase 1.5 r3 — debug-text + debug-rect relays into the
+// bgfx overlay / ss_ui shader.  Defined in port/src/renderer/bgfx_init.cpp.
+// ABI is extern-C / POD-only so STLport-compiled callers can use them
+// without a C++ header dep.
 extern "C" void ss_dbg_text_push(int virtX, int virtY, unsigned attr, const char* text);
+extern "C" void ss_dbg_rect_push(int x1, int y1, int x2, int y2, unsigned abgr);
 
 void CTextDraw::Draw( CWindow *pWindow, const STime &sTime, NGScene::I2DGameView *pView )
 {
@@ -129,6 +131,24 @@ void CTextDraw::Draw( CWindow *pWindow, const STime &sTime, NGScene::I2DGameView
 		while (ascii[lead] == ' ') ++lead;
 		if (outN > 0 && ascii[lead])
 			ss_dbg_text_push(sPosition.x, sPosition.y, 0x0f, ascii + lead);
+
+		// r3 iter 5: also push a translucent bounding rect via ss_ui so the
+		// "real geometry" path activates.  Size the box from the text's
+		// rendered length (8 px / char wide × 24 px tall is a rough Courier
+		// 16pt approximation).  The sSize field is the *container* (often
+		// 1024x768), not the text's actual extent, so we don't use it.
+		{
+			int tw = 8 * outN;   // approx text width in px
+			int th = 24;
+			ss_dbg_rect_push(sPosition.x - 4, sPosition.y - 2,
+			                 sPosition.x + tw + 4,
+			                 sPosition.y + th,
+			                 0xc03060f0u);  // ~75% opaque reddish-orange
+			static int n=0; if(n<4){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+			  if(_f){fprintf(_f,"dbg_rect_push #%d pos=(%d,%d) outN=%d size=(%d,%d) -> rect(%d,%d,%d,%d)\n",
+			    n,sPosition.x,sPosition.y,outN,sSize.x,sSize.y,
+			    sPosition.x-4,sPosition.y-2,sPosition.x+tw+4,sPosition.y+th); fclose(_f);} ++n; }
+		}
 	}
 	if ( !pText )
 	{
@@ -232,6 +252,9 @@ void CImageDraw::Draw( CWindow *pWindow, const STime &sTime, NGScene::I2DGameVie
 		            "[IMG %dx%d %s]", w, h,
 		            IsValid(pUITexture) ? "tex" : "no-tex");
 		ss_dbg_text_push(sWindow.x1, sWindow.y1, 0x3f, buf);
+		// r3 iter 5: outline rect so the image's footprint is visible too.
+		ss_dbg_rect_push(sWindow.x1, sWindow.y1, sWindow.x2, sWindow.y2,
+		                 IsValid(pUITexture) ? 0x6020c060u : 0x60606060u);
 	}
 
 	SRect sScrWindow( sWindow );
