@@ -332,28 +332,46 @@ static void ProcessStandardEvents( const NInput::SEvent &eEvent )
 	return;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+static void ss_step_trace(const char* s) {
+	FILE* fp = NULL; fopen_s(&fp, "silent_storm_step_trace.log", "a");
+	if (fp) { fprintf(fp, "%s\n", s); fclose(fp); }
+}
 static bool ProcessInterfaceCmds()
 {
+	int _n = 0;
 	while ( !cmds.empty() )
 	{
+		char _buf[128]; sprintf_s(_buf, "  PIC.%d front", _n); ss_step_trace(_buf);
 		CPtr<CInterfaceCommand> pCmd = cmds.front();
 		cmds.pop_front();
+		sprintf_s(_buf, "  PIC.%d popped, valid=%d", _n, (int)IsValid(pCmd)); ss_step_trace(_buf);
 		if ( !IsValid( pCmd ) )
 			return false;
+		sprintf_s(_buf, "  PIC.%d about to Exec", _n); ss_step_trace(_buf);
 		pCmd->Exec();
+		sprintf_s(_buf, "  PIC.%d Exec returned", _n); ss_step_trace(_buf);
+		++_n;
 	}
+	ss_step_trace("  PIC done");
 	return !interfaces.empty();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool StepApp( bool bActive, bool bSetGamma, bool bInput )
 {
+	static int _stepCount = 0;
+	bool bTrace = (_stepCount++ < 3);
+	if (bTrace) ss_step_trace("StepApp.0 entry");
 	if ( bActive )
 		NGfx::CheckBackBufferSize();
+	if (bTrace) ss_step_trace("StepApp.1 CheckBackBufferSize ok");
 	bAppIsActive = bActive;
 	NGfx::SetGamma( bSetGamma );
+	if (bTrace) ss_step_trace("StepApp.2 SetGamma ok");
 	if ( !ProcessInterfaceCmds() )
 		return false;
+	if (bTrace) ss_step_trace("StepApp.3 ProcessInterfaceCmds ok");
 	ASSERT( IsValid( interfaces.back() ) );
+	if (bTrace) ss_step_trace("StepApp.4 IsValid back ok");
 
 	if ( bInput )
 	{

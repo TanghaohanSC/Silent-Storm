@@ -227,9 +227,15 @@ static void ss_r8_render_fallback_menu()
 		ss_dbg_text_push( 200, r.y, r.attr, r.text );
 }
 
+static void ss_mm_trace(const char* s) {
+	FILE* fp = NULL; fopen_s(&fp, "silent_storm_step_trace.log", "a");
+	if (fp) { fprintf(fp, "[MM] %s\n", s); fclose(fp); }
+}
 void CMainMenuInterface::Initialize()
 {
+	ss_mm_trace("MMI::Init.0 entry");
 	CRenderBaseInterface::Initialize( N_MAINMENU_TEMPLATE );
+	ss_mm_trace("MMI::Init.1 CRenderBase::Init ok");
 
 	// silent-storm-port Phase 1.5 r7: the shipped Complete/game.db (Hammer&Sickle
 	// release database, used as the closest-shipping data set) does not contain

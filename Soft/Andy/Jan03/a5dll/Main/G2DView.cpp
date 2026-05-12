@@ -51,13 +51,21 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // C2DGameView
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+static void ss_2dv_trace(const char* s) {
+	FILE* fp = NULL; fopen_s(&fp, "silent_storm_step_trace.log", "a");
+	if (fp) { fprintf(fp, "[2DV] %s\n", s); fclose(fp); }
+}
 C2DGameView::C2DGameView()
 {
+	ss_2dv_trace("C2DGV.0 entry");
 	pScene = Make2DScene();
+	ss_2dv_trace("C2DGV.1 Make2DScene ok");
 	pScreenRect = new CCVec2( NGfx::GetScreenRect() );
-	///
+	ss_2dv_trace("C2DGV.2 ScreenRect ok");
 	pLocale = new CTextLocaleInfo;
+	ss_2dv_trace("C2DGV.3 new CTextLocaleInfo ok");
 	pLocale->Setup( NGfx::GetScreenRect() );
+	ss_2dv_trace("C2DGV.4 pLocale->Setup ok");
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CRects* C2DGameView::CreateRects( NDb::CTexture *pTexture, CFuncBase<CRectLayout> *pLayout, CFuncBase< CTRect<int> > *pSize )

@@ -286,6 +286,10 @@ const SWindowInfo& CLoader::GetControl( const string &szID )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void LoadTemplate( CWindow *pWindow, NDb::CUIContainer *pTemplate )
 {
+	// silent-storm-port r26: r25 promote leaves records with factory-default
+	// fields (CObj/CPtr members null). LoadTemplate body deref's these null
+	// pointers and crashes. Skip when pTemplate looks unloaded.
+	if ( !pTemplate || !pWindow ) return;
 	CObj<CLoader> pLoader = new CLoader;
 	pLoader->Load( pWindow, pTemplate );
 }
@@ -298,27 +302,39 @@ CInterface::CInterface():
 {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CInterface::CInterface( ICursor* _pCursor, NSound::ISoundScene *_pSound ): 
-	CWindow( SWindowInfo( 0, SPoint( 0, 0 ), SPoint( 1024, 768 ), "desktop", STYLE_VISIBLE | STYLE_ENABLED ) ), bShowFPSStats( false ), 
-	cmdLButtonDown( "leftbutton_down" ), cmdLButtonUp( "leftbutton_up" ), cmdRButtonDown( "rightbutton_down" ), cmdRButtonUp( "rightbutton_up" ), 
+static void ss_ci_trace(const char* s) {
+	FILE* fp = NULL; fopen_s(&fp, "silent_storm_step_trace.log", "a");
+	if (fp) { fprintf(fp, "[CI] %s\n", s); fclose(fp); }
+}
+CInterface::CInterface( ICursor* _pCursor, NSound::ISoundScene *_pSound ):
+	CWindow( SWindowInfo( 0, SPoint( 0, 0 ), SPoint( 1024, 768 ), "desktop", STYLE_VISIBLE | STYLE_ENABLED ) ), bShowFPSStats( false ),
+	cmdLButtonDown( "leftbutton_down" ), cmdLButtonUp( "leftbutton_up" ), cmdRButtonDown( "rightbutton_down" ), cmdRButtonUp( "rightbutton_up" ),
 	cmdConsole( "console" ), cmdFPSShow( "showfps" ), bindScroll( "scroll" ),
 	sDoubleClickTime( 0 ), sLastLButtonDownTime( 0 ), sLastRButtonDownTime( 0 ), sCursorPoint( 0, 0 )
 {
+	ss_ci_trace("CI::ctor.0 entry");
 	SetInterface( this );
-
+	ss_ci_trace("CI::ctor.1 SetInterface ok");
 	pTimer = sTimer.GetTime();
+	ss_ci_trace("CI::ctor.2 sTimer.GetTime ok");
 	pView = NGScene::CreateNew2DView();
-
+	ss_ci_trace("CI::ctor.3 CreateNew2DView ok");
 	pSound = _pSound;
 	pCursor = _pCursor;
 	pConsole = new CConsole( SWindowInfo( this, SPoint( 0, 0 ), SPoint( 0, 0 ), "console", STYLE_ENABLED | STYLE_TOPMOST ) );
-	NUI::LoadTemplate( pConsole, NDb::GetUIContainer( 42 ) );
+	ss_ci_trace("CI::ctor.4 new CConsole ok");
+	NDb::CUIContainer* pConsoleUI = NDb::GetUIContainer( 42 );
+	char _buf[128]; sprintf_s(_buf, "CI::ctor.5 GetUIContainer(42) = %p", (void*)pConsoleUI); ss_ci_trace(_buf);
+	NUI::LoadTemplate( pConsole, pConsoleUI );
+	ss_ci_trace("CI::ctor.6 LoadTemplate ok");
 	sDoubleClickTime = GetDoubleClickTime();
-
+	ss_ci_trace("CI::ctor.7 GetDoubleClickTime ok");
 	sDefaultCursor = SCursorInfo( NDb::GetUITexture( N_DEFAULT_CURSOR ) );
-
+	ss_ci_trace("CI::ctor.8 GetUITexture ok");
 	pFPSText = new CTextDraw( SPoint( 0, 32 ), SPoint( 1024, 768 ), L"Counting..." );
+	ss_ci_trace("CI::ctor.9 new CTextDraw FPS ok");
 	pNonPublicDemo = new CTextDraw( SPoint( 0, 32 ), SPoint( 1024, 768 ), L"<font size=18pt face=Courier><right>Work in progress" );
+	ss_ci_trace("CI::ctor.10 new CTextDraw Demo ok");
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 const SPoint& CInterface::GetCursorPos() const

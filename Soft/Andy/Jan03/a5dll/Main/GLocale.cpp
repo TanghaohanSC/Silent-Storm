@@ -36,6 +36,10 @@ CTextLocaleInfo::CTextLocaleInfo()
 		const CFontFormatInfo *pInfo = pFormatInfo->GetValue();
 		if ( !pInfo )
 			continue;
+		// silent-storm-port r26: pType->pTexture is null in records with unfilled
+		// fields (CPtr default). Skip this font entry rather than deref null.
+		if ( !IsValid( pType->pTexture ) )
+			continue;
 
 		fonts.push_back( new CFontInfo( SFont( pInfo->GetHeight(), pType->szName ), shareTextures.Get( pType->pTexture->GetRecordID() ), pFormatInfo ) );
 	}

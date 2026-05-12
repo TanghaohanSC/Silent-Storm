@@ -1,4 +1,8 @@
 #include "StdAfx.h"
+static void ss_im_trace(const char* s) {
+	FILE* fp = NULL; fopen_s(&fp, "silent_storm_step_trace.log", "a");
+	if (fp) { fprintf(fp, "[IM] %s\n", s); fclose(fp); }
+}
 // silent-storm-port Phase 1.5 r2: text draw re-enabled — investigating what
 // breaks so the main menu can actually paint.  Define SS_PHASE1_5_SKIP_TEXT_DRAW
 // to fall back to the round-1 behaviour (clear-only).
@@ -61,17 +65,24 @@ CInterMissionInterface::CInterMissionInterface():
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CInterMissionInterface::Initialize( const string &szConfig, const wstring &wsMessage )
 {
+	ss_im_trace("    IMI::Init.0 entry");
 	pCursor = NUI::ICursor::Create();
+	ss_im_trace("    IMI::Init.1 Cursor created");
 	pInterface = new NUI::CInterface( pCursor );
-
+	ss_im_trace("    IMI::Init.2 CInterface created");
 	pText = new NUI::CText( NUI::SWindowInfo( pInterface, NUI::SPoint( 0, 0 ), NUI::SPoint( 1024, 768 ), "", NUI::STYLE_ENABLED | NUI::STYLE_VISIBLE | NUI::STYLE_TRANSPARENT | NUI::STYLE_TOPMOST ) );
+	ss_im_trace("    IMI::Init.3 CText created");
 	if ( wsMessage.empty() )
 		pText->SetText( L"<font face=Courier size=30pt><color=red><center>INTERMISSION<br><color=white>ESC - exit<br>Use console to start game" );
 	else
 		pText->SetText( L"<font face=Courier size=30pt><color=red><center>INTERMISSION<br><color=white>ESC - exit<br><color=red>Game stop with message: " + wsMessage );
-
-	if ( !szConfig.empty() )
+	ss_im_trace("    IMI::Init.4 SetText ok");
+	if ( !szConfig.empty() ) {
+		char _buf[128]; sprintf_s(_buf, "    IMI::Init.5 about to LoadConfig '%s'", szConfig.c_str()); ss_im_trace(_buf);
 		NGlobal::LoadConfig( szConfig.c_str() );
+		ss_im_trace("    IMI::Init.6 LoadConfig returned");
+	}
+	ss_im_trace("    IMI::Init.7 done");
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CInterMissionInterface::Initialize( NDb::CUIContainer *pUI, NDb::CUITexture *pBackground, const CArray2D<NGfx::SPixel8888> &sScreenShot, bool bScreenShot )
@@ -176,10 +187,15 @@ CICInterMission::CICInterMission( const string &_szConfig, const wstring &_wsMes
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CICInterMission::Exec()
 {
+	ss_im_trace("CICInterMission::Exec entry");
 	ResetStack();
+	ss_im_trace("  ResetStack ok");
 	CInterMissionInterface *pRes = new CInterMissionInterface();
+	ss_im_trace("  new CInterMissionInterface ok");
 	pRes->Initialize( szConfig, wsMessage );
+	ss_im_trace("  Initialize ok");
 	SetInterface( pRes );
+	ss_im_trace("  SetInterface ok");
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // CICLoadWait
