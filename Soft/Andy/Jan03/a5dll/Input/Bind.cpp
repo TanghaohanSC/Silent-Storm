@@ -96,23 +96,18 @@ void Bind( EMappingType eType, const string &sCmd, const string &szSection, cons
 		sMapping.actionsSet[nTemp] = nAction;
 		sMapping.fullActionsSet[nTemp] = nAction;
 
-		// silent-storm-port Phase 1.5 r6: log bind registration so we can verify
-		// the resolved action ID matches what WndProc later pushes.
+		// silent-storm-port r39: log ALL bind registrations (was capped
+		// at 50 in r6 which truncated the post-Camera section binds).
 		{
-			static int n = 0;
-			if ( n < 50 )
+			FILE *_f = 0;
+			fopen_s( &_f, "silent_storm_bind.log", "a" );
+			if ( _f )
 			{
-				FILE *_f = 0;
-				fopen_s( &_f, "silent_storm_bind.log", "a" );
-				if ( _f )
-				{
-					fprintf( _f, "Bind cmd=%s ctrl=%s -> action=0x%08X\n",
-						sCmd.c_str(),
-						szControlsSet[nTemp].c_str(),
-						(unsigned)nAction );
-					fclose( _f );
-				}
-				++n;
+				fprintf( _f, "Bind cmd=%s ctrl=%s -> action=0x%08X\n",
+					sCmd.c_str(),
+					szControlsSet[nTemp].c_str(),
+					(unsigned)nAction );
+				fclose( _f );
 			}
 		}
 
@@ -476,7 +471,7 @@ static void ProcessMessage( const NInput::SMessage &mMsg )
 			if ( mMsg.cType != NInput::CT_TIME && mMsg.cType != NInput::CT_AXIS )
 			{
 				static int n = 0;
-				if ( n < 50 )
+				if ( n < 2000 )
 				{
 					FILE *_f = 0;
 					fopen_s( &_f, "silent_storm_bind.log", "a" );

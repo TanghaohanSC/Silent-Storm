@@ -167,6 +167,12 @@ void CRenderBaseInterface::Step()
 		{
 			pInterface->UpdateCursor();
 			pInterface->Step( GetTime() );
+
+			// silent-storm-port r39: attempted pInterface->Draw() from
+			// here so the data-driven UIContainer tree pushes through
+			// the ss_dbg_* relays, but CTextDraw::CreateDynamicRects
+			// crashes mid-walk on partially-filled DB records — disabled.
+			// (See port/docs/notes/r39_pInterface_draw.md if recorded.)
 		}
 	}
 	else
