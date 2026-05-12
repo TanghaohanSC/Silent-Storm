@@ -1287,26 +1287,46 @@ bool CWorld::PlaceTemplate( int nTemplateID, CVec3 ptPos )
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// silent-storm-port r55: per-stage trace inside CreateRandom so we know
+// which sub-call AVs (the outer SEH in ss_mi_call_CreateRandom catches it
+// but loses the location). Writes to step_trace.log.
+static void ss_cr_trace( const char* s )
+{
+	FILE* fp = 0;
+	fopen_s( &fp, "silent_storm_step_trace.log", "a" );
+	if ( fp ) {
+		fprintf( fp, "[CR] %s\n", s );
+		fclose( fp );
+	}
+}
 void CWorld::CreateRandom( int nVariantID, const vector<string> &params,
-	bool bBuildingStability, const list< CPtr<NScenario::CScenarioClue> > &clues, 
+	bool bBuildingStability, const list< CPtr<NScenario::CScenarioClue> > &clues,
 	int nMobsLevel, CObj<CPostWorldCreateInfo> *pPostInfo, SRandomSeed sSeed, bool _bLeanAndMean )
 {
+	ss_cr_trace("CR.0 entry");
 	CFWContext world( &pCurrentWorld, this );
 	CDGPtr<CFuncBase<STime> > pRefreshTime(pTime);
 	pRefreshTime.Refresh();
 	//
 	bLeanAndMean = _bLeanAndMean;
+	ss_cr_trace("CR.1 about to CreateAIMap");
 	pAIMap = NAI::CreateAIMap( this );
+	ss_cr_trace("CR.2 about to CreateNodesNetwork");
 	pPathNetwork = NAI::CreateNodesNetwork( pAIMap, pAIJobManager );
+	ss_cr_trace("CR.3 about to NRPG::CreateGame");
 	pRPGGame = NRPG::CreateGame( pAIMap, pPathNetwork );
+	ss_cr_trace("CR.4 about to ConvertFlags");
 	ConvertFlags( &createFlags, params );
+	ss_cr_trace("CR.5 about to BuildMap");
 
 	SMapInfo mapInfo;
 	if ( !BuildMap( nVariantID, params, pPathNetwork, &mapInfo, -1, sSeed ) )
 	{
+		ss_cr_trace("CR.5a BuildMap returned false -> CreateDefault");
 		CreateDefault();
 		return;
 	}
+	ss_cr_trace("CR.6 BuildMap OK -> LoadDiplomacy");
 	pDiplomacy->LoadDiplomacy( nVariantID );
 	nRootLayersGroup = 0;
 	pDefaultLight = mapInfo.pDefaultLight;
@@ -1314,8 +1334,9 @@ void CWorld::CreateRandom( int nVariantID, const vector<string> &params,
 
 	if ( mapInfo.bShowTerrain )
 	{
+		ss_cr_trace("CR.7 building CTerrainInfoHolder + CTerrain");
 		pTerrainInfo = new CTerrainInfoHolder( mapInfo.terrain );
-		pTerrain = new NWorld::CTerrain( pShow, pTerrainInfo, pAIMap, 
+		pTerrain = new NWorld::CTerrain( pShow, pTerrainInfo, pAIMap,
 			pTime, mapInfo.nBaseTerrainFloor, mapInfo.holesList, mapInfo.wallsList );
 	}
 	//
@@ -1325,8 +1346,10 @@ void CWorld::CreateRandom( int nVariantID, const vector<string> &params,
 		(*pPostInfo)->scripts = mapInfo.scripts;
 	}
 	//
+	ss_cr_trace("CR.8 about to CreateObjects");
 	CreateObjects( mapInfo, pPostInfo ? *pPostInfo : 0 );
 	//
+	ss_cr_trace("CR.9 about to add buildings");
 	vector<SMapBuilding>::const_iterator ib;
 	for ( ib = mapInfo.buildings.begin(); ib != mapInfo.buildings.end(); ++ib )
 	{
@@ -1335,31 +1358,43 @@ void CWorld::CreateRandom( int nVariantID, const vector<string> &params,
 		AddBuilding( *ib );
 	}
 
+	ss_cr_trace("CR.10 buildings done");
 	if ( !bLeanAndMean )
 	{
+		ss_cr_trace("CR.10a !bLeanAndMean branch");
 		ClueToSlot personClueToSlot, itemClueToSlot;
 		DistributeClues( mapInfo, clues, &personClueToSlot, &itemClueToSlot );
+		ss_cr_trace("CR.10b DistributeClues done");
 		PlaceItemSlotsToMap( itemClueToSlot );
+		ss_cr_trace("CR.10c PlaceItemSlotsToMap done");
 		//CreateFakeTerrainInfo( &terrain );
 		//
 		// ����� ����� ������� �� ������� �������, �������� �� ������������
 		pAIMap->Sync();
+		ss_cr_trace("CR.10d AIMap::Sync done");
 		// deploy units
 		// put some enemies
 		//
 		vector<NAI::SPathPlace> empty;
 		pPathNetwork->UpdateColouring( empty );
+		ss_cr_trace("CR.10e UpdateColouring done");
 		LoadWaypoints( mapInfo.waypoints );
+		ss_cr_trace("CR.10f LoadWaypoints done");
 		// �� ����� ������� �� ������� ������
 		pDeployedDeadUnitsPlayer = new CPlayer( L"Deployed dead units fake player", pGlobalGame, 0, -1 );
 		pDeployedDeadUnitsPlayer->SetCommander( new NWorld::CCommander );
+		ss_cr_trace("CR.10g DeadUnitsPlayer ready");
 		//
 		hash_map< int, CPtr<CUnitServer> > idToUnit;
 		CreateAIUnits( mapInfo, personClueToSlot, nMobsLevel, &idToUnit );
+		ss_cr_trace("CR.10h CreateAIUnits done");
 		CreateUnitGroups( mapInfo, &idToUnit );
+		ss_cr_trace("CR.10i CreateUnitGroups done");
 		PlaceItemSlotsToInventory( itemClueToSlot );
+		ss_cr_trace("CR.10j PlaceItemSlotsToInventory done");
 		//
 		nPartiesAdded = 0;
+		ss_cr_trace("CR.10k deploy spots loop start");
 		// copy deploy spots
 		for ( int k = 0; k < mapInfo.deploySpots.size(); ++k )
 		{
@@ -1394,15 +1429,20 @@ void CWorld::CreateRandom( int nVariantID, const vector<string> &params,
 			p.SetPose( NAI::CM_STAND );
 			deploySpots.push_back( SWorldDeploySpot( p, 0, k ) );
 		}
+		ss_cr_trace("CR.10l deploy spots loop done");
 		//
 		CheckStability();
+		ss_cr_trace("CR.10m CheckStability done");
 	}
 
+	ss_cr_trace("CR.11 about to StartGame");
 	StartGame();
+	ss_cr_trace("CR.12 StartGame done");
 	if ( IsValid( pOwnScript ) )
 	{
 		pScript = pOwnScript;
 	}
+	ss_cr_trace("CR.13 CreateRandom EXIT");
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CWorld::RunPostInit( CPostWorldCreateInfo *pPostInfo )
