@@ -69,6 +69,12 @@ public:
 	}
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// silent-storm-port r15: forward decl for the port helper that handles
+// the shipping wire format (CObj<CDBTableDataStorage> wrapper). Defined in
+// port/src/stubs/ado_stub.cpp.
+class CDBTableBase;
+void PortReadCDBTableStorage( CStructureSaver& f, CDBTableBase* pTable );
+
 class CDBTableBase
 {
 	typedef std::hash_map<int, CObj<CDBRecord> > CRecordHash;
@@ -79,10 +85,26 @@ class CDBTableBase
 	void Import();
 public:
 	CDBRecord* GetDBRecord( int nID );
-	int operator&( CStructureSaver &f ) 
+	int operator&( CStructureSaver &f )
 	{
-		f.Add( 1, &records );
+		// silent-storm-port r15: shipping wire wraps records in a
+		// CObj<CDBTableDataStorage> (typeID 0xA1843130). The Jan03
+		// `f.Add(1, &records)` hash_map read silently produced empty
+		// records; promote-from-storage runs after NDatabase::Serialize.
+		PortReadCDBTableStorage( f, this );
 		return 0;
+	}
+	// silent-storm-port r15: NDatabase::PromoteRecordsFromStorage needs
+	// to populate records[] + set nID on each created CDBRecord.
+	// CDBRecord::nID is private with friend CDBTableBase, so an inline
+	// member is the cleanest path (still lets the friend access nID).
+	void InsertRecord( int nID, CObjectBase* pRecObj )
+	{
+		CDBRecord* pRec = dynamic_cast<CDBRecord*>(pRecObj);
+		if (pRec) {
+			pRec->nID = nID;
+			records[nID] = pRec;
+		}
 	}
 	friend void NDatabase::Import();
 	friend void NDatabase::Refresh( int nTableID );
