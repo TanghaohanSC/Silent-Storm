@@ -167,6 +167,11 @@ private:
 public:
 	ZEND int operator&( CStructureSaver &f ) { f.Add(1,(CRenderBaseInterface*)this); f.Add(2,&pMainMenuUI); return 0; }
 
+	// silent-storm-port Phase 1.5 r8: non-serialized flag — set false when
+	// the shipping game.db lacks UIContainer(347), so Step() can paint a
+	// fallback debug-text main menu instead of a black screen.
+	bool m_bHaveDataMenu;
+
 public:
 	CMainMenuInterface();
 
@@ -179,10 +184,49 @@ public:
 // CMainMenuInterface
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CMainMenuInterface::CMainMenuInterface():
-	bindCampaign( "campaign" ), bindLoadGame( "load" ), bindOptions( "options" ), bindCredits( "credits" ), bindQuitGame( "quit" )
+	bindCampaign( "campaign" ), bindLoadGame( "load" ), bindOptions( "options" ), bindCredits( "credits" ), bindQuitGame( "quit" ),
+	m_bHaveDataMenu( false )
 {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+extern "C" void ss_dbg_text_banner(const char* text);
+extern "C" void ss_dbg_text_push(int virtX, int virtY, unsigned attr, const char* text);
+
+// silent-storm-port Phase 1.5 r8: fallback main-menu renderer.  The shipping
+// Complete/game.db (Hammer&Sickle Russian release) does not contain DBCamera
+// id=26 or UIContainer id=347 (CMainMenuUI template) — Nival's data-driven
+// path has nothing to LoadTemplate from, so without a hand-built scene the
+// screen is blank.  Push a visible "MAIN MENU" with the same five command
+// labels CMainMenuInterface::ProcessEvent already wires (campaign/load/
+// options/credits/quit) through the bgfx debug-text relay used by the rest
+// of the runtime.  Clicking still routes via the bound keys.
+static void ss_r8_render_fallback_menu()
+{
+	static int s_log_once = 0;
+	if ( s_log_once == 0 )
+	{
+		s_log_once = 1;
+		FILE *f = NULL;
+		fopen_s( &f, "silent_storm_r8_mainmenu.log", "w" );
+		if ( f ) { fprintf( f, "ss_r8_render_fallback_menu invoked — pushing banner+5 rows\n" ); fclose( f ); }
+	}
+
+	ss_dbg_text_banner( "SILENT STORM  -  MAIN MENU  (fallback render: game.db missing UI 347 / Cam 26)" );
+
+	// Buttons centered around y=300..520 in 1024x768 virtual space.
+	struct Row { int y; unsigned attr; const char *text; };
+	static const Row rows[] = {
+		{ 300, 0x4f, "  [ N ]   New Campaign       (key: bind 'campaign')" },
+		{ 340, 0x4f, "  [ L ]   Load Game          (key: bind 'load')" },
+		{ 380, 0x4f, "  [ O ]   Options            (key: bind 'options')" },
+		{ 420, 0x4f, "  [ C ]   Credits            (key: bind 'credits')" },
+		{ 460, 0x4f, "  [ Q ]   Quit Game          (key: bind 'quit')" },
+		{ 540, 0x07, "  ~ to open console, 'mainmenu' to re-enter, ESC to cancel." },
+	};
+	for ( const Row &r : rows )
+		ss_dbg_text_push( 200, r.y, r.attr, r.text );
+}
+
 void CMainMenuInterface::Initialize()
 {
 	CRenderBaseInterface::Initialize( N_MAINMENU_TEMPLATE );
@@ -200,9 +244,16 @@ void CMainMenuInterface::Initialize()
 	}
 
 	pMainMenuUI = new NUI::CMainMenuUI( NUI::SWindowInfo( GetInterface(), NUI::SPoint( 0, 0 ), NUI::SPoint( 1024, 768 ), "mainmenuUI" ) );
-	if ( NDb::CUIContainer *pContainer = NDb::GetUIContainer( 347 ) )
+	NDb::CUIContainer *pContainer = NDb::GetUIContainer( 347 );
+	if ( pContainer )
 		NUI::LoadTemplate( pMainMenuUI, pContainer );
 	pMainMenuUI->ShowWindow( NUI::SWTYPE_SHOW );
+
+	// If the data-driven main menu didn't materialize (no UIContainer record
+	// in this build's DB), render a fallback visible menu so the user can
+	// see we reached the main-menu state and re-trigger via the keybinds
+	// (campaign/load/options/credits/quit).
+	m_bHaveDataMenu = ( pContainer != 0 );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CMainMenuInterface::ProcessEvent( const NInput::SEvent &sEvent )
@@ -244,8 +295,21 @@ void CMainMenuInterface::Step()
 {
 	CRenderBaseInterface::Step();
 
+	// silent-storm-port Phase 1.5 r8: when the data-driven UIContainer is
+	// missing, paint a fallback debug-text menu every frame so the user
+	// can see we reached the main-menu state.
+	if ( !m_bHaveDataMenu )
+		ss_r8_render_fallback_menu();
+
 	if ( CanRender() )
 	{
+		// Without UIContainer 347 there's no "clientview" child window, so
+		// the original screen-rect computation derefs a null pointer.
+		// Skip the camera-rect setup when running in fallback mode — the
+		// debug-text overlay doesn't need camera placement.
+		if ( !m_bHaveDataMenu )
+			return;
+
 		NUI::SRect sScrWindow;
 		NUI::SPoint sScrPosition;
 		NUI::CWindow *pClientWindow = NUI::GetUIWindow<NUI::CWindow>( pMainMenuUI, "clientview" );
