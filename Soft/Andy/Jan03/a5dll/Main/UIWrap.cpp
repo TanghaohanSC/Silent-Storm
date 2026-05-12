@@ -87,6 +87,8 @@ void CTextDraw::SetText( const wstring &_wsText )
 // without a C++ header dep.
 extern "C" void ss_dbg_text_push(int virtX, int virtY, unsigned attr, const char* text);
 extern "C" void ss_dbg_rect_push(int x1, int y1, int x2, int y2, unsigned abgr);
+extern "C" void ss_dbg_glyph_push(int virtX, int virtY, unsigned abgr,
+                                  int scale_x, int scale_y, const char* text);
 
 void CTextDraw::Draw( CWindow *pWindow, const STime &sTime, NGScene::I2DGameView *pView )
 {
@@ -132,22 +134,37 @@ void CTextDraw::Draw( CWindow *pWindow, const STime &sTime, NGScene::I2DGameView
 		if (outN > 0 && ascii[lead])
 			ss_dbg_text_push(sPosition.x, sPosition.y, 0x0f, ascii + lead);
 
-		// r3 iter 5: also push a translucent bounding rect via ss_ui so the
-		// "real geometry" path activates.  Size the box from the text's
-		// rendered length (8 px / char wide × 24 px tall is a rough Courier
-		// 16pt approximation).  The sSize field is the *container* (often
-		// 1024x768), not the text's actual extent, so we don't use it.
+		// Phase 1.5 r4 iter 3: drop the orange dbg-rect underlay now that
+		// the real glyph atlas renders the text legibly via ss_ui.  Keep
+		// the rect-push extern declared in case other call sites still
+		// rely on the entry point.
+		(void)0;
+
+		// Phase 1.5 r4: also emit REAL textured-glyph quads via ss_ui +
+		// 128x128 Consolas atlas.  This is the *visible bitmap-font* path —
+		// each character becomes one textured triangle pair sampled from
+		// the modern-side glyph atlas.  Scale x2 so 8x16 cells become
+		// 16x32 on screen (legible at 1024x768).  We also do a poor-man's
+		// <center> by computing rendered width and shifting toward the
+		// center of the CTextDraw's bounding container (sSize.x usually
+		// 1024 for full-window text), since the upstream tag-stripper
+		// ditched the <center> directive earlier.
+		if (outN > 0 && ascii[lead])
 		{
-			int tw = 8 * outN;   // approx text width in px
-			int th = 24;
-			ss_dbg_rect_push(sPosition.x - 4, sPosition.y - 2,
-			                 sPosition.x + tw + 4,
-			                 sPosition.y + th,
-			                 0xc03060f0u);  // ~75% opaque reddish-orange
-			static int n=0; if(n<4){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
-			  if(_f){fprintf(_f,"dbg_rect_push #%d pos=(%d,%d) outN=%d size=(%d,%d) -> rect(%d,%d,%d,%d)\n",
-			    n,sPosition.x,sPosition.y,outN,sSize.x,sSize.y,
-			    sPosition.x-4,sPosition.y-2,sPosition.x+tw+4,sPosition.y+th); fclose(_f);} ++n; }
+			int n_chars = 0;
+			for (int k = lead; ascii[k]; ++k) ++n_chars;
+			const int kCellW = 8;   // atlas cell w
+			const int kCellH = 16;  // atlas cell h
+			const int scale = 2;
+			int draw_w = n_chars * kCellW * scale;
+			int draw_x = sPosition.x;
+			int draw_y = sPosition.y;
+			// Treat any container >= 200px wide as "centered text" and offset
+			// horizontally.  Same for vertical when container >= 100px tall.
+			if (sSize.x >= 200) draw_x = sPosition.x + (sSize.x - draw_w) / 2;
+			if (sSize.y >= 100) draw_y = sPosition.y + (sSize.y - kCellH * scale) / 2;
+			ss_dbg_glyph_push(draw_x, draw_y, 0xffffffffu,
+			                  scale, scale, ascii + lead);
 		}
 	}
 	if ( !pText )
