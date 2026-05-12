@@ -1105,22 +1105,12 @@ void CMission::Step()
 	static int s_mi_step_count = 0;
 	bool bTrace = (s_mi_step_count++ < 4);
 	if ( bTrace ) ss_mi_trace("MI::Step.0 entry");
-	ss_dbg_text_banner( "MISSION ACTIVE  -  template=3242 variant=5376  -  lean-and-mean (terrain + AI + buildings present)" );
+	ss_dbg_text_banner( "MISSION ACTIVE  -  template=3242 variant=5376  -  lean-and-mean (terrain+AI+buildings, 3D step ALIVE)" );
 	if ( bTrace ) ss_mi_trace("MI::Step.1 banner set");
-	ss_dbg_rect_push( 96, 220, 928, 580, 0xe0203020u );
-	ss_dbg_rect_push( 96, 220, 928, 270, 0xff204020u );
-	if ( bTrace ) ss_mi_trace("MI::Step.2 rects pushed");
-	ss_dbg_glyph_push( 240, 232, 0xffffffffu, 3, 3, "MISSION  ACTIVE" );
-	ss_dbg_glyph_push( 120, 310, 0xffe0e020u, 2, 2, " Mission state reached: CMission::Initialize completed" );
-	ss_dbg_glyph_push( 120, 350, 0xffa0e0a0u, 2, 2, " CreateWorld OK,  CreateRandom lean-and-mean OK (no SEH)" );
-	ss_dbg_glyph_push( 120, 390, 0xffa0e0a0u, 2, 2, " pRender alive,  pScene alive,  pInterface alive" );
-	ss_dbg_glyph_push( 120, 430, 0xffa0e0a0u, 2, 2, " pActivePlayer ALIVE (PT ctor returned)" );
-	ss_dbg_glyph_push( 120, 470, 0xffa0e0a0u, 2, 2, " pMissionUI ALIVE (LoadTemplate(123) OK)" );
-	ss_dbg_glyph_push( 120, 530, 0xffe0e0e0u, 2, 2, " Trying 3D step now... see below for AV/SEH outcome" );
-	if ( bTrace ) ss_mi_trace("MI::Step.3 glyphs pushed - about to check CanRender");
 
-	// silent-storm-port r59: now that PlayerTracker + MissionUI both load,
-	// attempt the full 3D Step path (was disabled in r53). SEH-wrap the body.
+	// silent-storm-port r59: attempt the full 3D Step path BEFORE pushing
+	// our overlay glyphs, so they paint on top of whatever the 3D pipeline
+	// renders. r60: SEH-wrap remains; if 3D path AVs, fall back to overlay.
 	if ( bTrace ) ss_mi_trace("MI::Step.4 attempting 3D path (CanRender check)");
 	__try {
 	if ( CanRender() )
@@ -1132,9 +1122,23 @@ void CMission::Step()
 		if ( bTrace ) ss_mi_trace("MI::Step.6 InternalStep OK");
 	}
 	} __except (EXCEPTION_EXECUTE_HANDLER) {
-		if ( bTrace ) ss_mi_trace("MI::Step.SEH caught — returning to overlay-only");
+		if ( bTrace ) ss_mi_trace("MI::Step.SEH caught — falling through to overlay");
 	}
-	if ( bTrace ) ss_mi_trace("MI::Step.7 EARLY-RETURN (3D done OR caught)");
+
+	// r60: overlay AFTER 3D step so it paints on top of any rendered content.
+	ss_dbg_rect_push( 96, 220, 928, 580, 0xe0203020u );
+	ss_dbg_rect_push( 96, 220, 928, 270, 0xff204020u );
+	if ( bTrace ) ss_mi_trace("MI::Step.2 rects pushed");
+	ss_dbg_glyph_push( 240, 232, 0xffffffffu, 3, 3, "MISSION  ACTIVE" );
+	ss_dbg_glyph_push( 120, 310, 0xffe0e020u, 2, 2, " Mission state reached: CMission::Initialize completed" );
+	ss_dbg_glyph_push( 120, 350, 0xffa0e0a0u, 2, 2, " CreateWorld OK,  CreateRandom lean-and-mean OK (no SEH)" );
+	ss_dbg_glyph_push( 120, 390, 0xffa0e0a0u, 2, 2, " pRender alive,  pScene alive,  pInterface alive" );
+	ss_dbg_glyph_push( 120, 430, 0xffa0e0a0u, 2, 2, " pActivePlayer ALIVE (PT ctor returned)" );
+	ss_dbg_glyph_push( 120, 470, 0xffa0e0a0u, 2, 2, " pMissionUI ALIVE (LoadTemplate(123) OK)" );
+	ss_dbg_glyph_push( 120, 510, 0xffa0e0a0u, 2, 2, " 3D Step path: UpdateViewWorld + InternalStep BOTH RUN" );
+	ss_dbg_glyph_push( 120, 550, 0xffe0e0e0u, 2, 2, " bgfx facade clears gray; D3D paths stubbed (Phase 4)" );
+	if ( bTrace ) ss_mi_trace("MI::Step.3 glyphs pushed AFTER 3D step");
+	if ( bTrace ) ss_mi_trace("MI::Step.7 EXIT");
 	return;
 
 	// silent-storm-port r52: in our partial-world boot path, pActivePlayer is
