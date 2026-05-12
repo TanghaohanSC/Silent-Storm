@@ -403,7 +403,20 @@ void CStructureSaver::Start( bool bRead )
 			obj.Read( &pServer, 4 );
 			obj.Read( &bValid,1 );
 			CObjectBase *pObject = pSSClasses->CreateObject( nTypeID );
-			ASSERT( pObject );
+			// silent-storm-port 2026-05-12: was ASSERT(pObject). Some game.db
+			// classes are not registered (likely linker dead-stripped statics
+			// from OBJECT lib, or missing from dropped tools subprojects).
+			// Log the typeID and skip rather than abort — keeps exe alive past
+			// data load so Phase 1 renderer plumbing can be exercised.
+			if ( !pObject )
+			{
+				char _ss_buf[128];
+				sprintf( _ss_buf, "[ss-port] missing class typeID 0x%08X at chunk pos %d -- skipping\n",
+					nTypeID, (int)obj.GetPosition() );
+				OutputDebugStringA( _ss_buf );
+				objects[pServer] = 0;
+				continue;
+			}
 			if ( !bValid )
 			{
 				// make object invalid

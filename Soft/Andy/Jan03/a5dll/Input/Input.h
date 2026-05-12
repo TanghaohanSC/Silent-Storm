@@ -48,6 +48,11 @@ namespace NInput
 	void StopSaveInput();
 	void StartEmulateInput( CDataStream *pStream );
 	void StopEmulateInput();
+
+	// SDL3 input bridge entry point. Pushes a pre-built SMessage directly
+	// into the message queue, bypassing DirectInput8. Called from
+	// port/src/platform/sdl_input_bridge.cpp.
+	void PushMessageSDL( const SMessage &msg );
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,8 @@
 #include "StdAfx.h"
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifndef SS_USE_SDL_INPUT
 #include <dinput.h>
+#endif
 #include "..\Misc\basic2.h"
 #include "..\FileIO\Streams.h"
 #include "..\Input\Input.h"
@@ -8,7 +10,9 @@
 #include "..\Misc\StrProc.h"
 #include "..\Misc\Tools.h"
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifndef SS_USE_SDL_INPUT
 extern "C" WINBASEAPI BOOL WINAPI IsDebuggerPresent(void);
+#endif
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 static const int POV_RANGE_VALUE = 1000;
 static const int AXIS_RANGE_VALUE = 10000;
@@ -26,6 +30,7 @@ namespace NInput
 // ��������������� ��������� ������
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifndef SS_USE_SDL_INPUT
 struct SKeyInfo
 {
 	const char *pszName;
@@ -33,7 +38,7 @@ struct SKeyInfo
 	int nDevAction;
 	EControlType cType;
 };
-const SKeyInfo kiKeyInfoList [] = 
+const SKeyInfo kiKeyInfoList [] =
 {
 ////// KEYBOARD //////
 	{ "ESC",								DI8DEVTYPE_KEYBOARD,	DIK_ESCAPE			, CT_KEY		},
@@ -271,11 +276,18 @@ void AddDeviceEnum( IDirectInputDevice8 *pdiDevice );
 void AddDeviceKeys( int nID, int nDevType );
 BOOL CALLBACK EnumDevicesCallback( const DIDEVICEINSTANCE* pdidInstance, PVOID pContext );
 BOOL CALLBACK EnumDeviceObjectsCallback( const DIDEVICEOBJECTINSTANCE* lpdidObject, PVOID pContext );
+#else  // SS_USE_SDL_INPUT
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// SDL input mode: no DirectInput, minimal stubs for the message queue.
+////////////////////////////////////////////////////////////////////////////////////////////////////
+static list<SMessage> messages;
+#endif // SS_USE_SDL_INPUT
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Initialization / Deinitialization / message handling
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifndef SS_USE_SDL_INPUT
 // ���������������� DirectInput
 bool InitInput( HWND hWnd, bool _bNonExclusiveMode, int nSampleBufferSize )
 {
@@ -559,6 +571,35 @@ void ResyncDevice( const SInputDevice &sDevice )
 		}
 	}
 }
+
+// SDL input stubs for the DI8 init/done/pump path
+#else  // SS_USE_SDL_INPUT
+
+bool InitInput( HWND /*hWnd*/, bool /*bNonExclusiveMode*/, int /*nSampleBufferSize*/ )
+{
+	messages.clear();
+	return true;
+}
+
+bool DoneInput()
+{
+	messages.clear();
+	return true;
+}
+
+void PumpMessages( bool /*bFocus*/ )
+{
+	// SDL input bridge feeds messages directly; nothing to do here.
+}
+
+#endif // SS_USE_SDL_INPUT
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// SDL bridge entry point: push a pre-built SMessage into the queue.
+// Called from port/src/platform/sdl_input_bridge.cpp.
+void PushMessageSDL( const SMessage &msg )
+{
+	messages.push_back( msg );
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool GetMessage( SMessage *pMsg )
 {
@@ -597,6 +638,7 @@ bool GetCharForKey( int nVirtualKey, WCHAR *pwcChar )
 	return false;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifndef SS_USE_SDL_INPUT
 bool GetKeyForMessage( const SMessage &mMsg, int *pnVirtualKey )
 {
 	if ( mMsg.cType == CT_TIME )
@@ -709,6 +751,23 @@ void GetControlInfo( int nAction, EControlType *pcType, float *pfGranularity )
 
 	return;
 }
+#else  // SS_USE_SDL_INPUT
+// Stubs: DI8 actionIDs/nameIDs tables not populated in SDL mode.
+bool GetKeyForMessage( const SMessage & /*mMsg*/, int *pnVirtualKey )
+{
+	*pnVirtualKey = 0;
+	return false;
+}
+int GetControlID( const string & /*sCommand*/ )
+{
+	return -1;
+}
+void GetControlInfo( int /*nAction*/, EControlType *pcType, float *pfGranularity )
+{
+	*pcType = CT_UNKNOWN;
+	*pfGranularity = 1.0f;
+}
+#endif // SS_USE_SDL_INPUT
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void StartSaveInput( CDataStream *pStream )
 {
@@ -727,9 +786,10 @@ void StopEmulateInput()
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//	Internal functions
+//	Internal functions (DirectInput8 only)
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifndef SS_USE_SDL_INPUT
 // ������� / ������ �������� ��� ���������
 bool SetFocus( bool bFocus )
 {
@@ -1081,6 +1141,7 @@ BOOL CALLBACK EnumDeviceObjectsCallback( const DIDEVICEOBJECTINSTANCE* lpdidObje
 
 	return DIENUM_CONTINUE;
 }
+#endif // SS_USE_SDL_INPUT
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }; // end of namespace NInput
 ////////////////////////////////////////////////////////////////////////////////////////////////////
