@@ -1,5 +1,5 @@
 InitD3D enter
-Direct3DCreate9 returned 0x168D3800
+Direct3DCreate9 returned 0x176A9700
 about to CheckDeviceCaps
 about to DetectModes
 InitD3D returning true

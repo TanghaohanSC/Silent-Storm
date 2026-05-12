@@ -1,15 +1,15 @@
 SMFC 01 enter
 SMFC 02 CheckDeviceCaps ok
 SMFC 03 about to SetMode
-SetMode enter 1024x768 bpp=32 fs=0
+SetMode enter 1280x1024 bpp=32 fs=1
 SetMode FillPresent OK, about to ResetDevice
 ResetDevice enter bDeviceCreated=0
 ResetDevice: injecting facade
-ResetDevice: facade injected 022CDE28
-ResetDevice: facade pPp w=1024 h=768, calling Reset
-  D3D9Facade::Reset -> bgfx::reset(1024,768)
+ResetDevice: facade injected 12070C78
+ResetDevice: facade pPp w=1280 h=1024, calling Reset
+  D3D9Facade::Reset -> bgfx::reset(1280,1024)
 ResetDevice: about to CreateQuery VCACHE
-ResetDevice: CreateQuery hr=0x00000000 pQ=16975780
+ResetDevice: CreateQuery hr=0x00000000 pQ=1774FD48
 ResetDevice: VCACHE done, SetWindowPos
 ResetDevice: about to InitDXObjects (hr=0x00000000)
 InitDXObjects: about to InitZBuffer
@@ -19,10 +19,10 @@ InitBuffers: textureCache ok, transparentCache
 InitBuffers: transparentCache ok, rtInfo loops
 InitBuffers: rtInfo loops ok, sysTextures
   CSysTexture: CreateTexture fmt=21
-  CSysTexture: CreateTexture hr=0x00000000 pTex=16A1BB48
+  CSysTexture: CreateTexture hr=0x00000000 pTex=04603470
   CSysTexture: GetSurfaceLevel hr=0x00000000
   CSysTexture: CreateTexture fmt=21
-  CSysTexture: CreateTexture hr=0x00000000 pTex=16A1B800
+  CSysTexture: CreateTexture hr=0x00000000 pTex=046034E8
   CSysTexture: GetSurfaceLevel hr=0x00000000
 InitBuffers: sysTextures ok, geometry caches
 InitBuffers: geometry caches ok, dynamicTris

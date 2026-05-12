@@ -1,2 +1,2 @@
-renderer::init_hwnd hwnd=001F088C w=100 h=100
+renderer::init_hwnd hwnd=02130718 w=100 h=100
 bgfx::init ok, backend=2
