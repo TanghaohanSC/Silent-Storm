@@ -33,11 +33,17 @@ extern "C" __declspec(dllimport) DWORD __stdcall  GetTickCount();
 #include <windows.h>
 //#include <objbase.h>
 //#include <assert.h>
+#include <stdio.h>
 #ifdef _DEBUG
+#  define SS_ASSERT_LOG_AND_CONTINUE 1
 #  ifdef FAST_DEBUG
 #    define ASSERT( a ) if ( !(a) ) __debugbreak();
 #  else
-#    define ASSERT( aParam ) if ( !(aParam) ) { char szBuf[1024]; sprintf( szBuf, "%s(%d) assertion %s failed", __FILE__, __LINE__, #aParam ); MessageBox( 0, szBuf, "Error", MB_OK ); __debugbreak(); }
+#    ifdef SS_ASSERT_LOG_AND_CONTINUE
+#      define ASSERT( aParam ) do { if ( !(aParam) ) { FILE* _af = 0; fopen_s(&_af, "silent_storm_assert.log", "a"); if (_af) { fprintf(_af, "%s(%d) assertion %s failed\n", __FILE__, __LINE__, #aParam); fclose(_af); } } } while (0)
+#    else
+#      define ASSERT( aParam ) if ( !(aParam) ) { char szBuf[1024]; sprintf( szBuf, "%s(%d) assertion %s failed", __FILE__, __LINE__, #aParam ); MessageBox( 0, szBuf, "Error", MB_OK ); __debugbreak(); }
+#    endif
 #  endif
 #else
 #  define ASSERT( a ) ((void)0)

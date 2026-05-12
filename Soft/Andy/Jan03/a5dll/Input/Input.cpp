@@ -279,8 +279,116 @@ BOOL CALLBACK EnumDeviceObjectsCallback( const DIDEVICEOBJECTINSTANCE* lpdidObje
 #else  // SS_USE_SDL_INPUT
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // SDL input mode: no DirectInput, minimal stubs for the message queue.
+//
+// silent-storm-port Phase 1.5 r6: also populate `nameIDs` so that NInput::CBind
+// can resolve user-bound control names (e.g. "`" for the console) to the same
+// action IDs that sdl_input_bridge.cpp encodes when pushing events. Without
+// this, every `bind ... 'KEY'` came back with action -1 and no key press ever
+// matched a CBind, leaving the intermission console permanently unreachable.
+//
+// The encoded action ID is `INPUT_KEYID(deviceID, offset)`:
+//   - deviceID 0 = mouse  (matches DEVICE_MOUSE in sdl_input_bridge.cpp)
+//   - deviceID 1 = keyboard (matches DEVICE_KEYBOARD in sdl_input_bridge.cpp)
+//   - offset = DIK_* scancode for keyboard, DIMOFS_* offset for mouse
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 static list<SMessage> messages;
+static hash_map<string, int> nameIDs;
+static hash_map<int, EControlType> actionTypes;
+
+namespace {
+struct SSDLKey {
+    const char *pszName;
+    int nDeviceID;   // 0 = mouse, 1 = keyboard
+    int nOffset;     // DIK_* scancode or DIMOFS_*
+    EControlType eType;
+};
+// DIK_* scancodes (from <dinput.h>, mirrored in port/src/platform/sdl_to_dik.h).
+// DIMOFS_* offsets (from DIMOUSESTATE2 in <dinput.h>).
+const SSDLKey kiSDLKeys[] = {
+    // ---- KEYBOARD (deviceID=1) ----
+    { "ESC",        1, 0x01, CT_KEY },
+    { "1",          1, 0x02, CT_KEY }, { "2",          1, 0x03, CT_KEY },
+    { "3",          1, 0x04, CT_KEY }, { "4",          1, 0x05, CT_KEY },
+    { "5",          1, 0x06, CT_KEY }, { "6",          1, 0x07, CT_KEY },
+    { "7",          1, 0x08, CT_KEY }, { "8",          1, 0x09, CT_KEY },
+    { "9",          1, 0x0A, CT_KEY }, { "0",          1, 0x0B, CT_KEY },
+    { "-",          1, 0x0C, CT_KEY }, { "=",          1, 0x0D, CT_KEY },
+    { "BACKSPACE",  1, 0x0E, CT_KEY }, { "TAB",        1, 0x0F, CT_KEY },
+    { "Q",          1, 0x10, CT_KEY }, { "W",          1, 0x11, CT_KEY },
+    { "E",          1, 0x12, CT_KEY }, { "R",          1, 0x13, CT_KEY },
+    { "T",          1, 0x14, CT_KEY }, { "Y",          1, 0x15, CT_KEY },
+    { "U",          1, 0x16, CT_KEY }, { "I",          1, 0x17, CT_KEY },
+    { "O",          1, 0x18, CT_KEY }, { "P",          1, 0x19, CT_KEY },
+    { "[",          1, 0x1A, CT_KEY }, { "]",          1, 0x1B, CT_KEY },
+    { "ENTER",      1, 0x1C, CT_KEY }, { "LCTRL",      1, 0x1D, CT_KEY },
+    { "A",          1, 0x1E, CT_KEY }, { "S",          1, 0x1F, CT_KEY },
+    { "D",          1, 0x20, CT_KEY }, { "F",          1, 0x21, CT_KEY },
+    { "G",          1, 0x22, CT_KEY }, { "H",          1, 0x23, CT_KEY },
+    { "J",          1, 0x24, CT_KEY }, { "K",          1, 0x25, CT_KEY },
+    { "L",          1, 0x26, CT_KEY }, { ";",          1, 0x27, CT_KEY },
+    { "'",          1, 0x28, CT_KEY }, { "`",          1, 0x29, CT_KEY },
+    { "LSHIFT",     1, 0x2A, CT_KEY }, { "\\",         1, 0x2B, CT_KEY },
+    { "Z",          1, 0x2C, CT_KEY }, { "X",          1, 0x2D, CT_KEY },
+    { "C",          1, 0x2E, CT_KEY }, { "V",          1, 0x2F, CT_KEY },
+    { "B",          1, 0x30, CT_KEY }, { "N",          1, 0x31, CT_KEY },
+    { "M",          1, 0x32, CT_KEY }, { ",",          1, 0x33, CT_KEY },
+    { ".",          1, 0x34, CT_KEY }, { "/",          1, 0x35, CT_KEY },
+    { "RSHIFT",     1, 0x36, CT_KEY }, { "NUM_MULTIPLY", 1, 0x37, CT_KEY },
+    { "LALT",       1, 0x38, CT_KEY }, { "SPACE",      1, 0x39, CT_KEY },
+    { "CAPITAL",    1, 0x3A, CT_KEY },
+    { "F1",         1, 0x3B, CT_KEY }, { "F2",         1, 0x3C, CT_KEY },
+    { "F3",         1, 0x3D, CT_KEY }, { "F4",         1, 0x3E, CT_KEY },
+    { "F5",         1, 0x3F, CT_KEY }, { "F6",         1, 0x40, CT_KEY },
+    { "F7",         1, 0x41, CT_KEY }, { "F8",         1, 0x42, CT_KEY },
+    { "F9",         1, 0x43, CT_KEY }, { "F10",        1, 0x44, CT_KEY },
+    { "NUM",        1, 0x45, CT_KEY }, { "SCROLL",     1, 0x46, CT_KEY },
+    { "NUM_7",      1, 0x47, CT_KEY }, { "NUM_8",      1, 0x48, CT_KEY },
+    { "NUM_9",      1, 0x49, CT_KEY }, { "NUM_MINUS",  1, 0x4A, CT_KEY },
+    { "NUM_4",      1, 0x4B, CT_KEY }, { "NUM_5",      1, 0x4C, CT_KEY },
+    { "NUM_6",      1, 0x4D, CT_KEY }, { "NUM_PLUS",   1, 0x4E, CT_KEY },
+    { "NUM_1",      1, 0x4F, CT_KEY }, { "NUM_2",      1, 0x50, CT_KEY },
+    { "NUM_3",      1, 0x51, CT_KEY }, { "NUM_0",      1, 0x52, CT_KEY },
+    { "NUM_PERIOD", 1, 0x53, CT_KEY }, { "F11",        1, 0x57, CT_KEY },
+    { "F12",        1, 0x58, CT_KEY },
+    { "NUM_ENTER",  1, 0x9C, CT_KEY }, { "RCTRL",      1, 0x9D, CT_KEY },
+    { "NUM_DIVIDE", 1, 0xB5, CT_KEY }, { "SYSRQ",      1, 0xB7, CT_KEY },
+    { "RALT",       1, 0xB8, CT_KEY }, { "PAUSE",      1, 0xC5, CT_KEY },
+    { "HOME",       1, 0xC7, CT_KEY }, { "UP",         1, 0xC8, CT_KEY },
+    { "PG_UP",      1, 0xC9, CT_KEY }, { "LEFT",       1, 0xCB, CT_KEY },
+    { "RIGHT",      1, 0xCD, CT_KEY }, { "END",        1, 0xCF, CT_KEY },
+    { "DOWN",       1, 0xD0, CT_KEY }, { "PG_DOWN",    1, 0xD1, CT_KEY },
+    { "INSERT",     1, 0xD2, CT_KEY }, { "DELETE",     1, 0xD3, CT_KEY },
+    { "LWIN",       1, 0xDB, CT_KEY }, { "RWIN",       1, 0xDC, CT_KEY },
+    { "APP_MENU",   1, 0xDD, CT_KEY },
+    // ---- MOUSE (deviceID=0) ----
+    // DIMOFS_X/Y/Z = 0/4/8 ; DIMOFS_BUTTON{0..7} = 12..19
+    { "MOUSE_AXIS_X",  0, 0,  CT_AXIS },
+    { "MOUSE_AXIS_Y",  0, 4,  CT_AXIS },
+    { "MOUSE_AXIS_Z",  0, 8,  CT_AXIS },
+    { "MOUSE_BUTTON0", 0, 12, CT_KEY },
+    { "MOUSE_BUTTON1", 0, 13, CT_KEY },
+    { "MOUSE_BUTTON2", 0, 14, CT_KEY },
+    { "MOUSE_BUTTON3", 0, 15, CT_KEY },
+    { "MOUSE_BUTTON4", 0, 16, CT_KEY },
+    { "MOUSE_BUTTON5", 0, 17, CT_KEY },
+    { "MOUSE_BUTTON6", 0, 18, CT_KEY },
+    { "MOUSE_BUTTON7", 0, 19, CT_KEY },
+    { 0, 0, 0, CT_UNKNOWN }
+};
+static void PopulateSDLNameIDs()
+{
+    nameIDs.clear();
+    actionTypes.clear();
+    for ( int i = 0; kiSDLKeys[i].pszName; ++i )
+    {
+        const SSDLKey &k = kiSDLKeys[i];
+        int nAction = INPUT_KEYID( k.nDeviceID, k.nOffset );
+        nameIDs[ k.pszName ] = nAction;
+        actionTypes[ nAction ] = k.eType;
+    }
+}
+}  // anonymous namespace
+
 #endif // SS_USE_SDL_INPUT
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -578,6 +686,9 @@ void ResyncDevice( const SInputDevice &sDevice )
 bool InitInput( HWND /*hWnd*/, bool /*bNonExclusiveMode*/, int /*nSampleBufferSize*/ )
 {
 	messages.clear();
+	// silent-storm-port Phase 1.5 r6: register the SDL-mode name->action table
+	// so NInput::CBind can resolve control names from input.cfg's `bind` lines.
+	PopulateSDLNameIDs();
 	return true;
 }
 
@@ -598,6 +709,23 @@ void PumpMessages( bool /*bFocus*/ )
 // Called from port/src/platform/sdl_input_bridge.cpp.
 void PushMessageSDL( const SMessage &msg )
 {
+	// silent-storm-port Phase 1.5 r6: log first N events so we can confirm the
+	// SDL bridge -> NInput pipe is actually delivering messages.
+	{
+		static int n = 0;
+		if ( n < 30 )
+		{
+			FILE *f = 0;
+			fopen_s( &f, "silent_storm_input.log", "a" );
+			if ( f )
+			{
+				fprintf( f, "PushMessageSDL #%d cType=%d nAction=0x%08X nParam=%d bState=%d\n",
+					n, (int)msg.cType, (unsigned)msg.nAction, msg.nParam, msg.bState ? 1 : 0 );
+				fclose( f );
+			}
+			++n;
+		}
+	}
 	messages.push_back( msg );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -752,19 +880,47 @@ void GetControlInfo( int nAction, EControlType *pcType, float *pfGranularity )
 	return;
 }
 #else  // SS_USE_SDL_INPUT
-// Stubs: DI8 actionIDs/nameIDs tables not populated in SDL mode.
-bool GetKeyForMessage( const SMessage & /*mMsg*/, int *pnVirtualKey )
+// silent-storm-port Phase 1.5 r6: real implementations backed by nameIDs that
+// PopulateSDLNameIDs() filled in during InitInput. Bindings can now resolve
+// "`", "ESC", "MOUSE_BUTTON0", etc.  Without this, every CBind got action -1
+// and the console + ESC + mouse buttons were all dead.
+bool GetKeyForMessage( const SMessage &mMsg, int *pnVirtualKey )
 {
-	*pnVirtualKey = 0;
-	return false;
+	if ( mMsg.cType == CT_TIME )
+	{
+		*pnVirtualKey = 0;
+		return false;
+	}
+	// Map keyboard DIK scancode -> Windows VK via MapVirtualKey, same as DI8 path.
+	int nDevID = INPUT_GETACTIONDEVICEID( mMsg.nAction );
+	int nOffset = INPUT_GETACTIONOFFS( mMsg.nAction );
+	if ( nDevID != 1 || !mMsg.bState ) // keyboard only, key-down only
+	{
+		*pnVirtualKey = 0;
+		return false;
+	}
+	HKL hKL = GetKeyboardLayout( 0 );
+	*pnVirtualKey = MapVirtualKeyEx( nOffset, 1, hKL );
+	return *pnVirtualKey != 0;
 }
-int GetControlID( const string & /*sCommand*/ )
+int GetControlID( const string &sCommand )
 {
-	return -1;
+	hash_map<string, int>::const_iterator it = nameIDs.find( sCommand );
+	if ( it == nameIDs.end() )
+		return -1;
+	return it->second;
 }
-void GetControlInfo( int /*nAction*/, EControlType *pcType, float *pfGranularity )
+void GetControlInfo( int nAction, EControlType *pcType, float *pfGranularity )
 {
-	*pcType = CT_UNKNOWN;
+	hash_map<int, EControlType>::const_iterator it = actionTypes.find( nAction );
+	if ( it == actionTypes.end() )
+	{
+		*pcType = CT_UNKNOWN;
+		*pfGranularity = 1.0f;
+		return;
+	}
+	*pcType = it->second;
+	// Granularity matches the DI8 path: mouse axes get 1 unit per count, keys 1.
 	*pfGranularity = 1.0f;
 }
 #endif // SS_USE_SDL_INPUT

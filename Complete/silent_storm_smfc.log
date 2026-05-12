@@ -1,0 +1,35 @@
+SMFC 01 enter
+SMFC 02 CheckDeviceCaps ok
+SMFC 03 about to SetMode
+SetMode enter 1024x768 bpp=32 fs=0
+SetMode FillPresent OK, about to ResetDevice
+ResetDevice enter bDeviceCreated=0
+ResetDevice: injecting facade
+ResetDevice: facade injected 022CDE28
+ResetDevice: facade pPp w=1024 h=768, calling Reset
+  D3D9Facade::Reset -> bgfx::reset(1024,768)
+ResetDevice: about to CreateQuery VCACHE
+ResetDevice: CreateQuery hr=0x00000000 pQ=16975780
+ResetDevice: VCACHE done, SetWindowPos
+ResetDevice: about to InitDXObjects (hr=0x00000000)
+InitDXObjects: about to InitZBuffer
+InitDXObjects: InitZBuffer ok, InitBuffers
+InitBuffers: about to textureCache.Init
+InitBuffers: textureCache ok, transparentCache
+InitBuffers: transparentCache ok, rtInfo loops
+InitBuffers: rtInfo loops ok, sysTextures
+  CSysTexture: CreateTexture fmt=21
+  CSysTexture: CreateTexture hr=0x00000000 pTex=16A1BB48
+  CSysTexture: GetSurfaceLevel hr=0x00000000
+  CSysTexture: CreateTexture fmt=21
+  CSysTexture: CreateTexture hr=0x00000000 pTex=16A1B800
+  CSysTexture: GetSurfaceLevel hr=0x00000000
+InitBuffers: sysTextures ok, geometry caches
+InitBuffers: geometry caches ok, dynamicTris
+InitBuffers: complete
+InitDXObjects: InitBuffers ok, InitRender
+InitDXObjects: InitRender hr=0x00000000
+ResetDevice: InitDXObjects ret hr=0x00000000
+SetMode ResetDevice hr=0x00000000
+SMFC 04 SetMode true
+SMFC 07 returning

@@ -1,4 +1,8 @@
 #include "StdAfx.h"
+// silent-storm-port Phase 1.5 r2: text draw re-enabled — investigating what
+// breaks so the main menu can actually paint.  Define SS_PHASE1_5_SKIP_TEXT_DRAW
+// to fall back to the round-1 behaviour (clear-only).
+//#define SS_PHASE1_5_SKIP_TEXT_DRAW 1
 #include "iMain.h"
 #include "G2DView.h"
 #include "GSceneUtils.h"
@@ -115,20 +119,44 @@ bool CInterMissionInterface::ProcessEvent( const NInput::SEvent &eEvent )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CInterMissionInterface::Step()
 {
+	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"IM::Step #%d enter\n",n); fclose(_f);} ++n; } }
 	MarkNewDGFrame();
 	if ( CanRender() )
 	{
+		{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+		  if(_f){fprintf(_f,"IM::Step #%d about to UpdateCursor\n",n); fclose(_f);} ++n; } }
 		pInterface->UpdateCursor();
+		{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+		  if(_f){fprintf(_f,"IM::Step #%d about to Step\n",n); fclose(_f);} ++n; } }
 		pInterface->Step( GetTime() );
+		{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+		  if(_f){fprintf(_f,"IM::Step #%d about to RenderFrame\n",n); fclose(_f);} ++n; } }
 		RenderFrame();
+		{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+		  if(_f){fprintf(_f,"IM::Step #%d RenderFrame ok\n",n); fclose(_f);} ++n; } }
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CInterMissionInterface::RenderFrame()
 {
+	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"IM::RenderFrame #%d ClearScreen\n",n); fclose(_f);} ++n; } }
 	NGScene::ClearScreen( CVec3(0.5f, 0.5f, 0.5f ) );
+#ifdef SS_PHASE1_5_SKIP_TEXT_DRAW
+	// silent-storm-port Phase 1.5: text rendering still crashes in the font
+	// pipeline (font texture not bound to the bgfx facade yet). Skip Draw
+	// entirely so the main loop can run and we see the clear-screen color.
+#else
+	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"IM::RenderFrame #%d pInterface->Draw\n",n); fclose(_f);} ++n; } }
 	pInterface->Draw( GetTime() );
+#endif
+	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"IM::RenderFrame #%d Flip\n",n); fclose(_f);} ++n; } }
 	NGScene::Flip();
+	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"IM::RenderFrame #%d Flip ok\n",n); fclose(_f);} ++n; } }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // CMD

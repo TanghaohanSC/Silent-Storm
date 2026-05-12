@@ -16,3 +16,26 @@
 16 InitInput ok, about to LoadConfig
 17 LoadConfig done
 18 about to SetModeFromConfig (Gfx)
+19 SetModeFromConfig ok, sound
+20 sound mode ok, about to queue main-loop command
+21 main-loop command queued, entering forever loop
+22.0 loop top
+22.0.a PumpMessages ok
+22.0.b NInput PumpMessages ok bActive=1
+22.0.c StepApp ret=1
+22.1 loop top
+22.1.a PumpMessages ok
+22.1.b NInput PumpMessages ok bActive=1
+22.1.c StepApp ret=1
+22.2 loop top
+22.2.a PumpMessages ok
+22.2.b NInput PumpMessages ok bActive=1
+22.2.c StepApp ret=1
+22.3 loop top
+22.3.a PumpMessages ok
+22.3.b NInput PumpMessages ok bActive=1
+22.3.c StepApp ret=1
+22.4 loop top
+22.4.a PumpMessages ok
+22.4.b NInput PumpMessages ok bActive=1
+22.4.c StepApp ret=1

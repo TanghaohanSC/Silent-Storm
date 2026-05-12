@@ -1,0 +1,2 @@
+Silent Storm audio log (Phase 2: FMOD -> miniaudio backend)
+FSOUND_Init: ok. sampleRate=44100 channels=2 backend=miniaudio 0.11.25

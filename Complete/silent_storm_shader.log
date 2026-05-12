@@ -1,1 +1,9 @@
 [shader_registry] loaded 8/8 archetypes from C:\Users\Haohan\Documents\silent-storm\port\build\msvc-debug\shaders
+[shader_registry]   get_program("ss_diffuse_unlit") -> idx=9 valid=1
+[shader_registry]   get_program("ss_diffuse_lit") -> idx=10 valid=1
+[shader_registry]   get_program("ss_skinned") -> idx=11 valid=1
+[shader_registry]   get_program("ss_ui") -> idx=12 valid=1
+[shader_registry]   get_program("ss_particle") -> idx=13 valid=1
+[shader_registry]   get_program("ss_shadow") -> idx=14 valid=1
+[shader_registry]   get_program("ss_terrain") -> idx=15 valid=1
+[shader_registry]   get_program("ss_water") -> idx=16 valid=1

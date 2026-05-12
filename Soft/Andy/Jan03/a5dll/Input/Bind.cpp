@@ -96,6 +96,26 @@ void Bind( EMappingType eType, const string &sCmd, const string &szSection, cons
 		sMapping.actionsSet[nTemp] = nAction;
 		sMapping.fullActionsSet[nTemp] = nAction;
 
+		// silent-storm-port Phase 1.5 r6: log bind registration so we can verify
+		// the resolved action ID matches what WndProc later pushes.
+		{
+			static int n = 0;
+			if ( n < 50 )
+			{
+				FILE *_f = 0;
+				fopen_s( &_f, "silent_storm_bind.log", "a" );
+				if ( _f )
+				{
+					fprintf( _f, "Bind cmd=%s ctrl=%s -> action=0x%08X\n",
+						sCmd.c_str(),
+						szControlsSet[nTemp].c_str(),
+						(unsigned)nAction );
+					fclose( _f );
+				}
+				++n;
+			}
+		}
+
 		SActionInfo &sInfo = sActions[nAction];
 		if ( sInfo.eState != STATE_INITIALIZED )
 		{
@@ -417,10 +437,29 @@ static void ProcessMessage( const NInput::SMessage &mMsg )
 	TActionsMap &sActions = GetActions();
 	TCommandsMap &sCommands = GetCommands();
 	TBindCommandsMap &sBindCommands = GetBindCommands();
-	
+
 	sEvent.commands.clear();
 	sEvent.mMessage = mMsg;
-		
+
+	// silent-storm-port Phase 1.5 r6: trace first key/button events so we can
+	// see whether bindings actually match.
+	if ( mMsg.cType != NInput::CT_TIME && mMsg.cType != NInput::CT_AXIS )
+	{
+		static int n = 0;
+		if ( n < 30 )
+		{
+			FILE *_f = 0;
+			fopen_s( &_f, "silent_storm_bind.log", "a" );
+			if ( _f )
+			{
+				fprintf( _f, "ProcessMessage #%d cType=%d nAction=0x%08X bState=%d nCmds=%d\n",
+					n, (int)mMsg.cType, (unsigned)mMsg.nAction, mMsg.bState ? 1 : 0, (int)sCommands.size() );
+				fclose( _f );
+			}
+			++n;
+		}
+	}
+
 	for ( hash_map<string, SCommand>::iterator iTempCommand = sCommands.begin(); iTempCommand != sCommands.end(); ++iTempCommand )
 	{
 		SCommand &sCommand = iTempCommand->second;
@@ -432,6 +471,26 @@ static void ProcessMessage( const NInput::SMessage &mMsg )
 				continue;
 			if ( find( iTempMapping->fullActionsSet.begin(), iTempMapping->fullActionsSet.end(), mMsg.nAction ) == iTempMapping->fullActionsSet.end() )
 				continue;
+
+			// silent-storm-port Phase 1.5 r6 diagnostic — log when a binding matches
+			if ( mMsg.cType != NInput::CT_TIME && mMsg.cType != NInput::CT_AXIS )
+			{
+				static int n = 0;
+				if ( n < 50 )
+				{
+					FILE *_f = 0;
+					fopen_s( &_f, "silent_storm_bind.log", "a" );
+					if ( _f )
+					{
+						fprintf( _f, "  match cmd=%s mType=%d bActive=%d bDisabled=%d nActSetSize=%d\n",
+							iTempCommand->first.c_str(), (int)iTempMapping->mType,
+							iTempMapping->bActive ? 1 : 0, iTempMapping->bDisabled ? 1 : 0,
+							(int)iTempMapping->actionsSet.size() );
+						fclose( _f );
+					}
+					++n;
+				}
+			}
 
 			SActionInfo &sActionInfo = sActions[mMsg.nAction];
 			sActionInfo.bActive = mMsg.bState;
@@ -449,7 +508,7 @@ static void ProcessMessage( const NInput::SMessage &mMsg )
 				iTempMapping->sAccumulator.sLimAxisAccumulator.Deactivate( mMsg.tTime );
 				continue;
 			}
-			
+
 			if ( iTempMapping->bActive && ( iTempMapping->mType == MTYPE_EVENT ) )
 				continue;
 
@@ -458,7 +517,7 @@ static void ProcessMessage( const NInput::SMessage &mMsg )
 			continue;
 		}
 	}
-	
+
 	events.push_back( sEvent );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

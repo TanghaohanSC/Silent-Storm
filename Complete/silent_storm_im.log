@@ -1,0 +1,87 @@
+IM::Step #0 enter
+IM::Step #0 about to UpdateCursor
+IM::Step #0 about to Step
+IM::Step #0 about to RenderFrame
+IM::RenderFrame #0 ClearScreen
+IM::RenderFrame #0 pInterface->Draw
+CInterface::Draw #0 pView=16776520
+CInterface::Draw #0 StartNewFrame ok, CWindow::Draw
+CWindow::Draw #0 this=1676D038
+CWindow::Draw #0 2 children
+CWindow::Draw #0 child[0]=16870DE0 Draw
+CText::Draw #0 this=16870DE0 pText=169A2528
+CText::Draw #0 about to pText->Draw
+CTextDraw::Draw #0 enter pText=00000000
+CTextDraw::Draw #0 pView->CreateText
+CTextDraw::Draw #0 CreateText returned 022C0EA8
+CTextDraw::Draw #0 CreateDynamicRects
+C2DGV::CreateDynRects #0 pText=022C0EA8
+GetFontFormatInfo: locale->GetFont returned null (no fonts in db)
+C2DGV::CreateDynRects #0 rectLayouts.size=0
+CTextDraw::Draw #0 CreateDynamicRects ok
+CText::Draw #0 pText->Draw ok, CWindow::Draw
+CWindow::Draw #1 this=16870DE0
+CWindow::Draw #1 0 children
+CInterface::Draw #0 CWindow::Draw ok, NonPublicDemo->Draw
+CTextDraw::Draw #1 enter pText=00000000
+CTextDraw::Draw #1 pView->CreateText
+CTextDraw::Draw #1 CreateText returned 16A47788
+CTextDraw::Draw #1 CreateDynamicRects
+C2DGV::CreateDynRects #1 pText=16A47788
+GetFontFormatInfo: locale->GetFont returned null (no fonts in db)
+C2DGV::CreateDynRects #1 rectLayouts.size=0
+CTextDraw::Draw #1 CreateDynamicRects ok
+CInterface::Draw #0 NPD->Draw ok, FPS
+CInterface::Draw #0 cursor ok, Flush
+CInterface::Draw #0 Flush ok
+IM::RenderFrame #0 Flip
+IM::RenderFrame #0 Flip ok
+IM::Step #0 RenderFrame ok
+IM::Step #1 enter
+IM::Step #1 about to UpdateCursor
+IM::Step #1 about to Step
+IM::Step #1 about to RenderFrame
+IM::RenderFrame #1 ClearScreen
+IM::RenderFrame #1 pInterface->Draw
+CInterface::Draw #1 pView=16776520
+CInterface::Draw #1 StartNewFrame ok, CWindow::Draw
+CWindow::Draw #2 this=1676D038
+CWindow::Draw #2 2 children
+CWindow::Draw #1 child[0]=16870DE0 Draw
+CText::Draw #1 this=16870DE0 pText=169A2528
+CText::Draw #1 about to pText->Draw
+CTextDraw::Draw #2 enter pText=022C0EA8
+CTextDraw::Draw #2 CreateDynamicRects
+C2DGV::CreateDynRects #2 pText=022C0EA8
+C2DGV::CreateDynRects #2 rectLayouts.size=0
+CTextDraw::Draw #2 CreateDynamicRects ok
+CText::Draw #1 pText->Draw ok, CWindow::Draw
+CWindow::Draw #3 this=16870DE0
+CWindow::Draw #3 0 children
+CInterface::Draw #1 CWindow::Draw ok, NonPublicDemo->Draw
+CInterface::Draw #1 NPD->Draw ok, FPS
+CInterface::Draw #1 cursor ok, Flush
+CInterface::Draw #1 Flush ok
+IM::RenderFrame #1 Flip
+IM::RenderFrame #1 Flip ok
+IM::Step #1 RenderFrame ok
+IM::Step #2 enter
+IM::Step #2 about to UpdateCursor
+IM::Step #2 about to Step
+IM::Step #2 about to RenderFrame
+IM::RenderFrame #2 ClearScreen
+IM::RenderFrame #2 pInterface->Draw
+CWindow::Draw #4 this=1676D038
+CWindow::Draw #4 2 children
+CWindow::Draw #2 child[0]=16870DE0 Draw
+CText::Draw #2 this=16870DE0 pText=169A2528
+CText::Draw #2 about to pText->Draw
+CText::Draw #2 pText->Draw ok, CWindow::Draw
+IM::RenderFrame #2 Flip
+IM::RenderFrame #2 Flip ok
+IM::Step #2 RenderFrame ok
+CWindow::Draw #3 child[0]=16870DE0 Draw
+CWindow::Draw #4 child[0]=16870DE0 Draw
+CWindow::Draw #5 child[0]=16870DE0 Draw
+CWindow::Draw #6 child[0]=16870DE0 Draw
+CWindow::Draw #7 child[0]=16870DE0 Draw

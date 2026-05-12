@@ -3,6 +3,15 @@
 #include "Gfx.h"
 #include "GfxRender.h"
 #include "..\MiscDll\Commands.h"
+#include <stdio.h>
+
+// silent-storm-port: trace SetModeFromConfig progress to a log
+static void ss_smfc_trace(const char* msg)
+{
+	FILE* f = NULL;
+	fopen_s(&f, "silent_storm_smfc.log", "a");
+	if (f) { fprintf(f, "%s\n", msg); fclose(f); }
+}
 
 namespace NGScene
 {
@@ -18,7 +27,10 @@ bool CanCalcAmbient() { return bCanCalcAmbient; }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool SetModeFromConfig()
 {
+	{ FILE* f=NULL; fopen_s(&f,"silent_storm_smfc.log","w"); if(f) fclose(f); }
+	ss_smfc_trace("SMFC 01 enter");
 	NGfx::CheckDeviceCaps();
+	ss_smfc_trace("SMFC 02 CheckDeviceCaps ok");
 	NGlobal::CValue sValue;
 
 	int nModeX = 1024, nModeY = 768;
@@ -90,7 +102,9 @@ bool SetModeFromConfig()
 		rtInfo.AddCube( 256, 1 );
 	}
 
+	ss_smfc_trace("SMFC 03 about to SetMode");
 	bool bRes = NGfx::SetMode( NGfx::SVideoMode( nModeX, nModeY, 32, fullScreen ), rtInfo );
+	ss_smfc_trace(bRes ? "SMFC 04 SetMode true" : "SMFC 04 SetMode false");
 	if ( !bRes )
 	{
 		// in case of failure try to create device limited to fastest mode
@@ -99,8 +113,11 @@ bool SetModeFromConfig()
 		bCanCalcAmbient = false;
 		nCLSkyTextures = 0;
 		rtInfo.Clear();
+		ss_smfc_trace("SMFC 05 retry SetMode fastest");
 		bRes = NGfx::SetMode( NGfx::SVideoMode( nModeX, nModeY, 32, fullScreen ), rtInfo );
+		ss_smfc_trace(bRes ? "SMFC 06 retry SetMode true" : "SMFC 06 retry SetMode false");
 	}
+	ss_smfc_trace("SMFC 07 returning");
 	return bRes;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

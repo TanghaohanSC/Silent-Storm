@@ -1,0 +1,9 @@
+[scene#1] BeginScene view=0 draw_total=0
+[present#1] draws=0 submits=0
+[dbg_tri#1] submitted via ss_ui
+[scene#2] BeginScene view=0 draw_total=0
+[present#2] draws=0 submits=0
+[dbg_tri#2] submitted via ss_ui
+[scene#3] BeginScene view=0 draw_total=0
+[present#3] draws=0 submits=0
+[dbg_tri#3] submitted via ss_ui

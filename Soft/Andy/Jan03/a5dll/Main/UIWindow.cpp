@@ -420,14 +420,22 @@ void CWindow::Update( const STime &sTime, NGScene::I2DGameView *pView )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CWindow::Draw( const STime &sTime, NGScene::I2DGameView *pView )
 {
+	{ static int n=0; if(n<5){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CWindow::Draw #%d this=%p\n",n,(void*)this); fclose(_f);} ++n; } }
 	list< CPtr<CWindow> > windowsList;
 	FormChildrenList( &windowsList );
+	{ static int n=0; if(n<5){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CWindow::Draw #%d %d children\n",n,(int)windowsList.size()); fclose(_f);} ++n; } }
+	int _idx = 0;
 	for ( list< CPtr<CWindow> >::reverse_iterator iTemp = windowsList.rbegin(); iTemp != windowsList.rend(); iTemp++ )
 	{
 		if ( !(*iTemp)->GetStyle( STYLE_VISIBLE ) )
 			continue;
 
+		{ static int n=0; if(n<8){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+		  if(_f){fprintf(_f,"CWindow::Draw #%d child[%d]=%p Draw\n",n,_idx,(*iTemp).GetPtr()); fclose(_f);} ++n; } }
 		(*iTemp)->Draw( sTime, pView );
+		++_idx;
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -3,6 +3,7 @@
 #include "..\Misc\StrProc.h"
 #include "..\Misc\HPTimer.h"
 #include "..\Misc\Win32Helper.h"
+#include "..\Input\Input.h"  // silent-storm-port Phase 1.5 r6: NInput::SMessage + PushMessageSDL
 #include <strstream>
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 using namespace NWinFrame;
@@ -281,6 +282,127 @@ static LRESULT CALLBACK WndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 			AddMsg( SWindowsMsg::KEY_UP, wParam, lParam & 0xFFFF, (lParam >> 16) & 0xFFFF );
 			break;
 	}
+
+#ifdef SS_USE_SDL_INPUT
+	// silent-storm-port Phase 1.5 r6: Win32 message -> NInput bridge.
+	// Replaces the DirectInput8 polling path that was the original source for
+	// NInput::messages.  Without this, NO key/mouse events reach Nival's
+	// CBind/CInterface code, so ESC, console (`), mouse clicks, etc. all dead.
+	//
+	// Action ID encoding (mirrors INPUT_KEYID in Input.cpp + the SDL bridge):
+	//   ((deviceID & 0xFF) << 24) | offset
+	//   deviceID 0 = mouse, 1 = keyboard
+	//   keyboard offset = DIK_* scancode (== Win32 scancode from lParam[16..23])
+	//   mouse button offset = DIMOFS_BUTTON{0..4} (12..16)
+	//   mouse axis offset = DIMOFS_X/Y/Z (0/4/8)
+	{
+		NInput::SMessage msg;
+		msg.ePOVAxis = NInput::PA_UNKNOWN;
+		msg.tTime    = GetTickCount();
+		bool bSend   = false;
+
+		switch ( uMsg )
+		{
+			case WM_KEYDOWN:
+			case WM_SYSKEYDOWN:
+			case WM_KEYUP:
+			case WM_SYSKEYUP:
+			{
+				// lParam bits 16..23 are the scancode. Bit 24 = extended key.
+				int dik = (int)((lParam >> 16) & 0xFF);
+				if ( (lParam >> 24) & 1 )
+					dik |= 0x80;   // DIK extended-bit (PG_UP, ARROW keys, etc.)
+				msg.cType   = NInput::CT_KEY;
+				msg.nAction = (1 << 24) | dik;
+				msg.bState  = ( uMsg == WM_KEYDOWN || uMsg == WM_SYSKEYDOWN );
+				msg.nParam  = msg.bState ? 0x80 : 0;
+				bSend = true;
+				break;
+			}
+			case WM_LBUTTONDOWN:
+			case WM_LBUTTONUP:
+				msg.cType   = NInput::CT_KEY;
+				msg.nAction = 12;   // DIMOFS_BUTTON0
+				msg.bState  = ( uMsg == WM_LBUTTONDOWN );
+				msg.nParam  = msg.bState ? 0x80 : 0;
+				bSend = true;
+				break;
+			case WM_RBUTTONDOWN:
+			case WM_RBUTTONUP:
+				msg.cType   = NInput::CT_KEY;
+				msg.nAction = 13;   // DIMOFS_BUTTON1
+				msg.bState  = ( uMsg == WM_RBUTTONDOWN );
+				msg.nParam  = msg.bState ? 0x80 : 0;
+				bSend = true;
+				break;
+			case WM_MBUTTONDOWN:
+			case WM_MBUTTONUP:
+				msg.cType   = NInput::CT_KEY;
+				msg.nAction = 14;   // DIMOFS_BUTTON2
+				msg.bState  = ( uMsg == WM_MBUTTONDOWN );
+				msg.nParam  = msg.bState ? 0x80 : 0;
+				bSend = true;
+				break;
+			case WM_MOUSEMOVE:
+			{
+				// Track abs position so we can emit relative axis deltas.
+				static int sLastX = -1, sLastY = -1;
+				int x = (int)(short)( lParam & 0xFFFF );
+				int y = (int)(short)( ( lParam >> 16 ) & 0xFFFF );
+				int dx = 0, dy = 0;
+				if ( sLastX >= 0 )
+				{
+					dx = x - sLastX;
+					dy = y - sLastY;
+				}
+				sLastX = x;
+				sLastY = y;
+				if ( dx != 0 )
+				{
+					NInput::SMessage m;
+					m.cType    = NInput::CT_AXIS;
+					m.ePOVAxis = NInput::PA_UNKNOWN;
+					m.nAction  = 0;  // DIMOFS_X
+					m.bState   = true;
+					m.nParam   = dx;
+					m.tTime    = msg.tTime;
+					NInput::PushMessageSDL( m );
+				}
+				if ( dy != 0 )
+				{
+					NInput::SMessage m;
+					m.cType    = NInput::CT_AXIS;
+					m.ePOVAxis = NInput::PA_UNKNOWN;
+					m.nAction  = 4;  // DIMOFS_Y
+					m.bState   = true;
+					m.nParam   = dy;
+					m.tTime    = msg.tTime;
+					NInput::PushMessageSDL( m );
+				}
+				bSend = false;  // already pushed above (axis events)
+				break;
+			}
+			case WM_MOUSEWHEEL:
+			{
+				int delta = (short)HIWORD( wParam );  // one notch = 120
+				NInput::SMessage m;
+				m.cType    = NInput::CT_AXIS;
+				m.ePOVAxis = NInput::PA_UNKNOWN;
+				m.nAction  = 8;  // DIMOFS_Z
+				m.bState   = true;
+				m.nParam   = delta;
+				m.tTime    = msg.tTime;
+				NInput::PushMessageSDL( m );
+				bSend = false;
+				break;
+			}
+		}
+
+		if ( bSend )
+			NInput::PushMessageSDL( msg );
+	}
+#endif // SS_USE_SDL_INPUT
+
 	return DefWindowProc( hWnd, uMsg, wParam, lParam );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

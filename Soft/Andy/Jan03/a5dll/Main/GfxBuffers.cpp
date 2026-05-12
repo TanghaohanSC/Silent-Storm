@@ -436,18 +436,24 @@ public:
 	CSysTexture() { bBusy = false; }
 	CSysTexture( D3DFORMAT _format )
 	{
+		{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+		  if(_f){fprintf(_f,"  CSysTexture: CreateTexture fmt=%d\n",(int)_format); fclose(_f);} }
 		bBusy = false;
-		HRESULT hRes = pDevice->CreateTexture( 
+		HRESULT hRes = pDevice->CreateTexture(
 			N_SYSMEM_TEXTURE_SIZE,
 			N_SYSMEM_TEXTURE_SIZE,
 			1,
-			0, 
-			_format, 
+			0,
+			_format,
 			D3DPOOL_SYSTEMMEM,
 			pTexture.GetAddr(),
 			0 );
+		{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+		  if(_f){fprintf(_f,"  CSysTexture: CreateTexture hr=0x%08x pTex=%p\n",(unsigned)hRes,(void*)(IDirect3DTexture9*)pTexture); fclose(_f);} }
 		ASSERT( D3D_OK == hRes ); // if this fails no need to run further
 		hRes = pTexture->GetSurfaceLevel( 0, pSurface.GetAddr() );
+		{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+		  if(_f){fprintf(_f,"  CSysTexture: GetSurfaceLevel hr=0x%08x\n",(unsigned)hRes); fclose(_f);} }
 		ASSERT( D3D_OK == hRes );
 	}
 	void MarkBusy() { bBusy = true; }
@@ -1318,15 +1324,25 @@ void AddGeometryCache( int nSize, EBufferUsage usage, ETrueBufferUsage trueUsage
 }
 void InitBuffers()
 {
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"InitBuffers: about to textureCache.Init\n"); fclose(_f);} }
 	textureCache.Init( new CTB( 1024, 1024, 1, PixelID2D3DFormat(SPixel8888::ID), REGULAR ) );
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"InitBuffers: textureCache ok, transparentCache\n"); fclose(_f);} }
 	transparentCache.Init( new CTB( 1024, 1024, 4, PixelID2D3DFormat(SPixel8888::ID), REGULAR ) );
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"InitBuffers: transparentCache ok, rtInfo loops\n"); fclose(_f);} }
 
 	for ( hash_map<int,int>::iterator i = rtInfo.targets.begin(); i != rtInfo.targets.end(); ++i )
 		rtCache[ i->first ].Init( i->first, i->second );
 	for ( hash_map<int,int>::iterator i = rtInfo.cubeTargets.begin(); i != rtInfo.cubeTargets.end(); ++i )
 		cmCache[ i->first ].Init( i->first, i->second );
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"InitBuffers: rtInfo loops ok, sysTextures\n"); fclose(_f);} }
 	// buffers for dynamic textures
 	sysTextures[D3DFMT_A8R8G8B8] = new CSurfaceRing( D3DFMT_A8R8G8B8, N_SYSMEM_TEXTURES );
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"InitBuffers: sysTextures ok, geometry caches\n"); fclose(_f);} }
 	//sysTextures[D3DFMT_R5G6B5] = new CSurfaceRing( D3DFMT_R5G6B5, N_SYSMEM_TEXTURES );
 	//trilists.Init( 220000, sizeof(S3DTriangle), S3DTriangle::ID, STATIC );
 	if ( !bTnLDevice )
@@ -1354,6 +1370,8 @@ void InitBuffers()
 		//AddGeometryCache<SGeomVecFull>( 500000, DYNAMIC, TBU_SOFTWARE );
 		}
 	}
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"InitBuffers: geometry caches ok, dynamicTris\n"); fclose(_f);} }
 	if ( bBan32BitIndices )
 		dynamicTris16.Init();
 	else
@@ -1361,6 +1379,8 @@ void InitBuffers()
 		dynamicTris32.Init();
 		pDevice->SetIndices( dynamicTris32.GetBuffer()->obj );
 	}
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"InitBuffers: complete\n"); fclose(_f);} }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 static ILinearBuffer* MakeGeometry( int nFormatID, int nSize, EBufferUsage usage )
