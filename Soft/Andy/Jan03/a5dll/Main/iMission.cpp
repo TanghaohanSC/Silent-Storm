@@ -138,7 +138,8 @@ static void ss_mi_trace(const char* s) {
 
 // r50: SEH wrappers — each phase runs in its own helper so __try doesn't
 // conflict with C++ object unwinding in CMission::Initialize (C2712).
-static void ss_mi_call_CreateRandom( NWorld::IWorld *pWorld, int nVariantID,
+// r50: returns true on successful CreateRandom, false on SEH.
+static bool ss_mi_call_CreateRandom( NWorld::IWorld *pWorld, int nVariantID,
 	const vector<string> &params, const list< CPtr<NScenario::CScenarioClue> > &clues,
 	int nMobsLevel, CObj<NWorld::CPostWorldCreateInfo> *pPostInfo, SRandomSeed sSeed )
 {
@@ -146,11 +147,95 @@ static void ss_mi_call_CreateRandom( NWorld::IWorld *pWorld, int nVariantID,
 	{
 		pWorld->CreateRandom( nVariantID, params, true, clues, nMobsLevel, pPostInfo, sSeed );
 		ss_mi_trace("MI::Init.4a CreateRandom done");
+		return true;
 	}
 	__except( EXCEPTION_EXECUTE_HANDLER )
 	{
 		ss_mi_trace("MI::Init.4a CreateRandom SEH caught");
+		return false;
 	}
+}
+
+// r51: after CreateRandom SEH-aborts, fall back to CreateDefault so pWorld
+// has a basic terrain + AI map (otherwise AddPlayer/GetDeploySpot will AV).
+static bool ss_mi_call_CreateDefault( NWorld::IWorld *pWorld )
+{
+	__try
+	{
+		pWorld->CreateDefault();
+		ss_mi_trace("MI::Init.4b CreateDefault done");
+		return true;
+	}
+	__except( EXCEPTION_EXECUTE_HANDLER )
+	{
+		ss_mi_trace("MI::Init.4b CreateDefault SEH caught");
+		return false;
+	}
+}
+
+// r51: impl thunks (no __try here, so C++ locals are fine).
+CPlayerTracker* ss_mi_new_PlayerTracker_impl(
+	IMission *pMission, NRPG::CGlobalPlayer *pGP, const wchar_t *pszName )
+{
+	return new CPlayerTracker( pMission, pGP, wstring( pszName ) );
+}
+NUI::CMissionUI* ss_mi_new_MissionUI_impl(
+	NUI::CInterface *pInterface, IMission *pMission )
+{
+	NUI::CMissionUI *p = new NUI::CMissionUI(
+		NUI::SWindowInfo( pInterface, NUI::SPoint( 0, 0 ),
+			NUI::SPoint( 1024, 768 ), "missionUI" ),
+		pMission );
+	NUI::LoadTemplate( p, NDb::GetUIContainer( 123 ) );
+	p->ShowWindow( NUI::SWTYPE_SHOW );
+	return p;
+}
+
+// r51: wrap CPlayerTracker ctor in SEH. Caller passes raw wchar* (no C++ obj
+// in this function's scope; new is invoked as a single C-style call that
+// the SEH handler can catch).
+static void* ss_mi_new_PlayerTracker_raw(
+	IMission *pMission, NRPG::CGlobalPlayer *pGP, const wchar_t *pszName )
+{
+	void *pRes = 0;
+	__try
+	{
+		// CPlayerTracker takes const wstring&; build it inline — but doing so
+		// in a function with __try would re-trigger C2712 if any temp has
+		// destructor. So we do the wstring construction via heap allocator.
+		// Simpler: call a no-throw thunk that itself materializes the wstring
+		// (lives in another function w/o __try).
+		extern CPlayerTracker* ss_mi_new_PlayerTracker_impl(
+			IMission*, NRPG::CGlobalPlayer*, const wchar_t* );
+		pRes = ss_mi_new_PlayerTracker_impl( pMission, pGP, pszName );
+	}
+	__except( EXCEPTION_EXECUTE_HANDLER )
+	{
+		ss_mi_trace("MI::Init.8.SEH PlayerTracker ctor caught");
+		pRes = 0;
+	}
+	return pRes;
+}
+
+// r51: wrap MissionUI ctor + LoadTemplate; both touch the deeply partial
+// db/world state. Same trick — use a thunk to keep the C++-locals function
+// distinct from the SEH-handler function.
+static void* ss_mi_new_MissionUI_raw(
+	NUI::CInterface *pInterface, IMission *pMission )
+{
+	void *pRes = 0;
+	__try
+	{
+		extern NUI::CMissionUI* ss_mi_new_MissionUI_impl(
+			NUI::CInterface*, IMission* );
+		pRes = ss_mi_new_MissionUI_impl( pInterface, pMission );
+	}
+	__except( EXCEPTION_EXECUTE_HANDLER )
+	{
+		ss_mi_trace("MI::Init.12a MissionUI SEH caught");
+		pRes = 0;
+	}
+	return pRes;
 }
 
 // r50: phase helpers — each takes a void(*)() lambda-equivalent, but since
@@ -274,7 +359,13 @@ bool CMission::Initialize( int _nTemplateID, int _nVariantID, NScenario::CScenar
 		// the crash is logged-and-skipped. After this, pWorld may be in a
 		// partial state but downstream code is null-guarded.
 		ss_mi_trace("MI::Init.4 CreateRandom entry");
-		ss_mi_call_CreateRandom( pWorld, nVariantID, params, clues, nMobsLevel, &pPostInfo, sSeed );
+		bool bCROK = ss_mi_call_CreateRandom( pWorld, nVariantID, params, clues, nMobsLevel, &pPostInfo, sSeed );
+		if ( !bCROK )
+		{
+			// r51: fall back to CreateDefault so we have a usable basic world
+			// (path network + terrain) for AddPlayer to operate on.
+			ss_mi_call_CreateDefault( pWorld );
+		}
 	}
 	else
 		pWorld->CreateRestored();
@@ -324,7 +415,7 @@ bool CMission::Initialize( int _nTemplateID, int _nVariantID, NScenario::CScenar
 			WCHAR wsString[1024];
 			swprintf( wsString, L"Player %d", nTemp );
 			if ( pGlobalGame->players[nTemp] )
-				playersSet[nTemp] = new CPlayerTracker( this, pGlobalGame->players[nTemp], wsString );
+				playersSet[nTemp] = (CPlayerTracker*)ss_mi_new_PlayerTracker_raw( this, pGlobalGame->players[nTemp], wsString );
 			else
 				ss_mi_trace("MI::Init.8.skip player[nTemp] null");
 		}
@@ -358,17 +449,17 @@ bool CMission::Initialize( int _nTemplateID, int _nVariantID, NScenario::CScenar
 	SetCameraParams( CAMERA_PC, fFOV, defaultCameraLimits );
 	if ( pCamera && pActivePlayer )
 		pCamera->SetPlacement( GetActivePlayer()->GetCamera() );
-	TraceCursor();
+	if ( pActivePlayer )
+		TraceCursor();
 	ss_mi_trace("MI::Init.11 camera OK");
 
 	bWaitForPartFinished = false;
 
 	if ( pInterface )
 	{
-		pMissionUI = new NUI::CMissionUI( NUI::SWindowInfo( pInterface, NUI::SPoint( 0, 0 ), NUI::SPoint( 1024, 768 ), "missionUI" ), this );
-		NUI::LoadTemplate( pMissionUI, NDb::GetUIContainer( 123 ) );
-		pMissionUI->ShowWindow( NUI::SWTYPE_SHOW );
-		ss_mi_trace("MI::Init.12a MissionUI loaded");
+		pMissionUI = (NUI::CMissionUI*)ss_mi_new_MissionUI_raw( pInterface, this );
+		if ( pMissionUI )
+			ss_mi_trace("MI::Init.12a MissionUI loaded");
 	}
 
 	vector<CObj<IState> > updatedStatesSet;
@@ -1639,6 +1730,12 @@ void CMission::RenderFrame( int nMode, const STime &sTime, ICamera *pCamera, boo
 bool CMission::TrackChanges()
 {
 	bool bUpdated = false;
+
+	// silent-storm-port r51: if player init failed (partial-world boot path),
+	// pActivePlayer is null. Don't deref it — just return cleanly so the
+	// caller can keep stepping the (empty) mission state.
+	if ( !pActivePlayer || !IsValid(pWorld) )
+		return false;
 
 	CPtr<NWorld::IPlayer> pNewTrackPlayer = pWorld->GetCurrentPlayer();
 	if ( pNewTrackPlayer != pTrackPlayer )
