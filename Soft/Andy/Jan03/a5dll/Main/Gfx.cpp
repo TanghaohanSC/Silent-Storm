@@ -467,14 +467,28 @@ static void DetectModes()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 static bool InitD3D()
 {
-	pD3D.Create( Direct3DCreate9( D3D_SDK_VERSION ) );
+	// silent-storm-port trace
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_initd3d.log","w");
+	  if(_f){fprintf(_f,"InitD3D enter\n"); fclose(_f);} }
+	IDirect3D9* _raw = Direct3DCreate9( D3D_SDK_VERSION );
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_initd3d.log","a");
+	  if(_f){fprintf(_f,"Direct3DCreate9 returned 0x%p\n",_raw); fclose(_f);} }
+	pD3D.Create( _raw );
 	if ( pD3D == 0 )
 	{
+		{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_initd3d.log","a");
+		  if(_f){fprintf(_f,"pD3D is null after Create -- ASSERT/FAIL\n"); fclose(_f);} }
 		ASSERT( 0 );
 		return false;
 	}
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_initd3d.log","a");
+	  if(_f){fprintf(_f,"about to CheckDeviceCaps\n"); fclose(_f);} }
 	CheckDeviceCaps();
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_initd3d.log","a");
+	  if(_f){fprintf(_f,"about to DetectModes\n"); fclose(_f);} }
 	DetectModes();
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_initd3d.log","a");
+	  if(_f){fprintf(_f,"InitD3D returning true\n"); fclose(_f);} }
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

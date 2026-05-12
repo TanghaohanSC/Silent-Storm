@@ -134,25 +134,32 @@ int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	ss_winmain_trace("13 about to NGfx::Init3D");
 	if ( !NGfx::Init3D( NWinFrame::GetWnd() ) )
 	{
+		ss_winmain_trace("XX Init3D returned false");
 		ASSERT(0); // DX8 not found
 		MessageBox( 0, "Failed to initialize Direct3D8", "Error", MB_OK );
 		return 0;
 	}
+	ss_winmain_trace("14 Init3D ok, about to InitSound");
 	if ( !NSound::InitSound( NWinFrame::GetWnd() ) )
 	{
+		ss_winmain_trace("XX InitSound returned false");
 		ASSERT(0); // FMod not found
 		MessageBox( 0, "Failed to initialize FMod", "Error", MB_OK );
 		return 0;
 	}
+	ss_winmain_trace("15 InitSound ok, about to InitInput");
 	if ( !NInput::InitInput( NWinFrame::GetWnd() ) )
 	{
+		ss_winmain_trace("XX InitInput returned false");
 		ASSERT(0); // DX8input not found
 		MessageBox( 0, "Failed to initialize DirectInput8", "Error", MB_OK );
 		return 0;
 	}
+	ss_winmain_trace("16 InitInput ok, about to LoadConfig");
 
 	// Load config & process params
 	NGlobal::LoadConfig( ".\\cfg\\autoexec.cfg" );
+	ss_winmain_trace("17 LoadConfig done");
 
 	vector<string> szParams;
 	bool bDoLoad = false;
@@ -205,25 +212,28 @@ int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 				szCfg = szParams[++i];
 		}
 	}
-	//
+	ss_winmain_trace("18 about to SetModeFromConfig (Gfx)");
 	if ( !NGScene::SetModeFromConfig() )
 	{
+		ss_winmain_trace("XX SetModeFromConfig returned false");
 		ASSERT(0); // no mode found
 		MessageBox( 0, "Failed to set display mode", "Error", MB_OK );
 		return 0;
 	}
-	//
+	ss_winmain_trace("19 SetModeFromConfig ok, sound");
 	if ( !NSound::SetModeFromConfig() )
 	{
+		ss_winmain_trace("XX sound SetModeFromConfig returned false");
 		ASSERT(0);
 		MessageBox( 0, "Failed to set sound mode", "Error", MB_OK );
 		return 0;
 	}
-	//
+	ss_winmain_trace("20 sound mode ok, about to queue main-loop command");
 	if ( bDoLoad )
 		NMainLoop::Command( new NMainLoop::CICLoad( string( NMainLoop::S_SLOT_QUICKSAVE ) ) );
 	else
 		NMainLoop::Command( new CICInterMission( szCfg ) );
+	ss_winmain_trace("21 main-loop command queued, entering forever loop");
 	for (;;)
 	{
 		NWinFrame::PumpMessages();

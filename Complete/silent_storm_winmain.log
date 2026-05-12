@@ -11,3 +11,8 @@
 11 bgfx bootstrap ok, loading shaders
 12 shaders loaded
 13 about to NGfx::Init3D
+14 Init3D ok, about to InitSound
+15 InitSound ok, about to InitInput
+16 InitInput ok, about to LoadConfig
+17 LoadConfig done
+18 about to SetModeFromConfig (Gfx)
