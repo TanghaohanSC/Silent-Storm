@@ -69,10 +69,15 @@ public:
 	}
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// silent-storm-port r21: forward decl for the storage field that replaces
+// Jan03's inline records hash_map on the wire. Class def in port stub header.
+class CDBTableDataStorage;
+
 class CDBTableBase
 {
 	typedef std::hash_map<int, CObj<CDBRecord> > CRecordHash;
-	CRecordHash records;
+	CRecordHash records;                       // materialized record cache (post-load)
+	CObj<CDBTableDataStorage> m_storage;       // r21: shipping wire field — CObj ref
 	//
 	void PreCreate( int nTypeID );
 	void Refresh( int nTypeID );
@@ -81,17 +86,16 @@ public:
 	CDBRecord* GetDBRecord( int nID );
 	int operator&( CStructureSaver &f )
 	{
-		// silent-storm-port r19: Jan03 wire format restored. Shipping's
-		// per-table records sub-chunk is also present in game.db; the
-		// real data lives in NDatabase::Serialize's field 2 storage map
-		// (read in ado_stub.cpp and post-promoted into this records hash).
-		f.Add( 1, &records );
+		// silent-storm-port r22: shipping CDBTableBase::op& (FUN_00449A10)
+		// calls LoadObject/StoreObject directly on the saver — no internal
+		// StartChunk wrap. The table's data chunk IS just the 4-byte
+		// server-ptr to the CDBTableDataStorage. Going through f.Add()
+		// would add an extra sub-chunk wrap that doesn't match wire.
+		// DoPtr is the right primitive: it directly read/writes the
+		// CObj ref without chunk delimiters.
+		f.DoPtr( &m_storage );
 		return 0;
 	}
-	// silent-storm-port r15: NDatabase::PromoteRecordsFromStorage needs
-	// to populate records[] + set nID on each created CDBRecord.
-	// CDBRecord::nID is private with friend CDBTableBase, so an inline
-	// member is the cleanest path (still lets the friend access nID).
 	void InsertRecord( int nID, CObjectBase* pRecObj )
 	{
 		CDBRecord* pRec = dynamic_cast<CDBRecord*>(pRecObj);
@@ -100,6 +104,7 @@ public:
 			records[nID] = pRec;
 		}
 	}
+	CDBTableDataStorage* GetStorage() const { return m_storage.GetPtr(); }
 	friend void NDatabase::Import();
 	friend void NDatabase::Refresh( int nTableID );
   friend class CDBIteratorBase;
