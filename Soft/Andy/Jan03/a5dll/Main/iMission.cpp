@@ -1071,12 +1071,17 @@ NRender::IRenderGame* CMission::GetRenderGame() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CMission::Step()
 {
+	// silent-storm-port r52: in our partial-world boot path, pActivePlayer is
+	// null (PlayerTracker ctor failed). Avoid the unconditional deref —
+	// render the world view with a null active player; let downstream null-
+	// guards filter the missing player.
 	if ( CanRender() )
 	{
 		int nStepCount = 0;
 		do
 		{
-			pRender->UpdateViewWorld( !bPause, GetTime(), pActivePlayer->GetPlayer(), bShowAllCheat || bCheatVisibility );
+			NWorld::IPlayer *pActP = pActivePlayer ? pActivePlayer->GetPlayer() : 0;
+			pRender->UpdateViewWorld( !bPause, GetTime(), pActP, bShowAllCheat || bCheatVisibility );
 
 			InternalStep();
 			nStepCount++;
@@ -1093,21 +1098,29 @@ void CMission::Step()
 			}
 		} while ( bWaitForPartFinished );
 
-		NUI::CWindow *pClientWindow = GetDesktop()->GetClientWindow();
+		// silent-storm-port r52: null-guard for pInterface/desktop missing
+		// (MissionUI failed to init). Without these we get AV in GetClientWindow.
+		if ( pInterface && pCamera )
+		{
+			NUI::CWindow *pClientWindow = GetDesktop() ? GetDesktop()->GetClientWindow() : 0;
+			if ( pClientWindow )
+			{
+				NUI::SRect sScrWindow;
+				NUI::SPoint sScrPosition;
+				const NUI::SPoint &sScrSize = pClientWindow->GetSize();
+				pClientWindow->ClientToScreen( &sScrPosition, &sScrWindow );
 
-		NUI::SRect sScrWindow;
-		NUI::SPoint sScrPosition;
-		const NUI::SPoint &sScrSize = pClientWindow->GetSize();
-		pClientWindow->ClientToScreen( &sScrPosition, &sScrWindow );
-
-		NUI::SRect sScrClientRect( sScrPosition.x, sScrPosition.y, sScrPosition.x + sScrSize.x, sScrPosition.y + sScrSize.y );
-		GetCamera()->SetScreenRect( CTRect<float>( float( sScrClientRect.x1 ) / 1024.0f, float( sScrClientRect.y1 ) / 768.0f, float( sScrClientRect.x2 ) / 1024.0f, float( sScrClientRect.y2 ) / 768.0f ) );
+				NUI::SRect sScrClientRect( sScrPosition.x, sScrPosition.y, sScrPosition.x + sScrSize.x, sScrPosition.y + sScrSize.y );
+				GetCamera()->SetScreenRect( CTRect<float>( float( sScrClientRect.x1 ) / 1024.0f, float( sScrClientRect.y1 ) / 768.0f, float( sScrClientRect.x2 ) / 1024.0f, float( sScrClientRect.y2 ) / 768.0f ) );
+			}
+		}
 
 		int nFlags = N_RENDERMODE_3D;
 		if ( !bHideInterface )
 			nFlags |= N_RENDERMODE_2D;
 
-		RenderFrame( nFlags, GetTime(), GetCamera() );
+		if ( pCamera )
+			RenderFrame( nFlags, GetTime(), GetCamera() );
 	}
 	else
 	{
@@ -1118,6 +1131,21 @@ void CMission::Step()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CMission::InternalStep()
 {
+	// silent-storm-port r52: null-guard all pActivePlayer/pCamera derefs so
+	// the partial-world Step loop doesn't AV.
+	if ( !pActivePlayer || !IsValid(pWorld) || !pCamera || !pInterface || !pState )
+	{
+		// Try the minimum so timing/sound advance, but skip everything that
+		// touches missing state.
+		if ( pCamera )
+			pCamera->Update( GetTime() );
+		if ( pInterface )
+		{
+			pInterface->UpdateCursor();
+			pInterface->Step( GetTime() );
+		}
+		return;
+	}
 	if ( ( playersSet.size() > 1 ) && !IsRealTime() && ( pActivePlayer->GetPlayer() != pWorld->GetCurrentPlayer() ) )
 	{
 		ICamera::SCameraPos sPosition;
