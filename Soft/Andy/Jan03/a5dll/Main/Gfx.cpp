@@ -5,6 +5,13 @@
 #include "..\MiscDll\Commands.h"
 #include "Gfx.h"
 #include "GfxInternal.h"
+#ifdef SS_USE_BGFX_FACADE
+// Forward declaration of the facade singleton — full definition in port/src/renderer/d3d9_facade.h
+// We only need the function, not the class, at this call-site.
+namespace silent_storm { namespace renderer {
+    IDirect3DDevice9* facade_instance();
+}} // namespace silent_storm::renderer
+#endif
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace NGfx
 {
@@ -80,11 +87,23 @@ static HRESULT ResetDevice()
 			bTnLDevice = false;
 		// initialize device and determine if vertex processing is hardware
 		hr = -1;
+#ifdef SS_USE_BGFX_FACADE
+		{
+			// Phase 1: inject the bgfx IDirect3DDevice9 facade instead of
+			// creating a real D3D9 device.  All D3D9 calls are redirected to
+			// the facade which will forward them to bgfx (Task 9).
+			IDirect3DDevice9** ppDev = pDevice.GetAddr();
+			*ppDev = silent_storm::renderer::facade_instance();
+			(*ppDev)->AddRef();   // com_ptr will Release() on destruction
+			hr = D3D_OK;
+			bHardwareVP = true;
+		}
+#else
 		if ( !bForceSWVP )
 		{
 			bHardwareVP = true;
 			hr = pD3D->CreateDevice(
-				D3DADAPTER_DEFAULT, 
+				D3DADAPTER_DEFAULT,
 				DEVICE_TYPE,
 				hWnd,
 #if defined(_DEBUG) && !defined(FAST_DEBUG)
@@ -99,15 +118,16 @@ static HRESULT ResetDevice()
 		if FAILED( hr )
 		{
 			bHardwareVP = false;
-			hr = pD3D->CreateDevice( 
-				D3DADAPTER_DEFAULT, 
+			hr = pD3D->CreateDevice(
+				D3DADAPTER_DEFAULT,
 				DEVICE_TYPE,
-				hWnd, 
+				hWnd,
 				D3DCREATE_SOFTWARE_VERTEXPROCESSING,
 				&pp,
 				pDevice.GetAddr() );
 			ASSERT( SUCCEEDED( hr ) );
 		}
+#endif // SS_USE_BGFX_FACADE
 		if ( !bHardwareVP )
 			bNVHackNP2 = false;
 		bBan32BitIndices = devCaps.MaxVertexIndex < 1000000 || !bHardwareVP; // ban streaming actually
