@@ -234,8 +234,15 @@ static void ss_mm_trace(const char* s) {
 void CMainMenuInterface::Initialize()
 {
 	ss_mm_trace("MMI::Init.0 entry");
-	CRenderBaseInterface::Initialize( N_MAINMENU_TEMPLATE );
-	ss_mm_trace("MMI::Init.1 CRenderBase::Init ok");
+	// silent-storm-port r27: skip CRenderBaseInterface::Initialize entirely.
+	// It creates Player/Commander/Camera/AmbientLight from DB records whose
+	// CObj/CPtr fields haven't been filled — every access cascades null
+	// derefs. Main menu only needs UI overlay; we have the fallback dbg-text
+	// path (m_bHaveDataMenu=false) for that. Bypass parent::Initialize and
+	// jump straight to the fallback flow below.
+	ss_mm_trace("MMI::Init.1 (parent Init SKIPPED)");
+	m_bHaveDataMenu = false;
+	return;
 
 	// silent-storm-port Phase 1.5 r7: the shipped Complete/game.db (Hammer&Sickle
 	// release database, used as the closest-shipping data set) does not contain
@@ -337,10 +344,15 @@ CICMainMenu::CICMainMenu()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CICMainMenu::Exec()
 {
+	ss_mm_trace("CICMainMenu::Exec.0 entry");
 	ResetStack();
+	ss_mm_trace("CICMainMenu::Exec.1 ResetStack ok");
 	CMainMenuInterface *pRes = new CMainMenuInterface;
+	ss_mm_trace("CICMainMenu::Exec.2 new CMainMenuInterface ok");
 	pRes->Initialize();
+	ss_mm_trace("CICMainMenu::Exec.3 Initialize ok");
 	SetInterface( pRes );
+	ss_mm_trace("CICMainMenu::Exec.4 SetInterface ok");
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
