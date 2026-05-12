@@ -95,27 +95,144 @@ void CTextDraw::Draw( CWindow *pWindow, const STime &sTime, NGScene::I2DGameView
 	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
 	  if(_f){fprintf(_f,"CTextDraw::Draw #%d enter pText=%p\n",n,pText.GetPtr()); fclose(_f);} ++n; } }
 
-	// Phase 1.5 r3 iter 1: emit the text into the bgfx debug overlay so we
-	// have a VISIBLE on-screen indication of what Nival is trying to render,
-	// even before a real font atlas is bound.  wsText is a wide string with
-	// BBCode-like markup tags (<font>, <color>, <br>, etc.); strip the tags
-	// (turning <br> into '|') for legibility and transcode the lower 7-bit
-	// ASCII subset.
+	// Phase 1.5 r4 iter 4: parse markup tags inline.  For each visible char
+	// in wsText, track the current ABGR color (default white) and split into
+	// independent "runs" at each <br> (which becomes a newline on screen) or
+	// each <color=...> change.  Each run gets its own ss_dbg_glyph_push at
+	// the correct position so we render multi-line, multi-color text.
+	//
+	// Supported tags:
+	//   <br>                — newline; advance pen Y by one line
+	//   <color=red>         — change pen color (named: red/white/green/yellow/cyan)
+	//   <color=#RRGGBB>     — change pen color (hex; converted to abgr)
+	//   <center>            — centering hint (whole-string center; honored at flush)
+	//   <font ...>          — ignored (we use one fixed bitmap font)
 	{
-		char ascii[88];
-		int outN = 0;
+		// Per-run buffer.
+		char run_buf[96];
+		int  run_n = 0;
+		uint32_t run_color = 0xffffffffu;   // ABGR (LE) white
+		uint32_t pen_color = 0xffffffffu;
+		// Alignment intent: 0=left (default), 1=center, 2=right.
+		int align = 0;
+		// Line counter — used to lay out multiple <br>-separated runs vertically.
+		int line = 0;
+
 		bool in_tag = false;
-		char tag_name[16];
-		int tag_n = 0;
-		for (int i = 0; i < (int)wsText.size() && outN < (int)sizeof(ascii) - 1; ++i) {
+		char tag_name[32];
+		int  tag_n = 0;
+
+		// Inline helpers ----------------------------------------------------
+		struct Helper {
+			static uint32_t named_color(const char* n) {
+				if (!n[0]) return 0xffffffffu;
+				if (!_stricmp(n, "red"))     return 0xff2020e0u; // ABGR: rich red
+				if (!_stricmp(n, "white"))   return 0xffffffffu;
+				if (!_stricmp(n, "green"))   return 0xff20c020u;
+				if (!_stricmp(n, "yellow"))  return 0xff20e0e0u;
+				if (!_stricmp(n, "cyan"))    return 0xffe0e020u;
+				if (!_stricmp(n, "blue"))    return 0xffe02020u;
+				if (!_stricmp(n, "gray"))    return 0xff808080u;
+				if (!_stricmp(n, "black"))   return 0xff000000u;
+				return 0xffffffffu;
+			}
+			static int hex_nyb(char c) {
+				if (c >= '0' && c <= '9') return c - '0';
+				if (c >= 'a' && c <= 'f') return 10 + (c - 'a');
+				if (c >= 'A' && c <= 'F') return 10 + (c - 'A');
+				return -1;
+			}
+			static uint32_t parse_color_attr(const char* s) {
+				// Handles `color=red` or `color=#rrggbb`.  Returns ABGR.
+				const char* eq = s;
+				while (*eq && *eq != '=') ++eq;
+				if (!*eq) return 0xffffffffu;
+				++eq;
+				if (*eq == '#') {
+					++eq;
+					int v[6] = {0};
+					int i = 0;
+					while (i < 6 && eq[i]) { int h = hex_nyb(eq[i]); if (h<0) break; v[i]=h; ++i; }
+					if (i < 6) return 0xffffffffu;
+					uint32_t r = (uint32_t)((v[0]<<4) | v[1]);
+					uint32_t g = (uint32_t)((v[2]<<4) | v[3]);
+					uint32_t b = (uint32_t)((v[4]<<4) | v[5]);
+					return 0xff000000u | (b<<16) | (g<<8) | r;
+				}
+				return named_color(eq);
+			}
+		};
+
+		auto flush_run = [&](int line_idx, uint32_t col){
+			run_buf[run_n] = '\0';
+			if (run_n <= 0) return;
+			int lead = 0;
+			while (run_buf[lead] == ' ') ++lead;
+			if (!run_buf[lead]) { return; }
+			// dbg_text path: ASCII overlay still useful, push first run only.
+			if (line_idx == 0)
+				ss_dbg_text_push(sPosition.x, sPosition.y, 0x0f, run_buf + lead);
+
+			int n_chars = 0;
+			for (int k = lead; run_buf[k]; ++k) ++n_chars;
+			const int kCellW = 8;
+			const int kCellH = 16;
+			const int scale  = 2;
+			int draw_w = n_chars * kCellW * scale;
+			const int line_h = kCellH * scale + 4;   // 36 px between lines
+			int draw_x = sPosition.x;
+			int draw_y = sPosition.y + line_idx * line_h;
+			// Apply horizontal alignment (<center>/<right>) within container.
+			int avail_x = sSize.x;
+			if (avail_x < 200 && sPosition.x == 0) avail_x = 1024;
+			if (align == 1 && avail_x >= 200)
+				draw_x = sPosition.x + (avail_x - draw_w) / 2;
+			else if (align == 2 && avail_x >= 200)
+				draw_x = sPosition.x + avail_x - draw_w - 16;  // 16px right margin
+			// Vertical center only when the *whole* container is huge AND the
+			// caller pinned sPosition.y to 0 — i.e. the "centered banner" case.
+			// Otherwise honour Nival's sPosition.y so successive CText widgets
+			// don't stack on top of each other (e.g. fullscreen INTERMISSION
+			// box + "Work in progress" at y=32 are independent).
+			if (align == 1 && sPosition.y == 0 && sSize.y >= 600) {
+				int center_y = sPosition.y + (sSize.y - kCellH * scale) / 2;
+				draw_y = center_y - line_h + line_idx * line_h;
+			}
+			ss_dbg_glyph_push(draw_x, draw_y, col, scale, scale, run_buf + lead);
+		};
+
+		for (int i = 0; i < (int)wsText.size(); ++i) {
 			wchar_t wc = wsText[i];
 			if (wc == L'<') { in_tag = true; tag_n = 0; continue; }
 			if (wc == L'>') {
 				in_tag = false;
-				tag_name[tag_n < (int)sizeof(tag_name) - 1 ? tag_n : (int)sizeof(tag_name) - 1] = '\0';
-				// Replace <br> / <br/> with a separator so multi-line strings stay legible.
-				if (tag_n >= 2 && tag_name[0] == 'b' && tag_name[1] == 'r')
-					ascii[outN++] = '|';
+				if (tag_n >= (int)sizeof(tag_name)) tag_n = (int)sizeof(tag_name) - 1;
+				tag_name[tag_n] = '\0';
+				// Tag handlers
+				if (tag_n >= 2 && (tag_name[0]=='b'||tag_name[0]=='B') && (tag_name[1]=='r'||tag_name[1]=='R')) {
+					// <br> — flush current run on its own line, start new line in same color
+					flush_run(line, pen_color);
+					run_n = 0;
+					++line;
+				} else if (tag_n >= 5 && (tag_name[0]=='c'||tag_name[0]=='C')
+				           && !_strnicmp(tag_name, "color=", 6)) {
+					// Color change in mid-run.  Flush what we have (with the OLD color),
+					// then update pen color for subsequent chars.  Same line.
+					if (run_n > 0) {
+						flush_run(line, pen_color);
+						run_n = 0;
+						++line;   // visual offset to make color change visible
+					}
+					pen_color = Helper::parse_color_attr(tag_name);
+					run_color = pen_color;
+				} else if (tag_n >= 6 && !_strnicmp(tag_name, "center", 6)) {
+					align = 1;
+				} else if (tag_n >= 5 && !_strnicmp(tag_name, "right", 5)) {
+					align = 2;
+				} else if (tag_n >= 4 && !_strnicmp(tag_name, "left", 4)) {
+					align = 0;
+				}
+				// Other tags (font, /color, etc.) ignored.
 				continue;
 			}
 			if (in_tag) {
@@ -123,49 +240,14 @@ void CTextDraw::Draw( CWindow *pWindow, const STime &sTime, NGScene::I2DGameView
 					tag_name[tag_n++] = (char)wc;
 				continue;
 			}
-			if (wc >= 32 && wc < 127)       ascii[outN++] = (char)wc;
-			else if (wc == 9 || wc == 10 || wc == 13) ascii[outN++] = ' ';
-			else                            ascii[outN++] = '?';
+			// Visible character — append to run if buffer has space.
+			if (run_n >= (int)sizeof(run_buf) - 1) continue;
+			if (wc >= 32 && wc < 127)       run_buf[run_n++] = (char)wc;
+			else if (wc == 9 || wc == 10 || wc == 13) run_buf[run_n++] = ' ';
+			else                            run_buf[run_n++] = '?';
 		}
-		ascii[outN] = '\0';
-		// Trim leading spaces for cleaner output.
-		int lead = 0;
-		while (ascii[lead] == ' ') ++lead;
-		if (outN > 0 && ascii[lead])
-			ss_dbg_text_push(sPosition.x, sPosition.y, 0x0f, ascii + lead);
-
-		// Phase 1.5 r4 iter 3: drop the orange dbg-rect underlay now that
-		// the real glyph atlas renders the text legibly via ss_ui.  Keep
-		// the rect-push extern declared in case other call sites still
-		// rely on the entry point.
-		(void)0;
-
-		// Phase 1.5 r4: also emit REAL textured-glyph quads via ss_ui +
-		// 128x128 Consolas atlas.  This is the *visible bitmap-font* path —
-		// each character becomes one textured triangle pair sampled from
-		// the modern-side glyph atlas.  Scale x2 so 8x16 cells become
-		// 16x32 on screen (legible at 1024x768).  We also do a poor-man's
-		// <center> by computing rendered width and shifting toward the
-		// center of the CTextDraw's bounding container (sSize.x usually
-		// 1024 for full-window text), since the upstream tag-stripper
-		// ditched the <center> directive earlier.
-		if (outN > 0 && ascii[lead])
-		{
-			int n_chars = 0;
-			for (int k = lead; ascii[k]; ++k) ++n_chars;
-			const int kCellW = 8;   // atlas cell w
-			const int kCellH = 16;  // atlas cell h
-			const int scale = 2;
-			int draw_w = n_chars * kCellW * scale;
-			int draw_x = sPosition.x;
-			int draw_y = sPosition.y;
-			// Treat any container >= 200px wide as "centered text" and offset
-			// horizontally.  Same for vertical when container >= 100px tall.
-			if (sSize.x >= 200) draw_x = sPosition.x + (sSize.x - draw_w) / 2;
-			if (sSize.y >= 100) draw_y = sPosition.y + (sSize.y - kCellH * scale) / 2;
-			ss_dbg_glyph_push(draw_x, draw_y, 0xffffffffu,
-			                  scale, scale, ascii + lead);
-		}
+		// Flush any trailing run.
+		if (run_n > 0) flush_run(line, pen_color);
 	}
 	if ( !pText )
 	{
