@@ -81,10 +81,63 @@ void CTextDraw::SetText( const wstring &_wsText )
 	pTextString->Set( wsText );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// silent-storm-port Phase 1.5 r3 — debug-text relay into bgfx dbgText overlay.
+// Defined in port/src/renderer/bgfx_init.cpp.  ABI is extern-C / POD-only so
+// STLport-compiled callers can use it without a C++ header dep.
+extern "C" void ss_dbg_text_push(int virtX, int virtY, unsigned attr, const char* text);
+
 void CTextDraw::Draw( CWindow *pWindow, const STime &sTime, NGScene::I2DGameView *pView )
 {
+	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CTextDraw::Draw #%d enter pText=%p\n",n,pText.GetPtr()); fclose(_f);} ++n; } }
+
+	// Phase 1.5 r3 iter 1: emit the text into the bgfx debug overlay so we
+	// have a VISIBLE on-screen indication of what Nival is trying to render,
+	// even before a real font atlas is bound.  wsText is a wide string with
+	// BBCode-like markup tags (<font>, <color>, <br>, etc.); strip the tags
+	// (turning <br> into '|') for legibility and transcode the lower 7-bit
+	// ASCII subset.
+	{
+		char ascii[88];
+		int outN = 0;
+		bool in_tag = false;
+		char tag_name[16];
+		int tag_n = 0;
+		for (int i = 0; i < (int)wsText.size() && outN < (int)sizeof(ascii) - 1; ++i) {
+			wchar_t wc = wsText[i];
+			if (wc == L'<') { in_tag = true; tag_n = 0; continue; }
+			if (wc == L'>') {
+				in_tag = false;
+				tag_name[tag_n < (int)sizeof(tag_name) - 1 ? tag_n : (int)sizeof(tag_name) - 1] = '\0';
+				// Replace <br> / <br/> with a separator so multi-line strings stay legible.
+				if (tag_n >= 2 && tag_name[0] == 'b' && tag_name[1] == 'r')
+					ascii[outN++] = '|';
+				continue;
+			}
+			if (in_tag) {
+				if (tag_n < (int)sizeof(tag_name) - 1 && wc < 127)
+					tag_name[tag_n++] = (char)wc;
+				continue;
+			}
+			if (wc >= 32 && wc < 127)       ascii[outN++] = (char)wc;
+			else if (wc == 9 || wc == 10 || wc == 13) ascii[outN++] = ' ';
+			else                            ascii[outN++] = '?';
+		}
+		ascii[outN] = '\0';
+		// Trim leading spaces for cleaner output.
+		int lead = 0;
+		while (ascii[lead] == ' ') ++lead;
+		if (outN > 0 && ascii[lead])
+			ss_dbg_text_push(sPosition.x, sPosition.y, 0x0f, ascii + lead);
+	}
 	if ( !pText )
+	{
+		{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+		  if(_f){fprintf(_f,"CTextDraw::Draw #%d pView->CreateText\n",n); fclose(_f);} ++n; } }
 		pText = pView->CreateText( pTextString, pSize );
+		{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+		  if(_f){fprintf(_f,"CTextDraw::Draw #%d CreateText returned %p\n",n,pText.GetPtr()); fclose(_f);} ++n; } }
+	}
 
 	SPoint sTextSize = GetSize( pView );
 	SRect sScrWindow( sPosition.x, sPosition.y, sPosition.x + sTextSize.x, sPosition.y + sTextSize.y );
@@ -111,7 +164,11 @@ void CTextDraw::Draw( CWindow *pWindow, const STime &sTime, NGScene::I2DGameView
 
 	UpdateSize( pView );
 
+	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CTextDraw::Draw #%d CreateDynamicRects\n",n); fclose(_f);} ++n; } }
 	pView->CreateDynamicRects( pText, sScrPosition, sScrWindow );
+	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CTextDraw::Draw #%d CreateDynamicRects ok\n",n); fclose(_f);} ++n; } }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CTextDraw::UpdateSize( NGScene::I2DGameView *pView )
@@ -164,6 +221,18 @@ void CImageDraw::SetImage( NDb::CUITexture* _pTexture, const SRect &sTexRect )
 void CImageDraw::Draw( CWindow *pWindow, const STime &sTime, NGScene::I2DGameView *pView )
 {
 	CVec2 vScreenRect = pView->GetViewportSize();
+
+	// Phase 1.5 r3 iter 1: emit an [IMG WxH] label into the bgfx dbg overlay
+	// to indicate that an image draw was attempted at this position.
+	{
+		char buf[80];
+		int w = sWindow.x2 - sWindow.x1;
+		int h = sWindow.y2 - sWindow.y1;
+		_snprintf_s(buf, sizeof(buf), _TRUNCATE,
+		            "[IMG %dx%d %s]", w, h,
+		            IsValid(pUITexture) ? "tex" : "no-tex");
+		ss_dbg_text_push(sWindow.x1, sWindow.y1, 0x3f, buf);
+	}
 
 	SRect sScrWindow( sWindow );
 	SPoint sScrPosition( sWindow.x1, sWindow.y1 );
