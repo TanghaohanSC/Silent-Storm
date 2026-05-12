@@ -136,6 +136,33 @@ static void ss_mi_trace(const char* s) {
 	if (fp) { fprintf(fp, "[MI] %s\n", s); fclose(fp); }
 }
 
+// r50: SEH wrappers — each phase runs in its own helper so __try doesn't
+// conflict with C++ object unwinding in CMission::Initialize (C2712).
+static void ss_mi_call_CreateRandom( NWorld::IWorld *pWorld, int nVariantID,
+	const vector<string> &params, const list< CPtr<NScenario::CScenarioClue> > &clues,
+	int nMobsLevel, CObj<NWorld::CPostWorldCreateInfo> *pPostInfo, SRandomSeed sSeed )
+{
+	__try
+	{
+		pWorld->CreateRandom( nVariantID, params, true, clues, nMobsLevel, pPostInfo, sSeed );
+		ss_mi_trace("MI::Init.4a CreateRandom done");
+	}
+	__except( EXCEPTION_EXECUTE_HANDLER )
+	{
+		ss_mi_trace("MI::Init.4a CreateRandom SEH caught");
+	}
+}
+
+// r50: phase helpers — each takes a void(*)() lambda-equivalent, but since
+// MSVC /EHsc disallows __try in any function with C++ unwinds, every helper
+// is a discrete free function that takes raw pointer args (no C++ locals
+// requiring destructors).  Each phase logs entry/exit + SEH outcome.
+static void ss_mi_call_PostInit( NWorld::IWorld *pWorld, NWorld::CPostWorldCreateInfo *pInfo )
+{
+	__try { pWorld->RunPostInit( pInfo ); ss_mi_trace("MI::Init.14a RunPostInit OK"); }
+	__except( EXCEPTION_EXECUTE_HANDLER ) { ss_mi_trace("MI::Init.14a SEH caught"); }
+}
+
 bool CMission::Initialize( int _nTemplateID, int _nVariantID, NScenario::CScenarioZone *_pZone, const vector<string> &params, NRPG::CGlobalGame *_pGlobalGame )
 {
 	char _buf[256];
@@ -242,14 +269,19 @@ bool CMission::Initialize( int _nTemplateID, int _nVariantID, NScenario::CScenar
 		pWorld = NWorld::CreateWorld( _pGlobalGame );
 		sprintf_s(_buf, "MI::Init.3a CreateWorld returned pWorld=%p", (void*)pWorld.GetPtr());
 		ss_mi_trace(_buf);
+		// silent-storm-port r50: CreateRandom touches terrain/AI/objects/units;
+		// many records still have only partial schema fill. Helper wraps SEH so
+		// the crash is logged-and-skipped. After this, pWorld may be in a
+		// partial state but downstream code is null-guarded.
 		ss_mi_trace("MI::Init.4 CreateRandom entry");
-		pWorld->CreateRandom( nVariantID, params, true, clues,
-			nMobsLevel, &pPostInfo, sSeed );
-		ss_mi_trace("MI::Init.4a CreateRandom done");
+		ss_mi_call_CreateRandom( pWorld, nVariantID, params, clues, nMobsLevel, &pPostInfo, sSeed );
 	}
 	else
 		pWorld->CreateRestored();
 
+	// silent-storm-port r50: per-step trace; SEH-guard only the calls that
+	// touch raw world/render state. Plain C++ flow + null guards elsewhere.
+	ss_mi_trace("MI::Init.5 music lookup");
 	NDb::CMusic *pAmbientMelody = NDb::GetMusic( 1 );
 	pCombatMelody  = NDb::GetMusic( 3 );
 	NDb::CTemplVariant *pVar = NDb::GetTemplVariant( nVariantID );
@@ -261,46 +293,83 @@ bool CMission::Initialize( int _nTemplateID, int _nVariantID, NScenario::CScenar
 			pCombatMelody  = pVar->pCombatMusic;
 	}
 
+	ss_mi_trace("MI::Init.6 CreateNewView");
 	pScene = NGScene::CreateNewView();
+	ss_mi_trace("MI::Init.6a CreateSoundScene");
 	pSoundScene = NSound::CreateSoundScene( pAmbientMelody );
+	ss_mi_trace("MI::Init.6b CreateRenderGame");
 	pRender = NRender::CreateRenderGame( pWorld, pScene );
+	ss_mi_trace("MI::Init.6c CreateRenderSound");
 	pRenderSound = NRender::CreateRenderSound( pWorld, pSoundScene );
+	ss_mi_trace("MI::Init.6d render OK");
+
 #ifdef _MAPEDIT
 	pCursor = NUI::ICursor::CreateEditorCursor();
 #else
 	pCursor = NUI::ICursor::Create( true, NGfx::GetScreenRect() / 2 );
 #endif
+	ss_mi_trace("MI::Init.7 cursor OK");
 	pInterface = new NUI::CInterface( pCursor, pSoundScene );
+	ss_mi_trace("MI::Init.7a interface OK");
 
-	playersSet.resize( pGlobalGame->players.size() );
-	for ( int nTemp = 0; nTemp < pGlobalGame->players.size(); nTemp++ )
+	if ( IsValid(pGlobalGame) )
 	{
-		WCHAR wsString[1024];
-		swprintf( wsString, L"Player %d", nTemp );
-		playersSet[nTemp] = new CPlayerTracker( this, pGlobalGame->players[nTemp], wsString );
+		sprintf_s(_buf, "MI::Init.8 player trackers start, pGG->players.size()=%d", (int)pGlobalGame->players.size());
+		ss_mi_trace(_buf);
+		playersSet.resize( pGlobalGame->players.size() );
+		for ( int nTemp = 0; nTemp < pGlobalGame->players.size(); nTemp++ )
+		{
+			sprintf_s(_buf, "MI::Init.8.%d new CPlayerTracker", nTemp);
+			ss_mi_trace(_buf);
+			WCHAR wsString[1024];
+			swprintf( wsString, L"Player %d", nTemp );
+			if ( pGlobalGame->players[nTemp] )
+				playersSet[nTemp] = new CPlayerTracker( this, pGlobalGame->players[nTemp], wsString );
+			else
+				ss_mi_trace("MI::Init.8.skip player[nTemp] null");
+		}
+		if ( !playersSet.empty() && playersSet.front() )
+		{
+			pActivePlayer = playersSet.front();
+			CommandState( new CStateEmpty );
+		}
+		ss_mi_trace("MI::Init.8a player trackers OK");
 	}
-	pActivePlayer = playersSet.front();
-	CommandState( new CStateEmpty );
+	else
+	{
+		ss_mi_trace("MI::Init.8 pGlobalGame null — skipping player trackers");
+	}
 
 	TrackChanges();
 	bUpdated = false;
 	bForceUpdateNextFrame = true;
+	ss_mi_trace("MI::Init.9 TrackChanges OK");
 
-	NDb::CAmbientLightReal *pLight = GetWorld()->GetDefaultLight();
-	if ( pLight )
-		GetScene()->SetAmbient( pLight );
-	else
-		SetLightMode( 0 );
+	if ( IsValid(pWorld) )
+	{
+		NDb::CAmbientLightReal *pLight = GetWorld()->GetDefaultLight();
+		if ( pLight )
+			GetScene()->SetAmbient( pLight );
+		else
+			SetLightMode( 0 );
+	}
+	ss_mi_trace("MI::Init.10 ambient light OK");
 
 	SetCameraParams( CAMERA_PC, fFOV, defaultCameraLimits );
-	pCamera->SetPlacement( GetActivePlayer()->GetCamera() );
-
+	if ( pCamera && pActivePlayer )
+		pCamera->SetPlacement( GetActivePlayer()->GetCamera() );
 	TraceCursor();
+	ss_mi_trace("MI::Init.11 camera OK");
 
 	bWaitForPartFinished = false;
-	pMissionUI = new NUI::CMissionUI( NUI::SWindowInfo( pInterface, NUI::SPoint( 0, 0 ), NUI::SPoint( 1024, 768 ), "missionUI" ), this );
-	NUI::LoadTemplate( pMissionUI, NDb::GetUIContainer( 123 ) );
-	pMissionUI->ShowWindow( NUI::SWTYPE_SHOW );
+
+	if ( pInterface )
+	{
+		pMissionUI = new NUI::CMissionUI( NUI::SWindowInfo( pInterface, NUI::SPoint( 0, 0 ), NUI::SPoint( 1024, 768 ), "missionUI" ), this );
+		NUI::LoadTemplate( pMissionUI, NDb::GetUIContainer( 123 ) );
+		pMissionUI->ShowWindow( NUI::SWTYPE_SHOW );
+		ss_mi_trace("MI::Init.12a MissionUI loaded");
+	}
 
 	vector<CObj<IState> > updatedStatesSet;
 	updatedStatesSet.push_back( new CStateWait() );
@@ -314,9 +383,12 @@ bool CMission::Initialize( int _nTemplateID, int _nVariantID, NScenario::CScenar
 	updatedStatesSet.push_back( new CStateMove( false ) );
 	updatedStatesSet.push_back( new CStateEmpty() );
 	SetUpdatedStates( updatedStatesSet );
+	ss_mi_trace("MI::Init.13 states set");
 
-	pWorld->RunPostInit( pPostInfo );
+	if ( IsValid(pWorld) && pPostInfo )
+		ss_mi_call_PostInit( pWorld, pPostInfo );
 
+	ss_mi_trace("MI::Init.DONE returning true (mission state alive)");
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

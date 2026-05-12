@@ -71,6 +71,11 @@ NAI::SPosition GetNearestPosition( CVec3 ptPos, IPathNetwork *_pPathNetwork, boo
 				sPlace.SetNetwork( pPathNetwork );
 				return sPlace;
 			}
+			// silent-storm-port r50: original infinite-loops here when
+			// path network has no candidates at all (e.g. terrain not yet
+			// generated). Break out with the (default-zeroed) sNearestPlace
+			// to let CreateRandom progress.
+			break;
 		}
 	}
 	return sNearestPlace;
