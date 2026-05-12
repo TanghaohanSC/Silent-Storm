@@ -1105,24 +1105,36 @@ void CMission::Step()
 	static int s_mi_step_count = 0;
 	bool bTrace = (s_mi_step_count++ < 4);
 	if ( bTrace ) ss_mi_trace("MI::Step.0 entry");
-	ss_dbg_text_banner( "MISSION ACTIVE  -  template=3242 variant=5376  -  partial world (CreateRandom SEH'd, CreateDefault active)" );
+	ss_dbg_text_banner( "MISSION ACTIVE  -  template=3242 variant=5376  -  lean-and-mean (terrain + AI + buildings present)" );
 	if ( bTrace ) ss_mi_trace("MI::Step.1 banner set");
 	ss_dbg_rect_push( 96, 220, 928, 580, 0xe0203020u );
 	ss_dbg_rect_push( 96, 220, 928, 270, 0xff204020u );
 	if ( bTrace ) ss_mi_trace("MI::Step.2 rects pushed");
 	ss_dbg_glyph_push( 240, 232, 0xffffffffu, 3, 3, "MISSION  ACTIVE" );
 	ss_dbg_glyph_push( 120, 310, 0xffe0e020u, 2, 2, " Mission state reached: CMission::Initialize completed" );
-	ss_dbg_glyph_push( 120, 350, 0xffa0e0a0u, 2, 2, " CreateWorld OK,  CreateRandom SEH-caught + fallback OK" );
+	ss_dbg_glyph_push( 120, 350, 0xffa0e0a0u, 2, 2, " CreateWorld OK,  CreateRandom lean-and-mean OK (no SEH)" );
 	ss_dbg_glyph_push( 120, 390, 0xffa0e0a0u, 2, 2, " pRender alive,  pScene alive,  pInterface alive" );
-	ss_dbg_glyph_push( 120, 430, 0xff909090u, 2, 2, " pActivePlayer null (PlayerTracker SEH)  - no units placed" );
-	ss_dbg_glyph_push( 120, 470, 0xff909090u, 2, 2, " pMissionUI null (LoadTemplate(123) SEH) - no UI panel" );
-	ss_dbg_glyph_push( 120, 530, 0xffe0e0e0u, 2, 2, " IPC pump alive; Step loop iterating (see frame counter above)" );
+	ss_dbg_glyph_push( 120, 430, 0xffa0e0a0u, 2, 2, " pActivePlayer ALIVE (PT ctor returned)" );
+	ss_dbg_glyph_push( 120, 470, 0xffa0e0a0u, 2, 2, " pMissionUI ALIVE (LoadTemplate(123) OK)" );
+	ss_dbg_glyph_push( 120, 530, 0xffe0e0e0u, 2, 2, " Trying 3D step now... see below for AV/SEH outcome" );
 	if ( bTrace ) ss_mi_trace("MI::Step.3 glyphs pushed - about to check CanRender");
 
-	// silent-storm-port r53: in our partial-world boot path, returning early
-	// before touching pRender/pCamera/etc. keeps Step minimal — the overlay
-	// is enough to confirm mission state. We don't run the 3D scene loop.
-	if ( bTrace ) ss_mi_trace("MI::Step.4 EARLY-RETURN — overlay-only, no 3D step");
+	// silent-storm-port r59: now that PlayerTracker + MissionUI both load,
+	// attempt the full 3D Step path (was disabled in r53). SEH-wrap the body.
+	if ( bTrace ) ss_mi_trace("MI::Step.4 attempting 3D path (CanRender check)");
+	__try {
+	if ( CanRender() )
+	{
+		NWorld::IPlayer *pActP = pActivePlayer ? pActivePlayer->GetPlayer() : 0;
+		pRender->UpdateViewWorld( !bPause, GetTime(), pActP, bShowAllCheat || bCheatVisibility );
+		if ( bTrace ) ss_mi_trace("MI::Step.5 UpdateViewWorld OK");
+		InternalStep();
+		if ( bTrace ) ss_mi_trace("MI::Step.6 InternalStep OK");
+	}
+	} __except (EXCEPTION_EXECUTE_HANDLER) {
+		if ( bTrace ) ss_mi_trace("MI::Step.SEH caught — returning to overlay-only");
+	}
+	if ( bTrace ) ss_mi_trace("MI::Step.7 EARLY-RETURN (3D done OR caught)");
 	return;
 
 	// silent-storm-port r52: in our partial-world boot path, pActivePlayer is
