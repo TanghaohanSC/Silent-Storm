@@ -196,17 +196,30 @@ CSideMenuInterface::CSideMenuInterface():
 {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+static void ss_sm_trace(const char* s) {
+	FILE* fp = NULL; fopen_s(&fp, "silent_storm_step_trace.log", "a");
+	if (fp) { fprintf(fp, "[SM] %s\n", s); fclose(fp); }
+}
 void CSideMenuInterface::Initialize()
 {
-	CRenderBaseInterface::Initialize( N_SIDEMENU_TEMPLATE );
+	ss_sm_trace("SMI::Init.0 entry");
+	// silent-storm-port r35: match MainMenu's lightweight init — no 3D world
+	// (the SideMenu just stacks on top of MainMenu). Camera/scene setup
+	// would crash because parent::Initialize tries to CreateWorld.
+	InitializeUIOnly();
+	ss_sm_trace("SMI::Init.1 InitializeUIOnly ok");
 
-	CPtr<NDb::CDBCamera> pDBCamera = NDb::GetDBCamera( N_SIDEMENU_CAMERA );
-	ICamera::SCameraPos sCameraPos( pDBCamera->vAnchor, pDBCamera->fDistance, pDBCamera->fPitch, pDBCamera->fYaw, pDBCamera->fRoll, pDBCamera->fFOV );
-	GetCamera()->SetPlacement( sCameraPos );
-
-	pSideMenuUI = new NUI::CSideMenuUI( NUI::SWindowInfo( GetInterface(), NUI::SPoint( 0, 0 ), NUI::SPoint( 1024, 768 ), "mainmenuUI" ), this );
-	NUI::LoadTemplate( pSideMenuUI, NDb::GetUIContainer( 353 ) );
-	pSideMenuUI->ShowWindow( NUI::SWTYPE_SHOW );
+	NDb::CUIContainer *pContainer = NDb::GetUIContainer( 353 );
+	ss_sm_trace(pContainer ? "SMI::Init.2 UIContainer 353 FOUND" : "SMI::Init.2 UIContainer 353 MISSING");
+	if ( pContainer )
+	{
+		pSideMenuUI = new NUI::CSideMenuUI( NUI::SWindowInfo( GetInterface(), NUI::SPoint( 0, 0 ), NUI::SPoint( 1024, 768 ), "mainmenuUI" ), this );
+		ss_sm_trace("SMI::Init.3 CSideMenuUI created");
+		NUI::LoadTemplate( pSideMenuUI, pContainer );
+		ss_sm_trace("SMI::Init.4 LoadTemplate ok");
+		pSideMenuUI->ShowWindow( NUI::SWTYPE_SHOW );
+		ss_sm_trace("SMI::Init.5 ShowWindow ok");
+	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CSideMenuInterface::ProcessEvent( const NInput::SEvent &sEvent )
@@ -246,11 +259,18 @@ void CSideMenuInterface::Step()
 {
 	CRenderBaseInterface::Step();
 
+	// silent-storm-port r35: GetCamera() and pSideMenuUI are null/empty when
+	// we used InitializeUIOnly — skip 3D scene + screen-rect wiring.
+	if ( !GetCamera() )
+		return;
+
 	if ( CanRender() )
 	{
 		NUI::SRect sScrWindow;
 		NUI::SPoint sScrPosition;
 		NUI::CWindow *pClientWindow = NUI::GetUIWindow<NUI::CWindow>( pSideMenuUI, "clientview" );
+		if ( !pClientWindow )
+			return;
 		const NUI::SPoint &sScrSize = pClientWindow->GetSize();
 		pClientWindow->ClientToScreen( &sScrPosition, &sScrWindow );
 

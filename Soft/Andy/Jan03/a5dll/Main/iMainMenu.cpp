@@ -296,7 +296,8 @@ bool CMainMenuInterface::ProcessEvent( const NInput::SEvent &sEvent )
 void CMainMenuInterface::Step()
 {
 	static int _sCount = 0;
-	bool _bTrace = (_sCount++ < 3);
+	++_sCount;
+	bool _bTrace = (_sCount < 3);
 	if (_bTrace) ss_mm_trace("MMI::Step.0 entry");
 	CRenderBaseInterface::Step();
 	if (_bTrace) ss_mm_trace("MMI::Step.1 parent Step ok");
@@ -307,6 +308,23 @@ void CMainMenuInterface::Step()
 	// 2D UI rendering through bgfx.
 	if ( !GetCamera() )
 		ss_r8_render_fallback_menu();
+
+	// silent-storm-port r35: smoke-test menu transitions without requiring
+	// human input — after ~5s in MainMenu, programmatically queue
+	// CICSideMenu so we can verify the state-machine transition works.
+	// One-shot guarded by a static counter; safe across re-entry because
+	// PopInterface returns us here and we don't fire again.
+	{
+		static int s_autoFireCounter = 0;
+		static bool s_autoFired = false;
+		if ( !s_autoFired && _sCount > 300 )  // ~5s @ 60fps
+		{
+			s_autoFired = true;
+			ss_mm_trace("MMI::Step.AUTO firing CICSideMenu");
+			NMainLoop::Command( new CICSideMenu() );
+		}
+		(void)s_autoFireCounter;  // unused, kept for symmetry
+	}
 
 	// silent-storm-port Phase 1.5 r8: when the data-driven UIContainer is
 	// missing, paint a fallback debug-text menu every frame so the user
