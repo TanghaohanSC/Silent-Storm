@@ -1138,6 +1138,23 @@ void CMission::Step()
 	ss_dbg_glyph_push( 120, 510, 0xffa0e0a0u, 2, 2, " 3D Step path: UpdateViewWorld + InternalStep BOTH RUN" );
 	ss_dbg_glyph_push( 120, 550, 0xffe0e0e0u, 2, 2, " bgfx facade clears gray; D3D paths stubbed (Phase 4)" );
 	if ( bTrace ) ss_mi_trace("MI::Step.3 glyphs pushed AFTER 3D step");
+
+	// silent-storm-port r64: call RenderFrame inside SEH so 3D mesh + UI Draw
+	// paths actually fire and our facade DrawIndexedPrimitive sees terrain/
+	// model geometry, not just overlay glyphs.  Pre-r64 had `return;` here.
+	__try {
+		if ( CanRender() && pCamera )
+		{
+			int nFlags = N_RENDERMODE_3D;
+			if ( !bHideInterface )
+				nFlags |= N_RENDERMODE_2D;
+			if ( bTrace ) ss_mi_trace("MI::Step.8 calling RenderFrame");
+			RenderFrame( nFlags, GetTime(), GetCamera() );
+			if ( bTrace ) ss_mi_trace("MI::Step.9 RenderFrame OK");
+		}
+	} __except (EXCEPTION_EXECUTE_HANDLER) {
+		if ( bTrace ) ss_mi_trace("MI::Step.SEH RenderFrame — caught");
+	}
 	if ( bTrace ) ss_mi_trace("MI::Step.7 EXIT");
 	return;
 
@@ -1802,28 +1819,55 @@ bool CMission::ProcessEvent( const NInput::SEvent &sEvent )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CMission::RenderFrame( int nMode, const STime &sTime, ICamera *pCamera, bool bShowUnits )
 {
+	// silent-storm-port r64: SEH-guard each stage of RenderFrame.
+	static int s_rf_trace = 0;
+	bool bRfTrace = (s_rf_trace++ < 4);
+	if ( bRfTrace ) ss_mi_trace("MI::RF.0 entry");
 	if ( nMode & N_RENDERMODE_3D )
 	{
-		CTransformStack ts;
-		pCamera->GetTransform( &ts, pScene->GetScreenRect() );
-
-		pRenderSound->Update( &ts, sTime );
-
-		const CTRect<float> &rScreen = pCamera->GetScreenRect();
-		if ( ( rScreen.Width() != 0 ) && ( rScreen.Height() != 0 ) )
+		if ( !pCamera || !pScene )
 		{
-			NGScene::IGameView::SDrawInfo drawInfo;
-			drawInfo.pTS = &ts;
-			drawInfo.vOrigin = CVec2( rScreen.x1, rScreen.y1 );
-			drawInfo.vSize = CVec2( rScreen.x2 - rScreen.x1, rScreen.y2 - rScreen.y1 );
-			drawInfo.bUseDefaultClearColor = true;
-			drawInfo.vClearColor = CVec3(0.25f,0.25f,0.25f); // not used due to using default clear color
-			pScene->Draw( drawInfo );
+			if ( bRfTrace ) ss_mi_trace("MI::RF.SKIP3D — null pCamera/pScene");
+		}
+		else
+		{
+			__try {
+				CTransformStack ts;
+				pCamera->GetTransform( &ts, pScene->GetScreenRect() );
+				if ( bRfTrace ) ss_mi_trace("MI::RF.1 GetTransform OK");
+				if ( pRenderSound ) pRenderSound->Update( &ts, sTime );
+
+				const CTRect<float> &rScreen = pCamera->GetScreenRect();
+				if ( ( rScreen.Width() != 0 ) && ( rScreen.Height() != 0 ) )
+				{
+					NGScene::IGameView::SDrawInfo drawInfo;
+					drawInfo.pTS = &ts;
+					drawInfo.vOrigin = CVec2( rScreen.x1, rScreen.y1 );
+					drawInfo.vSize = CVec2( rScreen.x2 - rScreen.x1, rScreen.y2 - rScreen.y1 );
+					drawInfo.bUseDefaultClearColor = true;
+					drawInfo.vClearColor = CVec3(0.25f,0.25f,0.25f);
+					if ( bRfTrace ) ss_mi_trace("MI::RF.2 about to pScene->Draw");
+					pScene->Draw( drawInfo );
+					if ( bRfTrace ) ss_mi_trace("MI::RF.3 pScene->Draw OK");
+				} else {
+					if ( bRfTrace ) ss_mi_trace("MI::RF.SKIP3D — screen rect empty");
+				}
+			} __except (EXCEPTION_EXECUTE_HANDLER) {
+				if ( bRfTrace ) ss_mi_trace("MI::RF.SEH 3D path");
+			}
 		}
 	}
 
 	if ( !bHideInterface && !bSpecialHideInterface && ( nMode & N_RENDERMODE_2D ) )
-		pInterface->Draw( sTime );
+	{
+		__try {
+			if ( bRfTrace ) ss_mi_trace("MI::RF.4 about to pInterface->Draw");
+			if ( pInterface ) pInterface->Draw( sTime );
+			if ( bRfTrace ) ss_mi_trace("MI::RF.5 pInterface->Draw OK");
+		} __except (EXCEPTION_EXECUTE_HANDLER) {
+			if ( bRfTrace ) ss_mi_trace("MI::RF.SEH 2D path");
+		}
+	}
 
 	float fFrameTime = NGScene::GetFrameTime();
 	static float fMinFrameTime = 1, fMaxFrameTime = 1e-4f, fElapsed = 0;
@@ -1841,7 +1885,14 @@ void CMission::RenderFrame( int nMode, const STime &sTime, ICamera *pCamera, boo
 		nFrames = 0;
 	}
 
-	NGScene::Flip();
+	__try {
+		if ( bRfTrace ) ss_mi_trace("MI::RF.6 about to Flip");
+		NGScene::Flip();
+		if ( bRfTrace ) ss_mi_trace("MI::RF.7 Flip OK");
+	} __except (EXCEPTION_EXECUTE_HANDLER) {
+		if ( bRfTrace ) ss_mi_trace("MI::RF.SEH Flip");
+	}
+	if ( bRfTrace ) ss_mi_trace("MI::RF.EXIT");
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Internal
