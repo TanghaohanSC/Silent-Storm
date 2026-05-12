@@ -467,15 +467,29 @@ void CInterface::UpdateCursor()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CInterface::Draw( const STime &sTime )
 {
+	{ static int n=0; if(n<2){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CInterface::Draw #%d pView=%p\n",n,pView.GetPtr()); fclose(_f);} ++n; } }
 	pView->StartNewFrame();
+	{ static int n=0; if(n<2){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CInterface::Draw #%d StartNewFrame ok, CWindow::Draw\n",n); fclose(_f);} ++n; } }
 	CWindow::Draw( sTime, pView );
+	{ static int n=0; if(n<2){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CInterface::Draw #%d CWindow::Draw ok, NonPublicDemo->Draw\n",n); fclose(_f);} ++n; } }
 
+	// silent-storm-port Phase 1.5 r2 iter 2: text path re-enabled.  Defensive
+	// null-pFontInfo skip in G2DView guards the previous null-deref.
 	pNonPublicDemo->Draw( this, sTime, pView );
-	if( bShowFPSStats )
-		pFPSText->Draw( this, sTime, pView );
+	{ static int n=0; if(n<2){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CInterface::Draw #%d NPD->Draw ok, FPS\n",n); fclose(_f);} ++n; } }
+	//if( bShowFPSStats )
+	//	pFPSText->Draw( this, sTime, pView );
 
 	pCursor->Draw( sTime, pView );
+	{ static int n=0; if(n<2){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CInterface::Draw #%d cursor ok, Flush\n",n); fclose(_f);} ++n; } }
 	pView->Flush();
+	{ static int n=0; if(n<2){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CInterface::Draw #%d Flush ok\n",n); fclose(_f);} ++n; } }
 	UpdateFPSText();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -82,13 +82,32 @@ CRects* C2DGameView::CreateClearRects( CFuncBase<CRectLayout> *pLayout, CFuncBas
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void C2DGameView::CreateDynamicRects( CFuncBase<SText> *pText, const CTPoint<int> &sPosition, const CTRect<int> &sWindow )
 {
+	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"C2DGV::CreateDynRects #%d pText=%p\n",n,pText); fclose(_f);} ++n; } }
 	CDGPtr< CFuncBase<SText> > pFormater( pText );
 
 	pFormater.Refresh();
 	const SText &sText = pFormater->GetValue();
+	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"C2DGV::CreateDynRects #%d rectLayouts.size=%d\n",n,(int)sText.rectLayouts.size()); fclose(_f);} ++n; } }
 	for ( int nTemp = 0; nTemp < sText.rectLayouts.size(); nTemp++ )
 	{
 		const SText::SFontLayout &sLayout = sText.rectLayouts[nTemp];
+		{ static int n=0; if(n<6){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+		  if(_f){fprintf(_f,"C2DGV::CreateDynRects #%d iter=%d pFontInfo=%p\n",n,nTemp,(void*)sLayout.pFontInfo.GetPtr()); fclose(_f);} ++n; } }
+		// silent-storm-port Phase 1.5 r2: skip glyph layouts whose font info
+		// hasn't been resolved yet (was a crash before — null deref).
+		if ( !sLayout.pFontInfo )
+		{
+			static int nWarn = 0;
+			if ( nWarn < 4 )
+			{
+				++nWarn;
+				FILE* _f = NULL; fopen_s(&_f,"silent_storm_im.log","a");
+				if (_f) { fprintf(_f,"C2DGV::CreateDynRects skip iter=%d (null pFontInfo)\n", nTemp); fclose(_f); }
+			}
+			continue;
+		}
 		pScene->CreateDynamicRects( sLayout.pFontInfo->GetTexture(), sLayout.sLayout, sPosition, sWindow );
 	}
 

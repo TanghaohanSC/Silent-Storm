@@ -45,10 +45,22 @@ bool CText::ProcessMessage( const SEvent &sEvent )
 	return CWindow::ProcessMessage( sEvent );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// silent-storm-port Phase 1.5 r2 iter 2: re-enabled text Draw.  Defensive
+// null-pFontInfo skip added in G2DView.cpp::CreateDynamicRects guards against
+// the original crash.
+//#define SS_PHASE1_5_SKIP_INNER_TEXT_DRAW 1
 void CText::Draw( const STime &sTime, NGScene::I2DGameView *pView )
 {
+	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CText::Draw #%d this=%p pText=%p\n",n,(void*)this,pText.GetPtr()); fclose(_f);} ++n; } }
 	pText->SetSize( GetSize() );
+	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CText::Draw #%d about to pText->Draw\n",n); fclose(_f);} ++n; } }
+#ifndef SS_PHASE1_5_SKIP_INNER_TEXT_DRAW
 	pText->Draw( this, sTime, pView );
+#endif
+	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CText::Draw #%d pText->Draw ok, CWindow::Draw\n",n); fclose(_f);} ++n; } }
 
 	CWindow::Draw( sTime, pView );
 }
@@ -169,7 +181,11 @@ bool CMLText::ProcessMessage( const SEvent &sEvent )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CMLText::Draw( const STime &sTime, NGScene::I2DGameView *pView )
 {
+	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CMLText::Draw #%d UpdateText\n",n); fclose(_f);} ++n; } }
 	UpdateText( pView );
+	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CMLText::Draw #%d UpdateText ok\n",n); fclose(_f);} ++n; } }
 
 	SRect sScrWindow;
 	SPoint sScrPosition;
@@ -177,7 +193,11 @@ void CMLText::Draw( const STime &sTime, NGScene::I2DGameView *pView )
 		return;
 	VirtualToScreen( &sScrPosition, &sScrWindow );
 
+	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CMLText::Draw #%d pText->Render\n",n); fclose(_f);} ++n; } }
 	pText->Render( pView, sScrPosition, sScrWindow );
+	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+	  if(_f){fprintf(_f,"CMLText::Draw #%d Render ok, CWindow::Draw\n",n); fclose(_f);} ++n; } }
 
 	CWindow::Draw( sTime, pView );
 }

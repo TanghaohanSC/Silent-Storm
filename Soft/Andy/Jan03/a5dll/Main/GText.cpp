@@ -12,7 +12,7 @@
 namespace NGScene
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//! Размер TAB-а
+//! пїЅпїЅпїЅпїЅпїЅпїЅ TAB-пїЅ
 const int
 	N_TAB_SIZE		= 32;
 const WCHAR
@@ -167,6 +167,16 @@ void CTextFormater::Generate()
 	eAlignStyle = ALIGN_LEFT;
 	chunksList.clear();
 	GetFontFormatInfo( sState.sFont, &sFontInfo );
+
+	// silent-storm-port Phase 1.5 r2 iter 3: when no font atlas is loaded
+	// (no fonts in db yet), produce an empty SText instead of dereferencing
+	// pInfo to ask for glyph widths (would crash at line 228 / 326).
+	if ( !sFontInfo.pInfo )
+	{
+		value.sSize.x = 0;
+		value.sSize.y = 0;
+		return;
+	}
 
 	pText.Refresh();
 	const wstring &wsText = pText->GetValue();
@@ -605,11 +615,35 @@ void CTextFormater::GetFontFormatInfo( const SFont &sFont, SFontInfo *pFontInfo 
 		ASSERT( 0 );
 
 	CPtr<CFontInfo> pFont = pLocale->GetFont( sSearch );
+	// silent-storm-port Phase 1.5 r2 iter 2: locale has no fonts loaded yet
+	// (font db assets not bound in the bgfx port).  Bail with zeroed info so
+	// the formatter produces an empty layout instead of crashing on null deref.
+	if ( !IsValid( pFont ) )
+	{
+		static int nWarn = 0;
+		if ( nWarn < 4 )
+		{
+			++nWarn;
+			FILE* _f = NULL; fopen_s(&_f,"silent_storm_im.log","a");
+			if (_f) { fprintf(_f,"GetFontFormatInfo: locale->GetFont returned null (no fonts in db)\n"); fclose(_f); }
+		}
+		pFontInfo->pFont = 0;
+		pFontInfo->pInfo = 0;
+		pFontInfo->scale.x = 1.0f;
+		pFontInfo->scale.y = 1.0f;
+		return;
+	}
 	CDGPtr< CPtrFuncBase<CFontFormatInfo> > pInfo( pFont->GetFormatInfo() );
 	pInfo.Refresh();
 	pFontInfo->pFont = pFont;
 	pFontInfo->pInfo = pInfo->GetValue();
 
+	if ( !pFontInfo->pInfo || pFontInfo->pInfo->GetLineSpace() <= 0 )
+	{
+		pFontInfo->scale.x = 1.0f;
+		pFontInfo->scale.y = 1.0f;
+		return;
+	}
 	float fScale = (float)sSearch.nSize / pFontInfo->pInfo->GetLineSpace();
 	pFontInfo->scale.x = fScale;
 	pFontInfo->scale.y = fScale;
