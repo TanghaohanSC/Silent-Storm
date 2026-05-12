@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "wInterface.h"
+#include "wMain.h"  // silent-storm-port r57: extern bool g_ss_createrandom_reached_exit_r57
 #include "wMainTrace.h"
 #include "wUICommands.h"
 #include "Transform.h"
@@ -145,7 +146,11 @@ static bool ss_mi_call_CreateRandom( NWorld::IWorld *pWorld, int nVariantID,
 {
 	__try
 	{
-		pWorld->CreateRandom( nVariantID, params, true, clues, nMobsLevel, pPostInfo, sSeed );
+		// silent-storm-port r57: pass bLeanAndMean=true to skip the second-half
+		// block (LoadWaypoints / CreateAIUnits / deploy-spots / CheckStability)
+		// that corrupts stack via partial-world record state. Terrain + buildings
+		// still build (CR.5 - CR.10), enough for visible rendering.
+		pWorld->CreateRandom( nVariantID, params, true, clues, nMobsLevel, pPostInfo, sSeed, /*bLeanAndMean*/ true );
 		ss_mi_trace("MI::Init.4a CreateRandom done");
 		return true;
 	}
@@ -359,12 +364,24 @@ bool CMission::Initialize( int _nTemplateID, int _nVariantID, NScenario::CScenar
 		// the crash is logged-and-skipped. After this, pWorld may be in a
 		// partial state but downstream code is null-guarded.
 		ss_mi_trace("MI::Init.4 CreateRandom entry");
+		// r57: reset the "body completed" flag the CreateRandom body sets right
+		// before its closing brace. If body completed but /GS canary or some
+		// later epilogue check fired the SEH, we still keep the partial world
+		// (terrain + AI map are populated) instead of nuking via CreateDefault.
+		NWorld::g_ss_createrandom_reached_exit_r57 = false;
 		bool bCROK = ss_mi_call_CreateRandom( pWorld, nVariantID, params, clues, nMobsLevel, &pPostInfo, sSeed );
-		if ( !bCROK )
+		if ( !bCROK && !NWorld::g_ss_createrandom_reached_exit_r57 )
 		{
 			// r51: fall back to CreateDefault so we have a usable basic world
 			// (path network + terrain) for AddPlayer to operate on.
+			// r57: only if CreateRandom didn't reach body-end (i.e. it crashed
+			// genuinely mid-build). If body-end reached but epilogue SEH'd,
+			// the partial world is still richer than CreateDefault would be.
 			ss_mi_call_CreateDefault( pWorld );
+		}
+		else if ( !bCROK && NWorld::g_ss_createrandom_reached_exit_r57 )
+		{
+			ss_mi_trace("MI::Init.4c CreateRandom body OK but epilogue SEH — KEEPING partial world");
 		}
 	}
 	else

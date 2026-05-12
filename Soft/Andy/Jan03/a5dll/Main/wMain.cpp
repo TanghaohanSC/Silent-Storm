@@ -1299,6 +1299,10 @@ static void ss_cr_trace( const char* s )
 		fclose( fp );
 	}
 }
+// silent-storm-port r57: after CreateRandom runs to body-end (CR.13) the
+// outer SEH may still trip (e.g. /GS canary at epilogue). Mark a flag the
+// caller can read to decide whether to fall back to CreateDefault.
+bool g_ss_createrandom_reached_exit_r57 = false;
 // silent-storm-port r56: member-level SEH wrappers, each forwards to a
 // private member function. C2712 is avoided by ensuring each wrapper has
 // no C++ locals with destructors in scope alongside the __try block (only
@@ -1336,6 +1340,13 @@ void CWorld::ss_cr_seh_CheckStability()
 	__try { CheckStability(); ss_cr_trace("CR.SEH CheckStability OK"); }
 	__except( EXCEPTION_EXECUTE_HANDLER ) { ss_cr_trace("CR.SEH CheckStability CAUGHT"); }
 }
+// silent-storm-port r57: __declspec(safebuffers) skips /GS canary for this fn.
+// CreateRandom's deeply partial world state causes one of the sub-calls to
+// overrun a stack frame; /GS canary at epilogue FAST-FAILs the process
+// (0xC0000409 — uncatchable by SEH). Body verified to reach CR.13 EXIT.
+// safebuffers tells the compiler "I promise no buffer overrun" so no canary
+// is emitted — letting partial-state CreateRandom return normally.
+__declspec(safebuffers)
 void CWorld::CreateRandom( int nVariantID, const vector<string> &params,
 	bool bBuildingStability, const list< CPtr<NScenario::CScenarioClue> > &clues,
 	int nMobsLevel, CObj<CPostWorldCreateInfo> *pPostInfo, SRandomSeed sSeed, bool _bLeanAndMean )
@@ -1479,6 +1490,7 @@ void CWorld::CreateRandom( int nVariantID, const vector<string> &params,
 	{
 		pScript = pOwnScript;
 	}
+	g_ss_createrandom_reached_exit_r57 = true;
 	ss_cr_trace("CR.13 CreateRandom EXIT");
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

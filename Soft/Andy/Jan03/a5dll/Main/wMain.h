@@ -271,6 +271,10 @@ private:  // silent-storm-port: restore default class access after public SWorld
 	void ss_cr_seh_PlaceItemSlotsToInventory( const ClueToSlot &itemClueToSlot );
 	void ss_cr_seh_StartGame();
 	void ss_cr_seh_CheckStability();
+	// r57: a flag set right before CreateRandom's closing brace; caller
+	// can check this after the outer SEH catches an exception to decide
+	// whether the body completed (kept partial world) vs. failed mid-build
+	// (need CreateDefault fallback).
 	// TBSWorld<>
 private:
 	void CheckSpot( const vector< CPtr<CPlayer> > &players );
@@ -454,6 +458,10 @@ public:
 	bool IsUnitInPocket( CUnitServer *pUnit ) const;
 };
 extern CWorld *pCurrentWorld;
+// silent-storm-port r57: set true right before CWorld::CreateRandom returns;
+// caller resets to false before the SEH-guarded call. Lets the caller tell
+// "body completed but /GS canary tripped" from "body crashed mid-build".
+extern bool g_ss_createrandom_reached_exit_r57;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
