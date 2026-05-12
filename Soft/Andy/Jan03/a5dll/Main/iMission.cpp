@@ -128,8 +128,20 @@ CMission::CMission():
 {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// silent-storm-port r45: trace + SEH around CMission::Initialize so the deep
+// CreateWorld/CreateRandom crash chain logs a known step instead of a bare
+// access violation. ss_mi_trace lives below at file scope.
+static void ss_mi_trace(const char* s) {
+	FILE* fp = NULL; fopen_s(&fp, "silent_storm_step_trace.log", "a");
+	if (fp) { fprintf(fp, "[MI] %s\n", s); fclose(fp); }
+}
+
 bool CMission::Initialize( int _nTemplateID, int _nVariantID, NScenario::CScenarioZone *_pZone, const vector<string> &params, NRPG::CGlobalGame *_pGlobalGame )
 {
+	char _buf[256];
+	sprintf_s(_buf, "MI::Init.0 entry tmpl=%d var=%d pZone=%p pGG=%p",
+		_nTemplateID, _nVariantID, _pZone, _pGlobalGame);
+	ss_mi_trace(_buf);
 	pZone = _pZone;
 	nTemplateID = _nTemplateID;
 	nVariantID = _nVariantID;
@@ -138,8 +150,10 @@ bool CMission::Initialize( int _nTemplateID, int _nVariantID, NScenario::CScenar
 	int nMobsLevel = 0;
 	SRandomSeed sSeed;
 	list< CPtr<NScenario::CScenarioClue> > clues;
+	ss_mi_trace("MI::Init.1 scenario probe start");
 	if ( IsValid( pZone ) && pGlobalGame->pScenarioTracker->IsScenarioAvailable() )
 	{
+		ss_mi_trace("MI::Init.1a scenario-available branch");
 		if ( nTemplateID == -1 )
 			nTemplateID = pZone->GetDefaultTemplateID();
 		pGlobalGame->pScenarioTracker->GetPlacedClues( pZone, nTemplateID, &clues );
@@ -148,26 +162,48 @@ bool CMission::Initialize( int _nTemplateID, int _nVariantID, NScenario::CScenar
 		pGlobalGame->nCurrentTemplateID = nTemplateID;
 		sSeed = pZone->GetRandomSeedForTemplate( nTemplateID );
 		nMobsLevel = pZone->GetDifficulty();
+		ss_mi_trace("MI::Init.1b scenario-available done");
 	}
 	else
 	{
-		// вычисляем сложность random encounter-а
+		ss_mi_trace("MI::Init.1c random-encounter branch");
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ random encounter-пїЅ
 		int nDelta = 0;
+		// silent-storm-port r45: pGlobalGame->pDifficulty may be null at this
+		// stage in our boot path (no chapter selected). Guard the deref so we
+		// don't crash before reaching CreateWorld.
+		int nREDiff = 1;
+		if ( pGlobalGame && IsValid( pGlobalGame->pDifficulty ) )
+			nREDiff = pGlobalGame->pDifficulty->nREDifficulty;
 		for ( int i = 0; i < 10; ++i )
-			nDelta += random.Get( 0, Max( 1, 2 * pGlobalGame->pDifficulty->nREDifficulty ) );
-		nDelta /= 10; nDelta -= pGlobalGame->pDifficulty->nREDifficulty;
-		nMobsLevel = pGlobalGame->nCurrentChapterDifficulty + nDelta;
+			nDelta += random.Get( 0, Max( 1, 2 * nREDiff ) );
+		nDelta /= 10; nDelta -= nREDiff;
+		nMobsLevel = ( pGlobalGame ? pGlobalGame->nCurrentChapterDifficulty : 0 ) + nDelta;
+		ss_mi_trace("MI::Init.1d random-encounter done");
 	}
 
 	if ( nVariantID == -1 )
 	{
+		sprintf_s(_buf, "MI::Init.2 var=-1, looking up template %d", nTemplateID);
+		ss_mi_trace(_buf);
 		CPtr<NDb::CTemplate> pTemplate = NDb::GetTemplate( nTemplateID );
 		if ( !IsValid( pTemplate ) )
+		{
+			ss_mi_trace("MI::Init.2a no template found, bailing");
 			return false;
+		}
 
 		SRand sRand( sSeed );
 		vector<int> dummyTemp;
-		nVariantID = NDb::GetTemplVariant( pTemplate, dummyTemp, -1, &sRand )->GetRecordID();
+		NDb::CTemplVariant *pVariant = NDb::GetTemplVariant( pTemplate, dummyTemp, -1, &sRand );
+		if ( !pVariant )
+		{
+			ss_mi_trace("MI::Init.2b no variant found, bailing");
+			return false;
+		}
+		nVariantID = pVariant->GetRecordID();
+		sprintf_s(_buf, "MI::Init.2c resolved variant=%d", nVariantID);
+		ss_mi_trace(_buf);
 	}
 
 	if ( IsValid( pZone ) )
@@ -176,9 +212,14 @@ bool CMission::Initialize( int _nTemplateID, int _nVariantID, NScenario::CScenar
 	CObj<NWorld::CPostWorldCreateInfo> pPostInfo;
 	if ( !IsValid( pWorld ) )
 	{
+		ss_mi_trace("MI::Init.3 CreateWorld entry");
 		pWorld = NWorld::CreateWorld( _pGlobalGame );
-		pWorld->CreateRandom( nVariantID, params, true, clues, 
+		sprintf_s(_buf, "MI::Init.3a CreateWorld returned pWorld=%p", (void*)pWorld.GetPtr());
+		ss_mi_trace(_buf);
+		ss_mi_trace("MI::Init.4 CreateRandom entry");
+		pWorld->CreateRandom( nVariantID, params, true, clues,
 			nMobsLevel, &pPostInfo, sSeed );
+		ss_mi_trace("MI::Init.4a CreateRandom done");
 	}
 	else
 		pWorld->CreateRestored();
@@ -2363,13 +2404,55 @@ CICBeginMission::CICBeginMission( NScenario::CScenarioZone *_pZone,
 {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// silent-storm-port r45: SEH-guarded inner that does the actual mission spin-up
+// вЂ” keeps the outer Exec free of __try (the local vector<>/list<> with
+// non-trivial dtors makes MSVC reject SEH in the same function).
+static void ss_cicbm_inner( int nTemplateID, int nVariantID, NScenario::CScenarioZone *pZone,
+                            const vector<string> &params, NRPG::CGlobalGame *pGlobalGame,
+                            NGame::CMission **ppOut, bool *pbOk )
+{
+	*ppOut = 0;
+	*pbOk = false;
+	NMainLoop::ShowLogo();
+	NGame::CMission *pRes = new NGame::CMission();
+	*ppOut = pRes;
+	*pbOk = pRes->Initialize( nTemplateID, nVariantID, pZone, params, pGlobalGame );
+}
+
+static bool ss_cicbm_guarded( int nTemplateID, int nVariantID, NScenario::CScenarioZone *pZone,
+                              const vector<string> &params, NRPG::CGlobalGame *pGlobalGame,
+                              NGame::CMission **ppOut )
+{
+	bool bOk = false;
+	__try {
+		ss_cicbm_inner( nTemplateID, nVariantID, pZone, params, pGlobalGame, ppOut, &bOk );
+	} __except( EXCEPTION_EXECUTE_HANDLER ) {
+		ss_mi_trace("CICBM::Exec SEH caught вЂ” Initialize aborted");
+		bOk = false;
+	}
+	return bOk;
+}
+
 void CICBeginMission::Exec()
 {
-	NMainLoop::ShowLogo();
-
-	CMission *pRes = new CMission();
-	if ( pRes->Initialize( nTemplateID, nVariantID, pZone, params, pGlobalGame ) )
+	ss_mi_trace("CICBM::Exec entry");
+	CMission *pRes = 0;
+	bool bOk = ss_cicbm_guarded( nTemplateID, nVariantID, pZone, params, pGlobalGame, &pRes );
+	if ( bOk )
+	{
+		ss_mi_trace("CICBM::Exec Initialize ok, calling SetInterface");
 		SetInterface( pRes );
+	}
+	else
+	{
+		ss_mi_trace("CICBM::Exec Initialize failed вЂ” leaking pRes (no dtor)");
+		// silent-storm-port r45: we intentionally LEAK pRes when init fails
+		// rather than calling delete. CMission's partially-initialized
+		// destructor would walk null pointers (no pInterface/pCursor/etc.
+		// were created) and likely crash; the leak is preferable to a
+		// dtor-time AV during the boot retry loop.
+	}
+	ss_mi_trace("CICBM::Exec exit");
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // CICEndMission
@@ -2456,11 +2539,11 @@ static void CommandStartScenarioZone( const string &szID, const vector<wstring> 
 		{
 			if ( nSize > 2 )
 			{
-				// удаляем clues-ы
+				// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ clues-пїЅ
 				vector< CPtr<NScenario::CScenarioClue> > tmpClues = pZone->GetClues();
 				for ( vector< CPtr<NScenario::CScenarioClue> >::iterator i  = tmpClues.begin(); i != tmpClues.end(); ++i )
 					pZone->RemoveClue( *i );
-				// добавляем clues-ы
+				// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ clues-пїЅ
 				for ( vector<string>::iterator i = clues.begin(); i != clues.end(); ++i )
 				{
 					CPtr<NScenario::CScenarioClue> pClue = pScenario->GetClueByName( *i );
