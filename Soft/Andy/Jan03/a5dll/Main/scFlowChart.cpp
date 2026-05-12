@@ -1572,9 +1572,38 @@ SScenarioFlowChartPassage SScenarioFlowChartPassage::operator+( CScenarioObjecti
 	return result;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CScenarioFlowChart *CreateScenarioFlowChart( int nScenarioID, bool bFull )
+// silent-storm-port r47: SEH-guard the deep flowchart constructor so a null
+// deref during Generate()/PathFinder/etc. doesn't blow up the whole boot
+// chain. We return null on failure — callers already handle that via
+// IsValid(pScenarioFlowChart) checks (see CScenarioTracker::CreateScenario).
+// This keeps the mission-init path advancing into the random-encounter
+// branch of CMission::Initialize, where we want CreateWorld/CreateRandom
+// to actually run.
+static void ss_sfc_trace(const char* s) {
+	FILE* fp = NULL; fopen_s(&fp, "silent_storm_step_trace.log", "a");
+	if (fp) { fprintf(fp, "[SFC] %s\n", s); fclose(fp); }
+}
+
+static CScenarioFlowChart* ss_sfc_inner( int nScenarioID, bool bFull )
 {
 	return new CScenarioFlowChart( nScenarioID, bFull );
+}
+
+CScenarioFlowChart *CreateScenarioFlowChart( int nScenarioID, bool bFull )
+{
+	char _buf[128];
+	sprintf_s(_buf, "CreateScenarioFlowChart entry id=%d full=%d", nScenarioID, (int)bFull);
+	ss_sfc_trace(_buf);
+	CScenarioFlowChart* pRes = 0;
+	__try {
+		pRes = ss_sfc_inner( nScenarioID, bFull );
+	} __except( EXCEPTION_EXECUTE_HANDLER ) {
+		ss_sfc_trace("CreateScenarioFlowChart SEH caught — returning null");
+		pRes = 0;
+	}
+	sprintf_s(_buf, "CreateScenarioFlowChart returned %p", (void*)pRes);
+	ss_sfc_trace(_buf);
+	return pRes;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CScenarioFlowChart *CreateScenarioFlowChart( string szScenarioName, bool bFull )
