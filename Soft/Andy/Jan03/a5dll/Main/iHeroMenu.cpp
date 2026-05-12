@@ -273,14 +273,23 @@ bool CHeroMenuInterface::ProcessEvent( const NInput::SEvent &sEvent )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 extern "C" void ss_dbg_text_banner(const char* text);
 extern "C" void ss_dbg_text_push(int virtX, int virtY, unsigned attr, const char* text);
+extern "C" void ss_dbg_glyph_push(int virtX, int virtY, unsigned abgr, int scale_x, int scale_y, const char* text);
+extern "C" void ss_dbg_rect_push(int x1, int y1, int x2, int y2, unsigned abgr);
 
 static void ss_r38_heromenu_overlay()
 {
-	ss_dbg_text_banner( "SILENT STORM  -  HERO SELECT  (state: CHeroMenuInterface, UIContainer 354)" );
-	ss_dbg_text_push( 200, 300, 0x2f, "  AXIS team — 6 starting heroes available." );
-	ss_dbg_text_push( 200, 340, 0x07, "  [ ENTER ] play with selected hero      [ TAB ] custom char" );
-	ss_dbg_text_push( 200, 380, 0x07, "  [ ESC   ] back to side select." );
-	ss_dbg_text_push( 200, 460, 0x06, "  (CHeroMenuUI loaded, but model viewport not yet wired)" );
+	ss_dbg_text_banner( "HERO SELECT -- ENTER play   TAB custom char   ESC back" );
+
+	ss_dbg_rect_push( 96, 220, 928, 580, 0xe0301020u );
+	ss_dbg_rect_push( 96, 220, 928, 270, 0xff402040u );
+	ss_dbg_glyph_push( 250, 232, 0xffffffffu, 3, 3, "HERO  SELECT" );
+
+	ss_dbg_glyph_push( 120, 310, 0xffe0e020u, 2, 2, " AXIS team -- 6 starting characters" );
+	ss_dbg_glyph_push( 120, 360, 0xff20c0e0u, 2, 2, "   1) Hero (default)            2) Hero" );
+	ss_dbg_glyph_push( 120, 400, 0xff20c0e0u, 2, 2, "   3) Hero                      4) Hero" );
+	ss_dbg_glyph_push( 120, 440, 0xff20c0e0u, 2, 2, "   5) Hero                      6) Hero" );
+	ss_dbg_glyph_push( 120, 500, 0xffe0e0e0u, 2, 2, " [ ENTER ] play   [ TAB ] custom   [ ESC ] back" );
+	ss_dbg_glyph_push( 120, 540, 0xff808080u, 1, 1, " auto-attempt CICBeginGame in 3s (defaultPersesSet=0 -> blocked)" );
 }
 
 static void ss_hm_begin_game_inner( NDb::CSide *pSide )

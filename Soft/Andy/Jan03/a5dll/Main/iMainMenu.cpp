@@ -191,6 +191,8 @@ CMainMenuInterface::CMainMenuInterface():
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 extern "C" void ss_dbg_text_banner(const char* text);
 extern "C" void ss_dbg_text_push(int virtX, int virtY, unsigned attr, const char* text);
+extern "C" void ss_dbg_glyph_push(int virtX, int virtY, unsigned abgr, int scale_x, int scale_y, const char* text);
+extern "C" void ss_dbg_rect_push(int x1, int y1, int x2, int y2, unsigned abgr);
 
 // silent-storm-port Phase 1.5 r8: fallback main-menu renderer.  The shipping
 // Complete/game.db (Hammer&Sickle Russian release) does not contain DBCamera
@@ -200,6 +202,9 @@ extern "C" void ss_dbg_text_push(int virtX, int virtY, unsigned attr, const char
 // labels CMainMenuInterface::ProcessEvent already wires (campaign/load/
 // options/credits/quit) through the bgfx debug-text relay used by the rest
 // of the runtime.  Clicking still routes via the bound keys.
+//
+// r41+: also emit big textured glyph rows + a dark rect background so the
+// menu reads as actual UI rather than a console overlay.
 static void ss_r8_render_fallback_menu()
 {
 	static int s_log_once = 0;
@@ -211,9 +216,9 @@ static void ss_r8_render_fallback_menu()
 		if ( f ) { fprintf( f, "ss_r8_render_fallback_menu invoked — pushing banner+5 rows\n" ); fclose( f ); }
 	}
 
-	ss_dbg_text_banner( "SILENT STORM  -  MAIN MENU  (fallback render: game.db missing UI 347 / Cam 26)" );
+	ss_dbg_text_banner( "SILENT STORM  -  MAIN MENU  (press N/L/O/C/Q  or  ENTER/ESC)" );
 
-	// Buttons centered around y=300..520 in 1024x768 virtual space.
+	// dbg-text overlay (still emitted for the small status console)
 	struct Row { int y; unsigned attr; const char *text; };
 	static const Row rows[] = {
 		{ 300, 0x4f, "  [ N ]   New Campaign       (key: bind 'campaign')" },
@@ -225,6 +230,23 @@ static void ss_r8_render_fallback_menu()
 	};
 	for ( const Row &r : rows )
 		ss_dbg_text_push( 200, r.y, r.attr, r.text );
+
+	// r41: large textured glyph header + big buttons. 1024x768 virt space.
+	// Dark wash behind the panel so the white text reads on top.
+	ss_dbg_rect_push( 192, 220, 832, 580, 0xe0202030u );  // dark slate panel
+	ss_dbg_rect_push( 192, 220, 832, 270, 0xff5060c0u );  // header bar
+
+	// Title — scale 4 = 32x64 cells
+	ss_dbg_glyph_push( 230, 232, 0xffffffffu, 3, 3, "SILENT STORM" );
+
+	// Buttons -- 2x scale fits ~50 chars / 800px width
+	ss_dbg_glyph_push( 220, 290, 0xff20e0e0u, 2, 2, " 1)  New Campaign       [ N / Enter ]" );
+	ss_dbg_glyph_push( 220, 340, 0xffe0e020u, 2, 2, " 2)  Load Game          [ L / F8    ]" );
+	ss_dbg_glyph_push( 220, 390, 0xff20c0e0u, 2, 2, " 3)  Options            [ O         ]" );
+	ss_dbg_glyph_push( 220, 440, 0xff60c0c0u, 2, 2, " 4)  Credits            [ C         ]" );
+	ss_dbg_glyph_push( 220, 490, 0xff2020e0u, 2, 2, " 5)  Quit Game          [ Q / Esc   ]" );
+
+	ss_dbg_glyph_push( 220, 540, 0xff808080u, 1, 1, " Silent Storm port - phase 1.5 r41 - bgfx 2D, no 3D scene yet." );
 }
 
 static void ss_mm_trace(const char* s) {

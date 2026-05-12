@@ -257,14 +257,22 @@ bool CSideMenuInterface::ProcessEvent( const NInput::SEvent &sEvent )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 extern "C" void ss_dbg_text_banner(const char* text);
 extern "C" void ss_dbg_text_push(int virtX, int virtY, unsigned attr, const char* text);
+extern "C" void ss_dbg_glyph_push(int virtX, int virtY, unsigned abgr, int scale_x, int scale_y, const char* text);
+extern "C" void ss_dbg_rect_push(int x1, int y1, int x2, int y2, unsigned abgr);
 
 static void ss_r38_sidemenu_overlay()
 {
-	ss_dbg_text_banner( "SILENT STORM  -  CHOOSE SIDE  (state: CSideMenuInterface, UIContainer 353)" );
-	ss_dbg_text_push( 200, 300, 0x2f, "  [ A ]   AXIS               (Germany / German Army)" );
-	ss_dbg_text_push( 200, 340, 0x1f, "  [ L ]   ALLIES             (USA / United Kingdom / USSR)" );
-	ss_dbg_text_push( 200, 420, 0x07, "  ENTER selects, ESC returns to Main Menu." );
-	ss_dbg_text_push( 200, 460, 0x06, "  (auto-firing CICHeroMenu(AXIS) in 3s for chain smoke-test)" );
+	ss_dbg_text_banner( "CHOOSE SIDE -- ENTER selects, ESC returns to Main Menu" );
+	ss_dbg_text_push( 200, 300, 0x2f, "  [ ENTER ] AXIS or ALLIES (default AXIS in 3s)" );
+
+	// Big glyph panel
+	ss_dbg_rect_push( 192, 220, 832, 580, 0xe0203020u );
+	ss_dbg_rect_push( 192, 220, 832, 270, 0xff406020u );
+	ss_dbg_glyph_push( 240, 232, 0xffffffffu, 3, 3, "CHOOSE  SIDE" );
+	ss_dbg_glyph_push( 220, 320, 0xff2020e0u, 2, 2, " >  AXIS                  (Wehrmacht)" );
+	ss_dbg_glyph_push( 220, 390, 0xffe0e0e0u, 2, 2, "    ALLIES                (US / UK / USSR)" );
+	ss_dbg_glyph_push( 220, 480, 0xffe0e020u, 2, 2, " [ ENTER ] confirm   [ ESC ] back" );
+	ss_dbg_glyph_push( 220, 540, 0xff808080u, 1, 1, " auto-firing CICHeroMenu(AXIS) in 3s (smoke-test)" );
 }
 
 void CSideMenuInterface::Step()
