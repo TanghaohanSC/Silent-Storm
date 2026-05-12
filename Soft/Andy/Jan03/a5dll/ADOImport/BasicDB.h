@@ -69,12 +69,6 @@ public:
 	}
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// silent-storm-port r15: forward decl for the port helper that handles
-// the shipping wire format (CObj<CDBTableDataStorage> wrapper). Defined in
-// port/src/stubs/ado_stub.cpp.
-class CDBTableBase;
-void PortReadCDBTableStorage( CStructureSaver& f, CDBTableBase* pTable );
-
 class CDBTableBase
 {
 	typedef std::hash_map<int, CObj<CDBRecord> > CRecordHash;
@@ -87,11 +81,11 @@ public:
 	CDBRecord* GetDBRecord( int nID );
 	int operator&( CStructureSaver &f )
 	{
-		// silent-storm-port r15: shipping wire wraps records in a
-		// CObj<CDBTableDataStorage> (typeID 0xA1843130). The Jan03
-		// `f.Add(1, &records)` hash_map read silently produced empty
-		// records; promote-from-storage runs after NDatabase::Serialize.
-		PortReadCDBTableStorage( f, this );
+		// silent-storm-port r19: Jan03 wire format restored. Shipping's
+		// per-table records sub-chunk is also present in game.db; the
+		// real data lives in NDatabase::Serialize's field 2 storage map
+		// (read in ado_stub.cpp and post-promoted into this records hash).
+		f.Add( 1, &records );
 		return 0;
 	}
 	// silent-storm-port r15: NDatabase::PromoteRecordsFromStorage needs
