@@ -187,12 +187,21 @@ void CMainMenuInterface::Initialize()
 {
 	CRenderBaseInterface::Initialize( N_MAINMENU_TEMPLATE );
 
+	// silent-storm-port Phase 1.5 r7: the shipped Complete/game.db (Hammer&Sickle
+	// release database, used as the closest-shipping data set) does not contain
+	// DBCamera ID=26 or UIContainer ID=347 that the Jan03 source drop expects.
+	// Guard each lookup so the main-menu state can boot — without these guards
+	// the bare pointer deref crashes immediately inside Initialize.
 	CPtr<NDb::CDBCamera> pDBCamera = NDb::GetDBCamera( N_MAINMENU_CAMERA );
-	ICamera::SCameraPos sCameraPos( pDBCamera->vAnchor, pDBCamera->fDistance, pDBCamera->fPitch, pDBCamera->fYaw, pDBCamera->fRoll, pDBCamera->fFOV );
-	GetCamera()->SetPlacement( sCameraPos );
+	if ( pDBCamera )
+	{
+		ICamera::SCameraPos sCameraPos( pDBCamera->vAnchor, pDBCamera->fDistance, pDBCamera->fPitch, pDBCamera->fYaw, pDBCamera->fRoll, pDBCamera->fFOV );
+		GetCamera()->SetPlacement( sCameraPos );
+	}
 
 	pMainMenuUI = new NUI::CMainMenuUI( NUI::SWindowInfo( GetInterface(), NUI::SPoint( 0, 0 ), NUI::SPoint( 1024, 768 ), "mainmenuUI" ) );
-	NUI::LoadTemplate( pMainMenuUI, NDb::GetUIContainer( 347 ) );
+	if ( NDb::CUIContainer *pContainer = NDb::GetUIContainer( 347 ) )
+		NUI::LoadTemplate( pMainMenuUI, pContainer );
 	pMainMenuUI->ShowWindow( NUI::SWTYPE_SHOW );
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

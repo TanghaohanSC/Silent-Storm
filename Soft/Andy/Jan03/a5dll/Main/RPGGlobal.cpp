@@ -222,9 +222,17 @@ CGlobalPlayer* CreateGlobalPlayer()
 	};
 	//
 	CGlobalPlayer *pPlayer = new CGlobalPlayer();
-	pPlayer->AddMerc( CreateMerc( NDb::GetPers(PC_SOLDIER), 0, true ) );
-	pPlayer->AddMerc( CreateMerc( NDb::GetPers(PC_GRENADER), 0, true ) );
-	pPlayer->AddMerc( CreateMerc( NDb::GetPers(PC_SNIPER), 0, true ) );
+	// silent-storm-port Phase 1.5 r7: the Jan03 source-drop's hard-coded merc IDs
+	// (54/53/14) do not exist in the shipped Complete/game.db (the Hammer&Sickle
+	// release DB renumbered persons). Calling CreateMerc(NULL) dereferences NULL
+	// in CUnit::CUnit at "pHead = pPers->pHead". Guard each lookup so the main
+	// menu can boot — there are no mercs to fight on the main-menu scene anyway.
+	NDb::CRPGPers *pSoldier = NDb::GetPers( PC_SOLDIER );
+	NDb::CRPGPers *pGrenader = NDb::GetPers( PC_GRENADER );
+	NDb::CRPGPers *pSniper   = NDb::GetPers( PC_SNIPER );
+	if ( pSoldier )  pPlayer->AddMerc( CreateMerc( pSoldier,  0, true ) );
+	if ( pGrenader ) pPlayer->AddMerc( CreateMerc( pGrenader, 0, true ) );
+	if ( pSniper )   pPlayer->AddMerc( CreateMerc( pSniper,   0, true ) );
 	return pPlayer;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
