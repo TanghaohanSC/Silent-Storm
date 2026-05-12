@@ -1299,6 +1299,43 @@ static void ss_cr_trace( const char* s )
 		fclose( fp );
 	}
 }
+// silent-storm-port r56: member-level SEH wrappers, each forwards to a
+// private member function. C2712 is avoided by ensuring each wrapper has
+// no C++ locals with destructors in scope alongside the __try block (only
+// references and POD pointers).
+void CWorld::ss_cr_seh_LoadWaypoints( const list< CObj<CMapWaypoint> > &wp )
+{
+	__try { LoadWaypoints( wp ); ss_cr_trace("CR.SEH LoadWaypoints OK"); }
+	__except( EXCEPTION_EXECUTE_HANDLER ) { ss_cr_trace("CR.SEH LoadWaypoints CAUGHT"); }
+}
+void CWorld::ss_cr_seh_CreateAIUnits( const SMapInfo &mapInfo,
+	const ClueToSlot &personClueToSlot, int nMobsLevel,
+	hash_map< int, CPtr<CUnitServer> > *pIDToUnit )
+{
+	__try { CreateAIUnits( mapInfo, personClueToSlot, nMobsLevel, pIDToUnit ); ss_cr_trace("CR.SEH CreateAIUnits OK"); }
+	__except( EXCEPTION_EXECUTE_HANDLER ) { ss_cr_trace("CR.SEH CreateAIUnits CAUGHT"); }
+}
+void CWorld::ss_cr_seh_CreateUnitGroups( const SMapInfo &mapInfo,
+	hash_map< int, CPtr<CUnitServer> > *pIDToUnit )
+{
+	__try { CreateUnitGroups( mapInfo, pIDToUnit ); ss_cr_trace("CR.SEH CreateUnitGroups OK"); }
+	__except( EXCEPTION_EXECUTE_HANDLER ) { ss_cr_trace("CR.SEH CreateUnitGroups CAUGHT"); }
+}
+void CWorld::ss_cr_seh_PlaceItemSlotsToInventory( const ClueToSlot &itemClueToSlot )
+{
+	__try { PlaceItemSlotsToInventory( itemClueToSlot ); ss_cr_trace("CR.SEH PlaceItemSlotsToInventory OK"); }
+	__except( EXCEPTION_EXECUTE_HANDLER ) { ss_cr_trace("CR.SEH PlaceItemSlotsToInventory CAUGHT"); }
+}
+void CWorld::ss_cr_seh_StartGame()
+{
+	__try { StartGame(); ss_cr_trace("CR.SEH StartGame OK"); }
+	__except( EXCEPTION_EXECUTE_HANDLER ) { ss_cr_trace("CR.SEH StartGame CAUGHT"); }
+}
+void CWorld::ss_cr_seh_CheckStability()
+{
+	__try { CheckStability(); ss_cr_trace("CR.SEH CheckStability OK"); }
+	__except( EXCEPTION_EXECUTE_HANDLER ) { ss_cr_trace("CR.SEH CheckStability CAUGHT"); }
+}
 void CWorld::CreateRandom( int nVariantID, const vector<string> &params,
 	bool bBuildingStability, const list< CPtr<NScenario::CScenarioClue> > &clues,
 	int nMobsLevel, CObj<CPostWorldCreateInfo> *pPostInfo, SRandomSeed sSeed, bool _bLeanAndMean )
@@ -1378,7 +1415,7 @@ void CWorld::CreateRandom( int nVariantID, const vector<string> &params,
 		vector<NAI::SPathPlace> empty;
 		pPathNetwork->UpdateColouring( empty );
 		ss_cr_trace("CR.10e UpdateColouring done");
-		LoadWaypoints( mapInfo.waypoints );
+		ss_cr_seh_LoadWaypoints( mapInfo.waypoints );
 		ss_cr_trace("CR.10f LoadWaypoints done");
 		// �� ����� ������� �� ������� ������
 		pDeployedDeadUnitsPlayer = new CPlayer( L"Deployed dead units fake player", pGlobalGame, 0, -1 );
@@ -1386,11 +1423,11 @@ void CWorld::CreateRandom( int nVariantID, const vector<string> &params,
 		ss_cr_trace("CR.10g DeadUnitsPlayer ready");
 		//
 		hash_map< int, CPtr<CUnitServer> > idToUnit;
-		CreateAIUnits( mapInfo, personClueToSlot, nMobsLevel, &idToUnit );
+		ss_cr_seh_CreateAIUnits( mapInfo, personClueToSlot, nMobsLevel, &idToUnit );
 		ss_cr_trace("CR.10h CreateAIUnits done");
-		CreateUnitGroups( mapInfo, &idToUnit );
+		ss_cr_seh_CreateUnitGroups( mapInfo, &idToUnit );
 		ss_cr_trace("CR.10i CreateUnitGroups done");
-		PlaceItemSlotsToInventory( itemClueToSlot );
+		ss_cr_seh_PlaceItemSlotsToInventory( itemClueToSlot );
 		ss_cr_trace("CR.10j PlaceItemSlotsToInventory done");
 		//
 		nPartiesAdded = 0;
@@ -1431,12 +1468,12 @@ void CWorld::CreateRandom( int nVariantID, const vector<string> &params,
 		}
 		ss_cr_trace("CR.10l deploy spots loop done");
 		//
-		CheckStability();
+		ss_cr_seh_CheckStability();
 		ss_cr_trace("CR.10m CheckStability done");
 	}
 
 	ss_cr_trace("CR.11 about to StartGame");
-	StartGame();
+	ss_cr_seh_StartGame();
 	ss_cr_trace("CR.12 StartGame done");
 	if ( IsValid( pOwnScript ) )
 	{

@@ -258,7 +258,20 @@ private:  // silent-storm-port: restore default class access after public SWorld
 	void Segment();
 	virtual void OnNewPlayerTurn( CPlayer *pPlayer );
 	virtual void OnRealTimeStarted();
-	// TBSWorld<>	
+	// silent-storm-port r56: SEH wrappers — implemented in wMain.cpp;
+	// each wraps a private member call in __try/__except so when the deeply
+	// partial world state (post-r54 still missing many record fields) AVs,
+	// CreateRandom can keep advancing instead of bailing entirely.
+	void ss_cr_seh_LoadWaypoints( const list< CObj<CMapWaypoint> > &wp );
+	void ss_cr_seh_CreateAIUnits( const SMapInfo &mapInfo,
+		const ClueToSlot &personClueToSlot, int nMobsLevel,
+		hash_map< int, CPtr<CUnitServer> > *pIDToUnit );
+	void ss_cr_seh_CreateUnitGroups( const SMapInfo &mapInfo,
+		hash_map< int, CPtr<CUnitServer> > *pIDToUnit );
+	void ss_cr_seh_PlaceItemSlotsToInventory( const ClueToSlot &itemClueToSlot );
+	void ss_cr_seh_StartGame();
+	void ss_cr_seh_CheckStability();
+	// TBSWorld<>
 private:
 	void CheckSpot( const vector< CPtr<CPlayer> > &players );
 	virtual bool IsTBSRealTimeModePossible() const;
