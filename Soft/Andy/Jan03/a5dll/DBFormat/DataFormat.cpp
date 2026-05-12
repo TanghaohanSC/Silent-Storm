@@ -21,6 +21,11 @@
 #include "DataRpgConstants.h"
 
 #include "..\Misc\StrProc.h"
+// r54: pull in CDBTableDataStorage definition so back-pop helpers can read
+// rows directly (the schema-based dbfill path can't see file-local CRndModel
+// / CRndConstructionPart). The header lives in the port tree; cmake adds
+// port/src/stubs to jan03_DBFormat's include path.
+#include "db_table_storage.h"
 
 const int N_DEF_BUMP_ID = 606;
 static void ErrOut( const string &str, int nID )
@@ -1878,6 +1883,208 @@ CConstructionPart* CreateConstructionPartVariant( int nVarID )
 ////
 CDBScenarioZone* GetDBScenarioZone( int nID ) { return Get<CDBScenarioZone>( nID ); }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// phase1.5/r54: file-local CRndModel/CRndConstructionPart can't be reached
+// from port/src/dbfill/dbfill.cpp (where the schema-based fill happens), so
+// dbfill has empty sentinel schemas for these two — pTemplate / pGeometry /
+// pSkeleton / pRPGArmor / pMaterials[] never get populated, and the existing
+// r49 back-pop sees pTemplate == 0 on every record.
+//
+// We fix it in two parts INSIDE this TU (where the classes are visible):
+//   1) FillRndModelsFromStorage_r54: read TemplateID/GeometryID/SkeletonID/
+//      RPGArmorID/Material0..3 from each row's int columns and assign refs.
+//   2) BackPopRndModels_r54: now that pTemplate is set, push this into
+//      pTemplate->variants + roulette.AddSector(1.0f).
+// Same pair for CRndConstructionPart.
+//
+// Helper to look up an int column index by name in m_column6.
+static int ColIdxByName_r54( const std::vector<std::string>& cols, const char* name )
+{
+	for ( size_t i = 0; i < cols.size(); ++i )
+		if ( cols[i] == name )
+			return (int)i;
+	return -1;
+}
+// Walk storage rows and resolve refs for CRndModel.
+static int FillRndModelsFromStorage_r54()
+{
+	int nFilled = 0;
+	CDBTableBase* pBase = NDatabase::GetTable( 1 ); // "Models"
+	if ( !pBase )
+		return 0;
+	CDBTable<CRndModel>* pT = (CDBTable<CRndModel>*)pBase;
+	CDBTableDataStorage* pS = pT->GetStorage();
+	if ( !pS )
+		return 0;
+	int idxID    = ColIdxByName_r54( pS->m_column6, "ID" );
+	int idxTempl = ColIdxByName_r54( pS->m_column6, "TemplateID" );
+	int idxGeom  = ColIdxByName_r54( pS->m_column6, "GeometryID" );
+	int idxSkel  = ColIdxByName_r54( pS->m_column6, "SkeletonID" );
+	int idxArmor = ColIdxByName_r54( pS->m_column6, "RPGArmorID" );
+	int idxMat0  = ColIdxByName_r54( pS->m_column6, "Material0" );
+	int idxMat1  = ColIdxByName_r54( pS->m_column6, "Material1" );
+	int idxMat2  = ColIdxByName_r54( pS->m_column6, "Material2" );
+	int idxMat3  = ColIdxByName_r54( pS->m_column6, "Material3" );
+	if ( idxID < 0 || idxTempl < 0 )
+		return 0;
+	for ( size_t row = 0; row < pS->m_buckets.size(); ++row )
+	{
+		const std::vector<int>& vals = pS->m_buckets[row];
+		if ( (int)vals.size() <= idxID || (int)vals.size() <= idxTempl )
+			continue;
+		int recID = vals[idxID];
+		CRndModel* pM = pT->GetRecord( recID );
+		if ( !pM )
+			continue;
+		int tID = vals[idxTempl];
+		if ( tID )
+			pM->pTemplate = NDatabase::GetTable<CTRndModel>() ? NDatabase::GetTable<CTRndModel>()->GetRecord( tID ) : 0;
+		if ( idxGeom >= 0 && (int)vals.size() > idxGeom && vals[idxGeom] )
+			pM->pGeometry = NDatabase::GetTable<CGeometry>() ? NDatabase::GetTable<CGeometry>()->GetRecord( vals[idxGeom] ) : 0;
+		if ( idxSkel >= 0 && (int)vals.size() > idxSkel && vals[idxSkel] )
+			pM->pSkeleton = NDatabase::GetTable<CSkeleton>() ? NDatabase::GetTable<CSkeleton>()->GetRecord( vals[idxSkel] ) : 0;
+		if ( idxArmor >= 0 && (int)vals.size() > idxArmor && vals[idxArmor] )
+			pM->pRPGArmor = NDatabase::GetTable<CRPGArmor>() ? NDatabase::GetTable<CRPGArmor>()->GetRecord( vals[idxArmor] ) : 0;
+		int mats[4] = { idxMat0, idxMat1, idxMat2, idxMat3 };
+		for ( int k = 0; k < 4; ++k )
+		{
+			if ( mats[k] >= 0 && (int)vals.size() > mats[k] && vals[mats[k]] )
+				pM->pMaterials[k] = NDatabase::GetTable<CTMaterial>() ? NDatabase::GetTable<CTMaterial>()->GetRecord( vals[mats[k]] ) : 0;
+		}
+		++nFilled;
+	}
+	return nFilled;
+}
+static int FillRndConstructionPartsFromStorage_r54()
+{
+	int nFilled = 0;
+	CDBTableBase* pBase = NDatabase::GetTable( 0x2f ); // "ConstructionParts" — class 47 (0x2f)
+	if ( !pBase )
+		return 0;
+	CDBTable<CRndConstructionPart>* pT = (CDBTable<CRndConstructionPart>*)pBase;
+	CDBTableDataStorage* pS = pT->GetStorage();
+	if ( !pS )
+		return 0;
+	int idxID     = ColIdxByName_r54( pS->m_column6, "ID" );
+	int idxTempl  = ColIdxByName_r54( pS->m_column6, "TemplateID" );
+	int idxGeom1  = ColIdxByName_r54( pS->m_column6, "FirstGeometryID" );
+	int idxGeom2  = ColIdxByName_r54( pS->m_column6, "SecondGeometryID" );
+	int idxObj    = ColIdxByName_r54( pS->m_column6, "Object" );
+	int idxArmor  = ColIdxByName_r54( pS->m_column6, "RPGArmorID" );
+	int idxSX     = ColIdxByName_r54( pS->m_column6, "SizeX" );
+	int idxSY     = ColIdxByName_r54( pS->m_column6, "SizeY" );
+	int idxSZ     = ColIdxByName_r54( pS->m_column6, "SizeZ" );
+	int idxSubM   = ColIdxByName_r54( pS->m_column6, "SubPartMask" );
+	int idxClip   = ColIdxByName_r54( pS->m_column6, "ClipGroupID" );
+	int idxThick  = ColIdxByName_r54( pS->m_column7, "Thickness" );
+	if ( idxID < 0 || idxTempl < 0 )
+		return 0;
+	for ( size_t row = 0; row < pS->m_buckets.size(); ++row )
+	{
+		const std::vector<int>& vals = pS->m_buckets[row];
+		if ( (int)vals.size() <= idxID || (int)vals.size() <= idxTempl )
+			continue;
+		int recID = vals[idxID];
+		CRndConstructionPart* pP = pT->GetRecord( recID );
+		if ( !pP )
+			continue;
+		int tID = vals[idxTempl];
+		if ( tID )
+			pP->pTemplate = NDatabase::GetTable<CTConstructionPart>() ? NDatabase::GetTable<CTConstructionPart>()->GetRecord( tID ) : 0;
+		if ( idxGeom1 >= 0 && (int)vals.size() > idxGeom1 && vals[idxGeom1] )
+			pP->pGeometry = NDatabase::GetTable<CGeometry>() ? NDatabase::GetTable<CGeometry>()->GetRecord( vals[idxGeom1] ) : 0;
+		if ( idxGeom2 >= 0 && (int)vals.size() > idxGeom2 && vals[idxGeom2] )
+			pP->p2ndGeometry = NDatabase::GetTable<CGeometry>() ? NDatabase::GetTable<CGeometry>()->GetRecord( vals[idxGeom2] ) : 0;
+		if ( idxObj >= 0 && (int)vals.size() > idxObj && vals[idxObj] )
+			pP->pObject = NDatabase::GetTable<CTRndObject>() ? NDatabase::GetTable<CTRndObject>()->GetRecord( vals[idxObj] ) : 0;
+		if ( idxArmor >= 0 && (int)vals.size() > idxArmor && vals[idxArmor] )
+			pP->pArmor = NDatabase::GetTable<CRPGArmor>() ? NDatabase::GetTable<CRPGArmor>()->GetRecord( vals[idxArmor] ) : 0;
+		if ( idxSX >= 0 && (int)vals.size() > idxSX )
+			pP->nSizeX = vals[idxSX];
+		if ( idxSY >= 0 && (int)vals.size() > idxSY )
+			pP->nSizeY = vals[idxSY];
+		if ( idxSZ >= 0 && (int)vals.size() > idxSZ )
+			pP->nSizeZ = vals[idxSZ];
+		if ( idxSubM >= 0 && (int)vals.size() > idxSubM )
+			pP->nSubPartsMask = vals[idxSubM];
+		if ( idxClip >= 0 && (int)vals.size() > idxClip )
+			pP->nClipGroup = vals[idxClip];
+		// floats live in m_column7 + m_buckets[row] alongside ints? No — floats
+		// have their own row layout, but to avoid digging deeper we leave
+		// fThickness at default for now (most code-paths use a fallback).
+		(void)idxThick;
+		++nFilled;
+	}
+	return nFilled;
+}
+int BackPopRndModels_r54()
+{
+	int nFilled = FillRndModelsFromStorage_r54();
+	(void)nFilled; // for debug print
+	int n = 0;
+	CDBTable<CRndModel>* pT = NDatabase::GetTable<CRndModel>();
+	if ( !pT )
+		return 0;
+	CDBIterator<CRndModel> it( *pT );
+	while ( it.MoveNext() )
+	{
+		CRndModel* pM = it.Get();
+		if ( !pM )
+			continue;
+		CTRndModel* pParent = pM->pTemplate.GetPtr();
+		if ( !pParent )
+			continue;
+		bool present = false;
+		for ( int i = 0; i < pParent->variants.size(); ++i )
+		{
+			if ( pParent->variants[i] == pM )
+			{
+				present = true;
+				break;
+			}
+		}
+		if ( present )
+			continue;
+		pParent->variants.push_back( pM );
+		pParent->roulette.AddSector( 1.0f );
+		++n;
+	}
+	return n;
+}
+int BackPopRndConstructionParts_r54()
+{
+	int nFilled = FillRndConstructionPartsFromStorage_r54();
+	(void)nFilled;
+	int n = 0;
+	CDBTable<CRndConstructionPart>* pT = NDatabase::GetTable<CRndConstructionPart>();
+	if ( !pT )
+		return 0;
+	CDBIterator<CRndConstructionPart> it( *pT );
+	while ( it.MoveNext() )
+	{
+		CRndConstructionPart* pP = it.Get();
+		if ( !pP )
+			continue;
+		CTConstructionPart* pParent = pP->pTemplate.GetPtr();
+		if ( !pParent )
+			continue;
+		bool present = false;
+		for ( int i = 0; i < pParent->variants.size(); ++i )
+		{
+			if ( pParent->variants[i] == pP )
+			{
+				present = true;
+				break;
+			}
+		}
+		if ( present )
+			continue;
+		pParent->variants.push_back( pP );
+		pParent->roulette.AddSector( 1.0f );
+		++n;
+	}
+	return n;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
 START_REGISTER(DataFormat)
 	StartRegisterSaveload();
 	REGISTER_DATABASE_CLASS( 1, "Models", CRndModel );
@@ -2017,6 +2224,30 @@ START_REGISTER(DataFormat)
 
 FINISH_REGISTER
 	//////////////////////////////////////////////////////////////////////////////////////
+}
+// phase1.5/r54: C-linkage wrappers so port/src/dbfill/dbfill.cpp can call into
+// the NDb namespace (CRndModel / CRndConstructionPart are file-local to this TU).
+extern "C" int PortBackPopRndModels_r54()
+{
+	int n = NDb::BackPopRndModels_r54();
+	FILE* fp = 0;
+	fopen_s( &fp, "silent_storm_r54_rndmodel.log", "a" );
+	if ( fp ) {
+		fprintf( fp, "r54 RndModel back-pop n=%d\n", n );
+		fclose( fp );
+	}
+	return n;
+}
+extern "C" int PortBackPopRndConstructionParts_r54()
+{
+	int n = NDb::BackPopRndConstructionParts_r54();
+	FILE* fp = 0;
+	fopen_s( &fp, "silent_storm_r54_rndmodel.log", "a" );
+	if ( fp ) {
+		fprintf( fp, "r54 RndConstructionPart back-pop n=%d\n", n );
+		fclose( fp );
+	}
+	return n;
 }
 using namespace NDb;
 // Format 0x[�������]DDMYHHN
