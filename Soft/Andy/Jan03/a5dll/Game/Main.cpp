@@ -6,10 +6,18 @@
 #include "..\ADOImport\BasicDB.h"
 #include "..\Misc\StrProc.h"
 #include "..\MiscDll\Commands.h"
-#include "..\Main\GResource.h" // CRAP за неимением лучшего, вообще-то должна быть поддержка версий
+#include "..\Main\GResource.h" // CRAP пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 #include "..\Main\iInterMission.h" // CRAP, to start from mission
 #include "..\Main\iSaveManager.h" // CRAP, to start from mission
 #include "..\Main\Sound.h"
+
+#ifdef SS_USE_BGFX_FACADE
+// Phase 1 Task 9: C-style bootstrap so we avoid the STLportв†”MSVC STL ABI
+// mismatch on std::string between Game/Main.cpp and the renderer lib.
+extern "C" bool ss_renderer_bootstrap(void* hwnd, int width, int height,
+                                       const char* cfg_path);
+extern "C" bool ss_renderer_load_shaders(const char* shader_dir);
+#endif
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //void DumpMemoryStats() {}
 
@@ -43,6 +51,26 @@ int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	// init subsystems
 	if ( !NWinFrame::InitApplication( hInstance, "A5", "A5" ) )
 		return 0;
+
+#ifdef SS_USE_BGFX_FACADE
+	// Phase 1 Task 9: initialize bgfx on Nival's HWND, then load shaders.
+	// This must happen before NGfx::Init3D вЂ” NGfx::Init3D ultimately creates
+	// the IDirect3DDevice9 facade, which assumes bgfx is already alive.
+	{
+		RECT rc;
+		GetClientRect(NWinFrame::GetWnd(), &rc);
+		int w = rc.right  - rc.left;
+		int h = rc.bottom - rc.top;
+		if (w <= 0 || h <= 0) { w = 1280; h = 720; }
+		if (!ss_renderer_bootstrap(NWinFrame::GetWnd(), w, h, "silent_storm.cfg"))
+		{
+			MessageBox(0, "bgfx init failed", "Error", MB_OK);
+			return 0;
+		}
+		ss_renderer_load_shaders("shaders");
+	}
+#endif
+
 	if ( !NGfx::Init3D( NWinFrame::GetWnd() ) )
 	{
 		ASSERT(0); // DX8 not found
