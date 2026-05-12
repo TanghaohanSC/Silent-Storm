@@ -283,12 +283,69 @@ static void ss_r38_heromenu_overlay()
 	ss_dbg_text_push( 200, 460, 0x06, "  (CHeroMenuUI loaded, but model viewport not yet wired)" );
 }
 
+static void ss_hm_begin_game_inner( NDb::CSide *pSide )
+{
+	if ( pSide && pSide->nGlobalMapID > 0 )
+	{
+		NRPG::CGlobalPlayer *pPlayer = NRPG::CreateGlobalPlayer( pSide );
+		if ( pPlayer && pSide->defaultPersesSet.size() > 0 )
+		{
+			NDb::CRPGPers *pPers = pSide->defaultPersesSet[0];
+			if ( pPers )
+			{
+				pPlayer->mercs.push_back( NRPG::CreateMerc( pPers, 0, true ) );
+				vector<CObj<NRPG::CGlobalPlayer> > playersSet;
+				playersSet.push_back( pPlayer );
+				ss_hm_trace("HMI::Step.AUTO firing CICBeginGame");
+				NMainLoop::Command( new NGame::CICBeginGame( pSide->nGlobalMapID, playersSet ) );
+			}
+			else
+			{
+				ss_hm_trace("HMI::Step.AUTO defaultPers[0] null");
+			}
+		}
+		else
+		{
+			ss_hm_trace("HMI::Step.AUTO no defaultPersesSet or null player");
+		}
+	}
+	else
+	{
+		ss_hm_trace("HMI::Step.AUTO pSide invalid or nGlobalMapID<=0");
+	}
+}
+
+static void ss_hm_try_begin_game_chain( NDb::CSide *pSide )
+{
+	__try {
+		ss_hm_begin_game_inner( pSide );
+	} __except( EXCEPTION_EXECUTE_HANDLER ) {
+		ss_hm_trace("HMI::Step.AUTO SEH caught -- chain aborted");
+	}
+}
+
 void CHeroMenuInterface::Step()
 {
+	static int _sCount = 0;
+	++_sCount;
 	CRenderBaseInterface::Step();
 
 	// silent-storm-port r38: paint a state-overlay every frame.
 	ss_r38_heromenu_overlay();
+
+	// silent-storm-port r40: smoke-test the deeper chain --
+	// HeroMenu -> CICBeginGame -> CICBeginMission. Pick the default
+	// pers programmatically. SEH-guarded helper because vector ctors
+	// disallow __try in this function.
+	{
+		static bool s_autoFired = false;
+		if ( !s_autoFired && _sCount > 180 )  // ~3s after HeroMenu init
+		{
+			s_autoFired = true;
+			ss_hm_trace("HMI::Step.AUTO try BeginGame chain");
+			ss_hm_try_begin_game_chain( pSide );
+		}
+	}
 
 	// silent-storm-port r37: GetCamera() null when InitializeUIOnly path
 	// used. Skip 3D scene wiring like SideMenu does.
