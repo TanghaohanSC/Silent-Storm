@@ -336,6 +336,12 @@ static void ss_step_trace(const char* s) {
 	FILE* fp = NULL; fopen_s(&fp, "silent_storm_step_trace.log", "a");
 	if (fp) { fprintf(fp, "%s\n", s); fclose(fp); }
 }
+
+// silent-storm-port r36: forward decl of the per-frame bgfx flush hook
+// (defined in renderer/bgfx_init.cpp).  Called unconditionally from the
+// tail of StepApp so menu interfaces that bypass RenderFrame still get a
+// bgfx::frame() boundary every loop iteration.
+extern "C" void ss_present_frame();
 static bool ProcessInterfaceCmds()
 {
 	int _n = 0;
@@ -398,6 +404,13 @@ bool StepApp( bool bActive, bool bSetGamma, bool bInput )
 
 	interfaces.back()->Step();
 	if (bTrace) ss_step_trace("StepApp.7 Step ok");
+
+	// silent-storm-port r36: unconditional per-frame bgfx flush so the
+	// dbg-text overlay and any queued ss_ui quads actually reach the swap
+	// chain even when the active interface uses InitializeUIOnly() and
+	// therefore never calls NGScene::Flip from inside RenderFrame.
+	ss_present_frame();
+	if (bTrace) ss_step_trace("StepApp.8 ss_present_frame ok");
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
