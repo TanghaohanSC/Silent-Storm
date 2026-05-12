@@ -1,0 +1,13 @@
+01 WinMain entered
+02 about to AddResourceDir
+03 about to RunResourceLoadingThread
+04 resource thread launched
+05 about to open game.db
+06 game.db opened, about to Serialize
+07 NDatabase::Serialize returned
+08 about to InitApplication
+09 InitApplication ok
+10 about to bgfx bootstrap
+11 bgfx bootstrap ok, loading shaders
+12 shaders loaded
+13 about to NGfx::Init3D

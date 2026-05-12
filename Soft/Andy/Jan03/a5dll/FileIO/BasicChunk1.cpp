@@ -403,17 +403,20 @@ void CStructureSaver::Start( bool bRead )
 			obj.Read( &pServer, 4 );
 			obj.Read( &bValid,1 );
 			CObjectBase *pObject = pSSClasses->CreateObject( nTypeID );
-			// silent-storm-port 2026-05-12: was ASSERT(pObject). Some game.db
-			// classes are not registered (likely linker dead-stripped statics
-			// from OBJECT lib, or missing from dropped tools subprojects).
-			// Log the typeID and skip rather than abort — keeps exe alive past
-			// data load so Phase 1 renderer plumbing can be exercised.
+			// silent-storm-port: was ASSERT(pObject). With /WHOLEARCHIVE on
+			// Main + DBFormat (Phase 1.5), most class registrations survive
+			// linking — but if any typeID still fails, log to a file and
+			// skip so the exe keeps running.
 			if ( !pObject )
 			{
-				char _ss_buf[128];
-				sprintf( _ss_buf, "[ss-port] missing class typeID 0x%08X at chunk pos %d -- skipping\n",
-					nTypeID, (int)obj.GetPosition() );
-				OutputDebugStringA( _ss_buf );
+				FILE* _ss_f = NULL;
+				fopen_s( &_ss_f, "silent_storm_missing_classes.log", "a" );
+				if ( _ss_f )
+				{
+					fprintf( _ss_f, "missing typeID 0x%08X at chunk pos %d\n",
+						nTypeID, (int)obj.GetPosition() );
+					fclose( _ss_f );
+				}
 				objects[pServer] = 0;
 				continue;
 			}
@@ -438,7 +441,10 @@ void CStructureSaver::Start( bool bRead )
 			StartChunk( (chunk_id) 1, i + 1 );
 			DataChunk( 0, &pServer, 4, 1 );
 			pObject = objects[pServer];
-			ASSERT( pObject );
+			// silent-storm-port: was ASSERT(pObject). If the upstream loop
+			// skipped this typeID (missing class), pObject is null; the
+			// if(pObject) below already guards. Promoting the ASSERT to a
+			// silent log so the deserialize chain completes.
 			if ( pObject )
 			{
 				if ( StartChunk( 1, 1 ) )

@@ -21,8 +21,55 @@ extern "C" bool ss_renderer_load_shaders(const char* shader_dir);
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //void DumpMemoryStats() {}
 
+// silent-storm-port Phase 1.5: unhandled exception filter — logs crash addr
+// so we can map it to a function in silent_storm.map without a debugger.
+static LONG WINAPI ss_crash_handler(EXCEPTION_POINTERS* p)
+{
+	FILE* f = NULL;
+	fopen_s(&f, "silent_storm_crash.log", "w");
+	if (f)
+	{
+		fprintf(f, "EXCEPTION 0x%08X at addr 0x%p\n",
+			(unsigned)p->ExceptionRecord->ExceptionCode,
+			p->ExceptionRecord->ExceptionAddress);
+		CONTEXT* ctx = p->ContextRecord;
+		fprintf(f, "EIP=0x%08X ESP=0x%08X EBP=0x%08X\n",
+			(unsigned)ctx->Eip, (unsigned)ctx->Esp, (unsigned)ctx->Ebp);
+		fprintf(f, "EAX=0x%08X EBX=0x%08X ECX=0x%08X EDX=0x%08X\n",
+			(unsigned)ctx->Eax, (unsigned)ctx->Ebx,
+			(unsigned)ctx->Ecx, (unsigned)ctx->Edx);
+		fprintf(f, "ESI=0x%08X EDI=0x%08X\n",
+			(unsigned)ctx->Esi, (unsigned)ctx->Edi);
+		// Walk a few stack frames manually (EBP-chain) — x86 only
+		unsigned* bp = (unsigned*)ctx->Ebp;
+		for (int i = 0; i < 16 && bp; ++i)
+		{
+			__try {
+				fprintf(f, "  frame[%2d] ebp=0x%08X ret=0x%08X\n",
+					i, (unsigned)bp, (unsigned)bp[1]);
+				bp = (unsigned*)bp[0];
+			} __except(EXCEPTION_EXECUTE_HANDLER) { break; }
+		}
+		fclose(f);
+	}
+	return EXCEPTION_EXECUTE_HANDLER;
+}
+
+// silent-storm-port: trace progress through WinMain to a log file
+static void ss_winmain_trace(const char* msg)
+{
+	FILE* f = NULL;
+	fopen_s(&f, "silent_storm_winmain.log", "a");
+	if (f) { fprintf(f, "%s\n", msg); fclose(f); }
+}
+
 int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
 {
+	SetUnhandledExceptionFilter(ss_crash_handler);
+	// Truncate trace log at start of run
+	{ FILE* f = NULL; fopen_s(&f, "silent_storm_winmain.log", "w"); if (f) fclose(f); }
+	ss_winmain_trace("01 WinMain entered");
+
 #ifdef _DEBUG
   int tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
 	//tmpFlag |= _CRTDBG_LEAK_CHECK_DF;// | _CRTDBG_CHECK_ALWAYS_DF;
@@ -32,30 +79,40 @@ int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 #else
 	srand( GetTickCount() );
 #endif // _DEBUG
+	ss_winmain_trace("02 about to AddResourceDir");
 	NGScene::AddResourceDir( ".\\res" );
+	ss_winmain_trace("03 about to RunResourceLoadingThread");
 	NGScene::RunResourceLoadingThread();
+	ss_winmain_trace("04 resource thread launched");
   // load game database
+	ss_winmain_trace("05 about to open game.db");
 	try
 	{
 		CFileStream f;
 		f.OpenRead( "game.db" );
+		ss_winmain_trace("06 game.db opened, about to Serialize");
 		NDatabase::Serialize( f, CStructureSaver::READ );
+		ss_winmain_trace("07 NDatabase::Serialize returned");
 	}
 	catch (...)
 	{
+		ss_winmain_trace("XX exception during game.db load");
 		ASSERT( 0 ); // game.db not found
 		MessageBox( 0, "File game.db not found", "Error", MB_OK );
 		return 0;
 	}
 
 	// init subsystems
+	ss_winmain_trace("08 about to InitApplication");
 	if ( !NWinFrame::InitApplication( hInstance, "A5", "A5" ) )
 		return 0;
+	ss_winmain_trace("09 InitApplication ok");
 
 #ifdef SS_USE_BGFX_FACADE
 	// Phase 1 Task 9: initialize bgfx on Nival's HWND, then load shaders.
 	// This must happen before NGfx::Init3D — NGfx::Init3D ultimately creates
 	// the IDirect3DDevice9 facade, which assumes bgfx is already alive.
+	ss_winmain_trace("10 about to bgfx bootstrap");
 	{
 		RECT rc;
 		GetClientRect(NWinFrame::GetWnd(), &rc);
@@ -64,13 +121,17 @@ int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 		if (w <= 0 || h <= 0) { w = 1280; h = 720; }
 		if (!ss_renderer_bootstrap(NWinFrame::GetWnd(), w, h, "silent_storm.cfg"))
 		{
+			ss_winmain_trace("XX bgfx bootstrap returned false");
 			MessageBox(0, "bgfx init failed", "Error", MB_OK);
 			return 0;
 		}
+		ss_winmain_trace("11 bgfx bootstrap ok, loading shaders");
 		ss_renderer_load_shaders("shaders");
+		ss_winmain_trace("12 shaders loaded");
 	}
 #endif
 
+	ss_winmain_trace("13 about to NGfx::Init3D");
 	if ( !NGfx::Init3D( NWinFrame::GetWnd() ) )
 	{
 		ASSERT(0); // DX8 not found

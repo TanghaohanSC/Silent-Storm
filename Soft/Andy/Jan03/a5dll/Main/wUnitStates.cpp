@@ -24,7 +24,20 @@
 namespace NWorld
 {
 //
-CCriticalsBan criticalsBan;
+// silent-storm-port Phase 1.5: was `CCriticalsBan criticalsBan;` (global).
+// Global construction with /WHOLEARCHIVE forced inclusion + nested
+// std::unordered_map emplace crashed at static-init time before WinMain
+// could install the SetUnhandledExceptionFilter. Convert to function-local
+// static — same lifetime semantics (lives until program end) but defers
+// construction to first use.
+CCriticalsBan& criticalsBan_inst()
+{
+	static CCriticalsBan inst;
+	return inst;
+}
+// Backwards-compat: expose a reference name for legacy `criticalsBan.X()` calls.
+// (Code compiled at static-init time CANNOT bind to this without going through
+// the function; we update the 1 call site below instead.)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // CUnitState
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,7 +62,7 @@ bool CUnitState::IsCriticalsFailCommand( CCmd *pCmd, EUnitCommandResult *pResult
 	if ( !IsValid( pCmd ) )
 		return true;
 	//
-	const list<NDb::ECritical> &criticals = criticalsBan.GetCommandBans( pUS, pCmd );
+	const list<NDb::ECritical> &criticals = criticalsBan_inst().GetCommandBans( pUS, pCmd );  // silent-storm-port
 	for ( list<NDb::ECritical>::const_iterator i = criticals.begin(); i != criticals.end(); ++i )
 		if ( pUS->GetUnitRPG()->HasCritical( *i ) )
 			return true;
