@@ -66,6 +66,18 @@ static void ss_winmain_trace(const char* msg)
 int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
 {
 	SetUnhandledExceptionFilter(ss_crash_handler);
+	// silent-storm-port Phase 1.5 r2: make the process DPI-aware so the Win32
+	// client area we pass to bgfx matches actual pixels (otherwise on a HiDPI
+	// display Windows lies to us, and bgfx's D3D11 swapchain ends up
+	// stretched to a quarter of the visible window).
+	{
+		HMODULE user32 = GetModuleHandleA("user32.dll");
+		if (user32) {
+			typedef BOOL (WINAPI *PFN_SetProcessDPIAware)(void);
+			PFN_SetProcessDPIAware fn = (PFN_SetProcessDPIAware)GetProcAddress(user32, "SetProcessDPIAware");
+			if (fn) fn();
+		}
+	}
 	// Truncate trace log at start of run
 	{ FILE* f = NULL; fopen_s(&f, "silent_storm_winmain.log", "w"); if (f) fclose(f); }
 	ss_winmain_trace("01 WinMain entered");
@@ -234,17 +246,30 @@ int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	else
 		NMainLoop::Command( new CICInterMission( szCfg ) );
 	ss_winmain_trace("21 main-loop command queued, entering forever loop");
+	int _iter = 0;
 	for (;;)
 	{
+		if (_iter < 5) { char buf[64]; sprintf_s(buf,"22.%d loop top", _iter); ss_winmain_trace(buf); }
 		NWinFrame::PumpMessages();
+		if (_iter < 5) { char buf[64]; sprintf_s(buf,"22.%d.a PumpMessages ok", _iter); ss_winmain_trace(buf); }
 		bool bActive = NWinFrame::IsAppActive();
 		NInput::PumpMessages( bActive );
+		if (_iter < 5) { char buf[64]; sprintf_s(buf,"22.%d.b NInput PumpMessages ok bActive=%d", _iter, (int)bActive); ss_winmain_trace(buf); }
 		if ( NWinFrame::IsExit() )
+		{
+			ss_winmain_trace("22 exit requested, breaking");
 			break;
-		if ( !NMainLoop::StepApp( bActive, bActive ) )
+		}
+		bool bStep = NMainLoop::StepApp( bActive, bActive );
+		if (_iter < 5) { char buf[64]; sprintf_s(buf,"22.%d.c StepApp ret=%d", _iter, (int)bStep); ss_winmain_trace(buf); }
+		if ( !bStep )
+		{
+			ss_winmain_trace("22 StepApp returned false, breaking");
 			break;
+		}
 		if ( !bActive )
 			Sleep( 40 );
+		++_iter;
 	}
 	//
 	NGlobal::SaveConfig( ".\\cfg\\config.cfg" );

@@ -60,10 +60,19 @@ static void DestroyManagedDXObjects()
 }
 static HRESULT InitDXObjects()
 {
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"InitDXObjects: about to InitZBuffer\n"); fclose(_f);} }
 	// init itself
 	InitZBuffer( GetZBufferFormat( pp.BackBufferFormat ) );
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"InitDXObjects: InitZBuffer ok, InitBuffers\n"); fclose(_f);} }
 	InitBuffers();
-	return InitRender();
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"InitDXObjects: InitBuffers ok, InitRender\n"); fclose(_f);} }
+	HRESULT hr = InitRender();
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"InitDXObjects: InitRender hr=0x%08x\n",(unsigned)hr); fclose(_f);} }
+	return hr;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,6 +82,8 @@ static bool bDeviceCreated = false;
 const _D3DDEVTYPE DEVICE_TYPE = D3DDEVTYPE_HAL;//D3DDEVTYPE_REF;//
 static HRESULT ResetDevice()
 {
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"ResetDevice enter bDeviceCreated=%d\n",(int)bDeviceCreated); fclose(_f);} }
 	HRESULT hr;
 	bNVHackNP2 = bNVHackNP2Cfg;
 	if ( !bDeviceCreated )
@@ -89,12 +100,23 @@ static HRESULT ResetDevice()
 		hr = -1;
 #ifdef SS_USE_BGFX_FACADE
 		{
+			{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+			  if(_f){fprintf(_f,"ResetDevice: injecting facade\n"); fclose(_f);} }
 			// Phase 1: inject the bgfx IDirect3DDevice9 facade instead of
 			// creating a real D3D9 device.  All D3D9 calls are redirected to
 			// the facade which will forward them to bgfx (Task 9).
 			IDirect3DDevice9** ppDev = pDevice.GetAddr();
 			*ppDev = silent_storm::renderer::facade_instance();
 			(*ppDev)->AddRef();   // com_ptr will Release() on destruction
+			{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+			  if(_f){fprintf(_f,"ResetDevice: facade injected %p\n",*ppDev); fclose(_f);} }
+			// silent-storm-port Phase 1.5 r2: Reset the facade to size the
+			// bgfx back-buffer to the chosen mode (otherwise it stays at the
+			// 100x100 bootstrap size).
+			{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+			  if(_f){fprintf(_f,"ResetDevice: facade pPp w=%u h=%u, calling Reset\n",
+			           pp.BackBufferWidth, pp.BackBufferHeight); fclose(_f);} }
+			(*ppDev)->Reset( &pp );
 			hr = D3D_OK;
 			bHardwareVP = true;
 		}
@@ -134,14 +156,20 @@ static HRESULT ResetDevice()
 	}
 	else
 	{
+		{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+		  if(_f){fprintf(_f,"ResetDevice: device already created, calling Reset\n"); fclose(_f);} }
 		DestroyLostableDXObjects();
 		hr = pDevice->Reset( &pp );
 	}
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"ResetDevice: about to CreateQuery VCACHE\n"); fclose(_f);} }
 	{
 		D3DDEVINFO_VCACHE vcache;
 		Zero( vcache );
 		IDirect3DQuery9 *pQ;
 		HRESULT hr = pDevice->CreateQuery( D3DQUERYTYPE_VCACHE, &pQ );
+		{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+		  if(_f){fprintf(_f,"ResetDevice: CreateQuery hr=0x%08x pQ=%p\n",(unsigned)hr,pQ); fclose(_f);} }
 		if ( SUCCEEDED(hr) )
 		{
 			pQ->Issue( D3DISSUE_BEGIN );
@@ -152,19 +180,25 @@ static HRESULT ResetDevice()
 				nVCacheSize = vcache.CacheSize;
 		}
 	}
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"ResetDevice: VCACHE done, SetWindowPos\n"); fclose(_f);} }
 	bGammaIsSet = false;
-	SetWindowPos( 
-		hWnd, 
-		HWND_NOTOPMOST, 
-		0, 0, pp.BackBufferWidth, pp.BackBufferHeight, 
+	SetWindowPos(
+		hWnd,
+		HWND_NOTOPMOST,
+		0, 0, pp.BackBufferWidth, pp.BackBufferHeight,
 		SWP_SHOWWINDOW );
 	if ( bTnLDevice )
 		rtInfo.Clear();
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"ResetDevice: about to InitDXObjects (hr=0x%08x)\n",(unsigned)hr); fclose(_f);} }
 	if ( hr == D3D_OK )
 	{
 		hr = InitDXObjects();
 		bDeviceCreated = true;
 	}
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"ResetDevice: InitDXObjects ret hr=0x%08x\n",(unsigned)hr); fclose(_f);} }
 	return hr;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -494,11 +528,21 @@ static bool InitD3D()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool SetMode( const SVideoMode &m, const SRenderTargetsInfo &_rtInfo )
 {
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"SetMode enter %dx%d bpp=%d fs=%d\n",m.nXSize,m.nYSize,m.nBpp,(int)m.fullScreen); fclose(_f);} }
 	if ( !FillPresent( m ) )
+	{
+		{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+		  if(_f){fprintf(_f,"SetMode FillPresent FAIL\n"); fclose(_f);} }
 		return false;
+	}
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"SetMode FillPresent OK, about to ResetDevice\n"); fclose(_f);} }
 	rtInfo = _rtInfo;
 	videoMode = m;
 	HRESULT hr = ResetDevice();
+	{ FILE* _f=NULL; fopen_s(&_f,"silent_storm_smfc.log","a");
+	  if(_f){fprintf(_f,"SetMode ResetDevice hr=0x%08x\n",(unsigned)hr); fclose(_f);} }
 	return D3D_OK == hr;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
