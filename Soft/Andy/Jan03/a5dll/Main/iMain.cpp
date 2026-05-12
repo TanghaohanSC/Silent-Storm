@@ -125,6 +125,11 @@ void CInterfaceCommand::ResetStack()
 void CInterfaceCommand::SetInterface( IInterfaceBase *pNewInterface )
 {
 	ASSERT( IsValid( pNewInterface ) );
+	// r53: trace
+	{
+		FILE* fp=NULL; fopen_s(&fp, "silent_storm_step_trace.log", "a");
+		if (fp) { fprintf(fp, "[CIC] SetInterface called, new=%p\n", (void*)pNewInterface); fclose(fp); }
+	}
 	interfaces.clear();
 	interfaces.push_back( pNewInterface );
 	pNewInterface->OnGetFocus();
@@ -365,7 +370,9 @@ static bool ProcessInterfaceCmds()
 bool StepApp( bool bActive, bool bSetGamma, bool bInput )
 {
 	static int _stepCount = 0;
-	bool bTrace = (_stepCount++ < 3);
+	// r53: trace first 3 steps, also every 240th step after that
+	bool bTrace = (_stepCount < 3) || (_stepCount % 240 == 0);
+	_stepCount++;
 	if (bTrace) ss_step_trace("StepApp.0 entry");
 	if ( bActive )
 		NGfx::CheckBackBufferSize();
@@ -402,6 +409,12 @@ bool StepApp( bool bActive, bool bSetGamma, bool bInput )
 		NGScene::LoadPrecached();
 	if (bTrace) ss_step_trace("StepApp.6 LoadPrecached ok");
 
+	// r53: trace the interface type at Step time to see if Mission is on top
+	if (bTrace) {
+		char buf[128];
+		sprintf_s(buf, "StepApp.7-pre interfaces.size=%d back=%p", (int)interfaces.size(), (void*)interfaces.back().GetPtr());
+		ss_step_trace(buf);
+	}
 	interfaces.back()->Step();
 	if (bTrace) ss_step_trace("StepApp.7 Step ok");
 
