@@ -390,11 +390,14 @@ bool StepApp( bool bActive, bool bSetGamma, bool bInput )
 
 		currentTime = event.mMessage.tTime;
 	}
+	if (bTrace) ss_step_trace("StepApp.5 input handled");
 
 	if ( bActive )
 		NGScene::LoadPrecached();
+	if (bTrace) ss_step_trace("StepApp.6 LoadPrecached ok");
 
 	interfaces.back()->Step();
+	if (bTrace) ss_step_trace("StepApp.7 Step ok");
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////

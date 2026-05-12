@@ -118,19 +118,28 @@ void CRenderBaseInterface::SetLightMode( int _nLightMode )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CRenderBaseInterface::OnGetFocus()
 {
-	pRender->ResetTiming();
-	pRenderSound->ResetTiming();
+	// silent-storm-port Phase 1.5 r31: when MainMenuInterface skips
+	// parent::Initialize (DB records for cameras/world missing), pRender and
+	// pRenderSound stay null. ResetTiming on a null CObj crashes deep inside
+	// CastToUserObjectImpl. Null-guard so SetInterface succeeds and the
+	// main menu can paint its fallback overlay.
+	if ( pRender ) pRender->ResetTiming();
+	if ( pRenderSound ) pRenderSound->ResetTiming();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CRenderBaseInterface::ProcessEvent( const NInput::SEvent &sEvent )
 {
-	pCursor->ProcessEvent( sEvent );
+	// silent-storm-port Phase 1.5 r31: when parent::Initialize was skipped,
+	// pCursor / pInterface / pScene are null. Guard each dereference.
+	if ( pCursor ) pCursor->ProcessEvent( sEvent );
 
-	if ( pInterface->ProcessEvent( sEvent ) )
+	if ( pInterface && pInterface->ProcessEvent( sEvent ) )
 		return true;
 
 	if ( bindShadows.ProcessEvent( sEvent ) )
-		pScene->SetNextShadowsMode();
+	{
+		if ( pScene ) pScene->SetNextShadowsMode();
+	}
 	else if ( bindSwitchLighting.ProcessEvent( sEvent ) )
 		SetLightMode( nLightMode + 1 );
 
@@ -139,17 +148,21 @@ bool CRenderBaseInterface::ProcessEvent( const NInput::SEvent &sEvent )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CRenderBaseInterface::Step()
 {
+	// silent-storm-port Phase 1.5 r31: null-guard for skipped-Initialize state
 	if ( CanRender() )
 	{
-		pCamera->Update( GetTime() );
+		if ( pCamera ) pCamera->Update( GetTime() );
 
-		pInterface->UpdateCursor();
-		pInterface->Step( GetTime() );
+		if ( pInterface )
+		{
+			pInterface->UpdateCursor();
+			pInterface->Step( GetTime() );
+		}
 	}
 	else
 	{
-		pRender->ResetTiming();
-		pRenderSound->ResetTiming();
+		if ( pRender ) pRender->ResetTiming();
+		if ( pRenderSound ) pRenderSound->ResetTiming();
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
