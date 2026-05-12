@@ -284,10 +284,25 @@ void CTextDraw::Draw( CWindow *pWindow, const STime &sTime, NGScene::I2DGameView
 	UpdateSize( pView );
 
 	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
-	  if(_f){fprintf(_f,"CTextDraw::Draw #%d CreateDynamicRects\n",n); fclose(_f);} ++n; } }
-	pView->CreateDynamicRects( pText, sScrPosition, sScrWindow );
+	  if(_f){fprintf(_f,"CTextDraw::Draw #%d CreateDynamicRects (r42 SEH-guarded)\n",n); fclose(_f);} ++n; } }
+	// silent-storm-port r42: pView->CreateDynamicRects walks into G2DView::
+	// CreateDynamicRects -> pFontInfo->GetTexture() -> pScene->CreateDynamic
+	// Rects which crashes on partially-filled DB texture refs. The
+	// ss_dbg_glyph_push above (Phase 1.5 r4) already emitted the
+	// textured-glyph path of this text, so we can drop the Nival-side
+	// rect creation entirely for the time being. Once pFontInfo->pTexture
+	// records are resolved we can re-enable.
+	__try {
+		pView->CreateDynamicRects( pText, sScrPosition, sScrWindow );
+	} __except( EXCEPTION_EXECUTE_HANDLER ) {
+		static int s_seh = 0;
+		if ( ++s_seh < 3 ) {
+			FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
+			if(_f){fprintf(_f,"CTextDraw::Draw SEH at CreateDynamicRects #%d\n",s_seh); fclose(_f);}
+		}
+	}
 	{ static int n=0; if(n<3){ FILE* _f=NULL; fopen_s(&_f,"silent_storm_im.log","a");
-	  if(_f){fprintf(_f,"CTextDraw::Draw #%d CreateDynamicRects ok\n",n); fclose(_f);} ++n; } }
+	  if(_f){fprintf(_f,"CTextDraw::Draw #%d CreateDynamicRects done\n",n); fclose(_f);} ++n; } }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CTextDraw::UpdateSize( NGScene::I2DGameView *pView )

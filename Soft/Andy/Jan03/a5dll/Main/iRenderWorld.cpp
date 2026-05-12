@@ -168,11 +168,32 @@ void CRenderBaseInterface::Step()
 			pInterface->UpdateCursor();
 			pInterface->Step( GetTime() );
 
-			// silent-storm-port r39: attempted pInterface->Draw() from
-			// here so the data-driven UIContainer tree pushes through
-			// the ss_dbg_* relays, but CTextDraw::CreateDynamicRects
-			// crashes mid-walk on partially-filled DB records — disabled.
-			// (See port/docs/notes/r39_pInterface_draw.md if recorded.)
+			// silent-storm-port r42: drive the data-driven UI Draw chain
+			// from Step. Re-enabled now that UIWrap.cpp's CTextDraw::Draw
+			// has an SEH guard around the CreateDynamicRects call that
+			// crashed in r39 (the glyph_push half of CTextDraw still
+			// runs and emits real textured text via bgfx). Outer SEH here
+			// catches anything CreateDynamicRects couldn't.
+			if ( !pCamera )
+			{
+				static int s_crash_count = 0;
+				static int s_call_count = 0;
+				if (s_call_count < 3) {
+					FILE* fp = NULL; fopen_s(&fp, "silent_storm_step_trace.log", "a");
+					if (fp) { fprintf(fp, "[RB] Step.r42 Draw call=%d crash=%d\n", s_call_count, s_crash_count); fclose(fp); }
+					++s_call_count;
+				}
+				if ( s_crash_count < 3 )  // give up after 3 hard crashes
+				{
+					__try {
+						pInterface->Draw( GetTime() );
+					} __except( EXCEPTION_EXECUTE_HANDLER ) {
+						++s_crash_count;
+						FILE* fp = NULL; fopen_s(&fp, "silent_storm_step_trace.log", "a");
+						if (fp) { fprintf(fp, "[RB] Step.r42 SEH count=%d\n", s_crash_count); fclose(fp); }
+					}
+				}
+			}
 		}
 	}
 	else
