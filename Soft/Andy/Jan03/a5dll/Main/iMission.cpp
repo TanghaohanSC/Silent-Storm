@@ -189,8 +189,34 @@ bool CMission::Initialize( int _nTemplateID, int _nVariantID, NScenario::CScenar
 		CPtr<NDb::CTemplate> pTemplate = NDb::GetTemplate( nTemplateID );
 		if ( !IsValid( pTemplate ) )
 		{
-			ss_mi_trace("MI::Init.2a no template found, bailing");
-			return false;
+			// silent-storm-port r48: nTemplateID often arrives as -1 from
+			// CICBeginGame in our boot path because pZone is null (scenario
+			// flowchart was SEH-skipped). Fall back to iterating the template
+			// table and grabbing the first valid one so CreateWorld actually
+			// runs and we hit deeper crashes there instead of bailing here.
+			ss_mi_trace("MI::Init.2a template miss, scanning table for fallback");
+			CDBTable<NDb::CTemplate> *pTemplateTable = NDatabase::GetTable<NDb::CTemplate>();
+			if ( pTemplateTable )
+			{
+				CDBIterator<NDb::CTemplate> it( *pTemplateTable );
+				while ( it.MoveNext() )
+				{
+					NDb::CTemplate *pT = it.Get();
+					if ( IsValid( pT ) )
+					{
+						pTemplate = pT;
+						nTemplateID = pT->GetRecordID();
+						sprintf_s(_buf, "MI::Init.2a fallback picked template id=%d", nTemplateID);
+						ss_mi_trace(_buf);
+						break;
+					}
+				}
+			}
+			if ( !IsValid( pTemplate ) )
+			{
+				ss_mi_trace("MI::Init.2b no template fallback either, bailing");
+				return false;
+			}
 		}
 
 		SRand sRand( sSeed );
