@@ -21,18 +21,42 @@ namespace NGame
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // CPlayerTracker
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CPlayerTracker::CPlayerTracker( IMission *_pMission, NRPG::CGlobalPlayer *_pGlobalPlayer, const wstring &_wsName ): 
+// silent-storm-port r58: traces inside PlayerTracker ctor (partial world).
+static void ss_pt_trace( const char* s )
+{
+	FILE* fp = 0;
+	fopen_s( &fp, "silent_storm_step_trace.log", "a" );
+	if ( fp ) {
+		fprintf( fp, "[PT] %s\n", s );
+		fclose( fp );
+	}
+}
+// silent-storm-port r58: skip the cam init entirely in partial-world boot —
+// SCameraPos default-ctor already zeros everything. We don't need a valid
+// camera pos because there are no real units to track; the camera is set
+// later when the player issues their first move or via fallback in Step.
+static void ss_pt_seh_cam_init(
+	ICamera::SCameraPos *pOut, NAI::SPosition * /*pSPos*/, NWorld::IWorld * /*pWorld*/ )
+{
+	*pOut = ICamera::SCameraPos();
+	pOut->ptAnchor = CVec3( 0, 0, 0 );
+	pOut->ptAnchor.z = 0;
+}
+CPlayerTracker::CPlayerTracker( IMission *_pMission, NRPG::CGlobalPlayer *_pGlobalPlayer, const wstring &_wsName ):
 	pMission( _pMission ), pGlobalPlayer( _pGlobalPlayer ), wsName( _wsName )
 {
+	ss_pt_trace("PT.0 entry");
 	pCommander = new NWorld::CCommander;
+	ss_pt_trace("PT.1 CCommander created, about to AddPlayer");
 	pPlayer =  pMission->GetWorld()->AddPlayer( wsName, pGlobalPlayer, pCommander );
+	ss_pt_trace("PT.2 AddPlayer done");
 
 	NAI::SPosition sPos;
 	pPlayer->GetDeploySpot( &sPos.p );
-	sPos.SetNetwork( pMission->GetWorld()->GetPathNetwork() );
+	ss_pt_trace("PT.3 GetDeploySpot done");
 
-	sCamPlacement = ICamera::SCameraPos( sPos.GetCP(), 25.0f, ToRadian( -65.0f ), ToRadian( -65.0f ), 0 );
-	sCamPlacement.ptAnchor.z = 0;
+	ss_pt_seh_cam_init( &sCamPlacement, &sPos, pMission->GetWorld() );
+	ss_pt_trace("PT.5 ctor exit (SEH-guarded cam)");
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CPlayerTracker::AddUnit( NRPG::CUnit *pMerc )

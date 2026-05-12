@@ -182,7 +182,10 @@ static bool ss_mi_call_CreateDefault( NWorld::IWorld *pWorld )
 CPlayerTracker* ss_mi_new_PlayerTracker_impl(
 	IMission *pMission, NRPG::CGlobalPlayer *pGP, const wchar_t *pszName )
 {
-	return new CPlayerTracker( pMission, pGP, wstring( pszName ) );
+	ss_mi_trace("MI::Init.8.PT.impl entering");
+	CPlayerTracker* p = new CPlayerTracker( pMission, pGP, wstring( pszName ) );
+	ss_mi_trace("MI::Init.8.PT.impl exit");
+	return p;
 }
 NUI::CMissionUI* ss_mi_new_MissionUI_impl(
 	NUI::CInterface *pInterface, IMission *pMission )
