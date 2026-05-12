@@ -271,9 +271,24 @@ bool CHeroMenuInterface::ProcessEvent( const NInput::SEvent &sEvent )
 	return false;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+extern "C" void ss_dbg_text_banner(const char* text);
+extern "C" void ss_dbg_text_push(int virtX, int virtY, unsigned attr, const char* text);
+
+static void ss_r38_heromenu_overlay()
+{
+	ss_dbg_text_banner( "SILENT STORM  -  HERO SELECT  (state: CHeroMenuInterface, UIContainer 354)" );
+	ss_dbg_text_push( 200, 300, 0x2f, "  AXIS team — 6 starting heroes available." );
+	ss_dbg_text_push( 200, 340, 0x07, "  [ ENTER ] play with selected hero      [ TAB ] custom char" );
+	ss_dbg_text_push( 200, 380, 0x07, "  [ ESC   ] back to side select." );
+	ss_dbg_text_push( 200, 460, 0x06, "  (CHeroMenuUI loaded, but model viewport not yet wired)" );
+}
+
 void CHeroMenuInterface::Step()
 {
 	CRenderBaseInterface::Step();
+
+	// silent-storm-port r38: paint a state-overlay every frame.
+	ss_r38_heromenu_overlay();
 
 	// silent-storm-port r37: GetCamera() null when InitializeUIOnly path
 	// used. Skip 3D scene wiring like SideMenu does.

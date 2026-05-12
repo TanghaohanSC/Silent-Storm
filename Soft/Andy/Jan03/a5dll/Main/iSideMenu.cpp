@@ -255,11 +255,28 @@ bool CSideMenuInterface::ProcessEvent( const NInput::SEvent &sEvent )
 	return false;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+extern "C" void ss_dbg_text_banner(const char* text);
+extern "C" void ss_dbg_text_push(int virtX, int virtY, unsigned attr, const char* text);
+
+static void ss_r38_sidemenu_overlay()
+{
+	ss_dbg_text_banner( "SILENT STORM  -  CHOOSE SIDE  (state: CSideMenuInterface, UIContainer 353)" );
+	ss_dbg_text_push( 200, 300, 0x2f, "  [ A ]   AXIS               (Germany / German Army)" );
+	ss_dbg_text_push( 200, 340, 0x1f, "  [ L ]   ALLIES             (USA / United Kingdom / USSR)" );
+	ss_dbg_text_push( 200, 420, 0x07, "  ENTER selects, ESC returns to Main Menu." );
+	ss_dbg_text_push( 200, 460, 0x06, "  (auto-firing CICHeroMenu(AXIS) in 3s for chain smoke-test)" );
+}
+
 void CSideMenuInterface::Step()
 {
 	static int _sCount = 0;
 	++_sCount;
 	CRenderBaseInterface::Step();
+
+	// silent-storm-port r38: keep a fallback overlay alive so the screen
+	// reflects the state-machine advance even when the data-driven UI
+	// hasn't been rendered to pixels yet.
+	ss_r38_sidemenu_overlay();
 
 	// silent-storm-port r37: smoke-test SideMenu -> HeroMenu (AXIS). The
 	// real UI control flow is bindNext.ProcessEvent on ENTER, but for
