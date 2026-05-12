@@ -209,33 +209,82 @@ CICBeginGame::CICBeginGame( int _nTemplateID, const vector<CObj<NRPG::CGlobalPla
 {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// silent-storm-port r46: trace + null-guards around CICBeginGame::Exec so the
+// crash chain logs known progress (was hitting AV before queueing the next
+// command, leaving no useful trace).
+static void ss_bg_trace(const char* s) {
+	FILE* fp = NULL; fopen_s(&fp, "silent_storm_step_trace.log", "a");
+	if (fp) { fprintf(fp, "[BG] %s\n", s); fclose(fp); }
+}
+
 void CICBeginGame::Exec()
 {
+	char _buf[256];
+	sprintf_s(_buf, "BG::Exec.0 entry tmpl=%d playersSet.size=%d", nTemplateID, (int)playersSet.size());
+	ss_bg_trace(_buf);
 	int nScenarioID = -1;
 	CPtr<NDb::CGlobalMap> pGlobalMap = NDb::GetGlobalMap( nTemplateID );
+	sprintf_s(_buf, "BG::Exec.1 pGlobalMap=%p", (void*)pGlobalMap.GetPtr());
+	ss_bg_trace(_buf);
 	if ( IsValid( pGlobalMap ) && IsValid( pGlobalMap->pScenario ) )
+	{
 		nScenarioID = pGlobalMap->pScenario->GetRecordID();
+		sprintf_s(_buf, "BG::Exec.2 nScenarioID=%d", nScenarioID);
+		ss_bg_trace(_buf);
+	}
+	else
+	{
+		ss_bg_trace("BG::Exec.2 no scenario (pGlobalMap/pScenario invalid)");
+	}
 
 	ResetStack(); // just the way to unregister "scenario" command
+	ss_bg_trace("BG::Exec.3 ResetStack ok");
 	CPtr<NRPG::CGlobalGame> pGame = NRPG::CreateGlobalGame( nScenarioID );
+	sprintf_s(_buf, "BG::Exec.4 CreateGlobalGame ok pGame=%p", (void*)pGame.GetPtr());
+	ss_bg_trace(_buf);
+	if ( !pGame )
+	{
+		ss_bg_trace("BG::Exec.4a pGame null, aborting chain");
+		return;
+	}
 	pGame->players = playersSet;
+	ss_bg_trace("BG::Exec.5 players assigned");
 
 	pGame->bGlobalMapSet = true;
 	pGame->nGlobalMapID = nTemplateID;
 
-	CPtr<NScenario::CScenarioZone> pZone = pGame->pScenarioTracker->GetZoneByDBZone( pGlobalMap->pBaseZone );
-	if ( !IsValid( pZone ) )
+	if ( !IsValid( pGlobalMap ) )
 	{
-		ASSERT( 0 );
-		csSystem << CC_RED << L"ERROR: Can't start game! No base zone set!" << endl;
+		ss_bg_trace("BG::Exec.6 pGlobalMap invalid, skipping zone setup");
+		// silent-storm-port r46: still queue CICBeginMission with pZone=0 so
+		// CMission::Initialize traces fire — we can then see what bails next.
+		vector<string> templParams;
+		NMainLoop::Command( new NGame::CICBeginMission( (NScenario::CScenarioZone*)0, -1, templParams, pGame ) );
 		return;
 	}
 
+	sprintf_s(_buf, "BG::Exec.6 pBaseZone=%p", (void*)pGlobalMap->pBaseZone.GetPtr());
+	ss_bg_trace(_buf);
+	CPtr<NScenario::CScenarioZone> pZone;
+	if ( IsValid( pGame->pScenarioTracker ) && IsValid( pGlobalMap->pBaseZone ) )
+	{
+		pZone = pGame->pScenarioTracker->GetZoneByDBZone( pGlobalMap->pBaseZone );
+		sprintf_s(_buf, "BG::Exec.7 GetZoneByDBZone -> pZone=%p", (void*)pZone.GetPtr());
+		ss_bg_trace(_buf);
+	}
+	else
+	{
+		ss_bg_trace("BG::Exec.7 skipping zone lookup (tracker or pBaseZone invalid)");
+	}
+
 	NMainLoop::CSaveManager *pSaveManager = NMainLoop::GetSaveManager();
-	pSaveManager->ClearSlot( NMainLoop::S_SLOT_ACTIVE );
+	if ( pSaveManager )
+		pSaveManager->ClearSlot( NMainLoop::S_SLOT_ACTIVE );
+	ss_bg_trace("BG::Exec.8 SaveManager cleared");
 
 	vector<string> templParams;
 	NMainLoop::Command( new NGame::CICBeginMission( pZone, -1, templParams, pGame ) );
+	ss_bg_trace("BG::Exec.9 CICBeginMission queued");
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // CICContinueGlobal
