@@ -285,34 +285,41 @@ static void ss_r38_heromenu_overlay()
 
 static void ss_hm_begin_game_inner( NDb::CSide *pSide )
 {
-	if ( pSide && pSide->nGlobalMapID > 0 )
+	char _buf[256];
+	if ( !pSide ) { ss_hm_trace("HMI::Step.AUTO pSide NULL"); return; }
+	sprintf_s(_buf, "HMI::Step.AUTO pSide=%p nGlobalMapID=%d defaultPers.size=%d maleP.size=%d",
+		pSide, pSide->nGlobalMapID, (int)pSide->defaultPersesSet.size(),
+		(int)pSide->malePersesSet.size());
+	ss_hm_trace(_buf);
+
+	// Fall back to malePersesSet if defaultPersesSet is empty.
+	NDb::CRPGPers *pPers = 0;
+	if ( pSide->defaultPersesSet.size() > 0 )
+		pPers = pSide->defaultPersesSet[0];
+	else if ( pSide->malePersesSet.size() > 0 )
+		pPers = pSide->malePersesSet[0];
+
+	if ( !pPers )
 	{
-		NRPG::CGlobalPlayer *pPlayer = NRPG::CreateGlobalPlayer( pSide );
-		if ( pPlayer && pSide->defaultPersesSet.size() > 0 )
-		{
-			NDb::CRPGPers *pPers = pSide->defaultPersesSet[0];
-			if ( pPers )
-			{
-				pPlayer->mercs.push_back( NRPG::CreateMerc( pPers, 0, true ) );
-				vector<CObj<NRPG::CGlobalPlayer> > playersSet;
-				playersSet.push_back( pPlayer );
-				ss_hm_trace("HMI::Step.AUTO firing CICBeginGame");
-				NMainLoop::Command( new NGame::CICBeginGame( pSide->nGlobalMapID, playersSet ) );
-			}
-			else
-			{
-				ss_hm_trace("HMI::Step.AUTO defaultPers[0] null");
-			}
-		}
-		else
-		{
-			ss_hm_trace("HMI::Step.AUTO no defaultPersesSet or null player");
-		}
+		ss_hm_trace("HMI::Step.AUTO no Pers available (all sets empty)");
+		return;
 	}
-	else
+
+	NRPG::CGlobalPlayer *pPlayer = NRPG::CreateGlobalPlayer( pSide );
+	if ( !pPlayer )
 	{
-		ss_hm_trace("HMI::Step.AUTO pSide invalid or nGlobalMapID<=0");
+		ss_hm_trace("HMI::Step.AUTO CreateGlobalPlayer returned null");
+		return;
 	}
+
+	pPlayer->mercs.push_back( NRPG::CreateMerc( pPers, 0, true ) );
+	vector<CObj<NRPG::CGlobalPlayer> > playersSet;
+	playersSet.push_back( pPlayer );
+
+	int nMap = pSide->nGlobalMapID > 0 ? pSide->nGlobalMapID : 1;  // best-effort default
+	sprintf_s(_buf, "HMI::Step.AUTO firing CICBeginGame(nMap=%d)", nMap);
+	ss_hm_trace(_buf);
+	NMainLoop::Command( new NGame::CICBeginGame( nMap, playersSet ) );
 }
 
 static void ss_hm_try_begin_game_chain( NDb::CSide *pSide )
